@@ -36,8 +36,8 @@ namespace StreamlineAcademy.Infrastructure.JWT
             {
              new Claim(AppClaimTypes.UserId, user.Id.ToString()),
          
-             new Claim(JwtRegisteredClaimNames.Name, user.Name),
-             new Claim(JwtRegisteredClaimNames.Email, user.Email),
+             new Claim(JwtRegisteredClaimNames.Name, user.Name!),
+             new Claim(JwtRegisteredClaimNames.Email, user.Email!),
              new Claim(UserRole , Enum.GetName(typeof(UserRole), user.UserRole) ?? ""),
              }),
                 Expires = DateTime.Now.AddHours(1),

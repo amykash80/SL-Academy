@@ -65,35 +65,52 @@ namespace StreamlineAcademy.Application.Services
         }
 
         public async Task<ApiResponse<AcademyResponseModel>> RegisterAcademy(AcademyRequestModel request)
-        { 
+        {
             var existingAcademy = await academyRepository.GetByIdAsync(x => x.AcademyName == request.AcademyName);
-            if (existingAcademy is not  null)
-                return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered,HttpStatusCodes.Conflict);
+            if (existingAcademy is not null)
+                return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered, HttpStatusCodes.Conflict);
 
             var existingEmail = await userRepository.FirstOrDefaultAsync(x => x.Email == request.Email);
             if (existingEmail is not null)
-              return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered,HttpStatusCodes.Conflict); 
+                return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered, HttpStatusCodes.Conflict);
+            var UserSalt = AppEncryption.GenerateSalt();
 
-            var user = mapper.Map<User>(request);
-            user.Salt = AppEncryption.GenerateSalt();
-            user.Password=AppEncryption.CreatePassword(request.Password!,user.Salt);
-            user.UserRole = UserRole.AcademyAdmin;
-            user.CreatedBy = Guid.Empty;
-            user.CreatedDate= DateTime.Now;
-            user.ModifiedBy = Guid.Empty;
-            user.ModifiedDate= DateTime.Now;
-            user.IsActive = true;
+            var user = new User() {
+                Name = request.Name,
+                Email = request.Email,
+                PostalCode = request.PostalCode,
+                PhoneNumber = request.PhoneNumber,
+                Address = request.Address,
+                UserRole = UserRole.AcademyAdmin,
+                Salt = UserSalt,
+                Password = AppEncryption.CreatePassword(request.Password!,UserSalt),
+                CreatedBy=Guid.Empty,
+                CreatedDate= DateTime.Now,
+                ModifiedBy=Guid.Empty,
+                ModifiedDate= DateTime.Now,
+                DeletedBy=Guid.Empty,
+                IsActive=true
+             
+            };
 
 
             var returnVal = await userRepository.InsertAsync(user); 
             if (returnVal > 0)
             {
-                var academy=mapper.Map<Academy>(request);
-                academy.Id = user.Id;
+                var academy = new Academy() { 
+                
+                Id=user.Id,
+                AcademyName = request.Name,
+                AcademyTypeId=request.AcademyTypeId,
+                CountryId=request.CountryId,
+                StateId=request.StateId,
+                CityId=request.CityId,
+                };
+
                 var result = await academyRepository.InsertAsync(academy);
                 if (result > 0)
 				{
-                    var isEmailSent = await emailHelperService.SendRegistrationEmail(user.Email!, user.Name!, user.Password);
+                    //var isEmailSent = await emailHelperService.SendRegistrationEmail(user.Email!, user.Name!, user.Password);
 					var updateStatusResponse = await academyRepository.UpdateRegistrationStatus(academy.Id, RegistrationStatus.Approved);
                     var res = await academyRepository.GetAcademyById(academy.Id);
                     return ApiResponse<AcademyResponseModel>.SuccessResponse(mapper.Map<AcademyResponseModel>(res)); 
