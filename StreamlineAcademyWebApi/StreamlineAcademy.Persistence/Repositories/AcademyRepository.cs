@@ -82,15 +82,15 @@ namespace StreamlineAcademy.Persistence.Repositories
 				{
 					Id = a.Id,
 					AcademyName = a.AcademyName,
-					Email = a.User.Email,
+					Email = a.User!.Email,
 					PhoneNumber = a.User.PhoneNumber,
 					AcademyAdmin = a.User.Name,
 					PostalCode = a.User.PostalCode,
 					Address = a.User.Address,
-					AcademyType = a.AcademyType.Name,
-					CountryName = a.Country.CountryName,
-					StateName = a.State.StateName,
-					CityName = a.City.CityName,
+					AcademyType = a.AcademyType!.Name,
+					CountryName = a.Country!.CountryName,
+					StateName = a.State!.StateName,
+					CityName = a.City!.CityName,
 					UserRole = a.User.UserRole
 				})
 				.ToListAsync();
