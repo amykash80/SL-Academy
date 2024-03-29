@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MimeKit" Version="4.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StreamlineAcademy.Application\StreamlineAcademy.Application.csproj" />
+    <ProjectReference Include="..\StreamlineAcademy.Domain\StreamlineAcademy.Domain.csproj" />
+    <ProjectReference Include="..\StreamlineAcademy.Infrastructure\StreamlineAcademy.Infrastructure.csproj" />
+    <ProjectReference Include="..\StreamlineAcademy.Persistence\StreamlineAcademy.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
