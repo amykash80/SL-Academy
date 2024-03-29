@@ -84,7 +84,11 @@ public static class APIMessages
 			public static readonly string EnquiryAdded = "Enquiry Added Successfully.";
 
 			public static readonly string EnquiryUpdated = "Enquiry Updated Successfully.";
-		}
+            public static readonly string EnquiryDeleted = "Enquiry Deleted Successfully.";
+            public static readonly string EnquiryNameExist = "Name already Exist.";
+            public static readonly string EnquiryEmailExist = "Email already Exist.";
+            public static readonly string InvalidCredential = "Credential Required.";
+        }
 
 		public static class Auth
     {
@@ -111,7 +115,9 @@ public static class APIMessages
         public const string CheckEmailToResetPassword = "Please check your email inbox for instructions on how to reset your password.";
 
         public const string PasswordResetSuccess = "Your password has been successfully reset. You can now log in using your new password.";
-    }
+        public const string UserNotFound = "User not found";
+        public const string IncorrectOldPassword = "Old Password is Incorrect";
+        }
 
     public static class TemplateNames
     {
