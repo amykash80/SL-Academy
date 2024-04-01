@@ -17,31 +17,21 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-//using static StreamlineAcademy.Domain.Models.Requests.AcademyResponseModel;
 
 namespace StreamlineAcademy.Application.Services
 {
     public class AcademyService : IAcademyService
     {
         private readonly IAcademyRepository academyRepository;
-        private readonly IMapper mapper;
         private readonly IUserRepository userRepository;
-        private readonly IEnquiryService enquiryService;
-		private readonly IContextService contextService;
 		private readonly IEmailHelperService emailHelperService;
 
 		public AcademyService(IAcademyRepository academyRepository,
-                               IMapper mapper ,
                                IUserRepository userRepository ,
-                               IEnquiryService enquiryService,
-                               IContextService contextService,
                                IEmailHelperService emailHelperService)
         {
             this.academyRepository = academyRepository;
-            this.mapper = mapper;
             this.userRepository = userRepository;
-            this.enquiryService = enquiryService;
-			this.contextService = contextService;
 			this.emailHelperService = emailHelperService;
 		}
 
@@ -92,8 +82,6 @@ namespace StreamlineAcademy.Application.Services
                 IsActive=true
              
             };
-
-
             var returnVal = await userRepository.InsertAsync(user); 
             if (returnVal > 0)
             {
@@ -106,7 +94,6 @@ namespace StreamlineAcademy.Application.Services
                 StateId=request.StateId,
                 CityId=request.CityId,
                 };
-
                 var result = await academyRepository.InsertAsync(academy);
                 if (result > 0)
 				{
@@ -115,7 +102,7 @@ namespace StreamlineAcademy.Application.Services
 
                         var updateStatusResponse = await academyRepository.UpdateRegistrationStatus(academy.Id, RegistrationStatus.Approved);
                         var res = await academyRepository.GetAcademyById(academy.Id);
-                        return ApiResponse<AcademyResponseModel>.SuccessResponse(mapper.Map<AcademyResponseModel>(res));
+                        return ApiResponse<AcademyResponseModel>.SuccessResponse(res);
                     }
                 } 
                 return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest); 
@@ -133,7 +120,6 @@ namespace StreamlineAcademy.Application.Services
             var result = await userRepository.FirstOrDefaultAsync(x => x.Id == existingAcademy.Id);
             result.IsActive = false;
             result.DeletedDate = DateTime.Now;
-
             if (result is not null )
             {
                 int isSoftDelted = await academyRepository.Delete(result);
@@ -141,7 +127,6 @@ namespace StreamlineAcademy.Application.Services
                 {
 					var returnVal = await academyRepository.GetAcademyById(existingAcademy.Id);
 					return ApiResponse<AcademyResponseModel>.SuccessResponse(returnVal, APIMessages.AcademyManagement.AcademyDeleted);
-
 				}
 			} 
             return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError); 
