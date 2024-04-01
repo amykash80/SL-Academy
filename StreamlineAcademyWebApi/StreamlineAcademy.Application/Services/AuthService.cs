@@ -40,7 +40,7 @@ namespace StreamlineAcademy.Application.Services
             var id = contextService.GetUserId();
             var user=await authRepository.FirstOrDefaultAsync(x=>x.Id == id);
             if (user is null)
-                return ApiResponse<string>.ErrorResponse("User Not Found", HttpStatusCodes.NotFound);
+                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.UserNotFound, HttpStatusCodes.NotFound);
 
             if (AppEncryption.ComparePassword(model.OldPassword!, user.Password!, user.Salt!))
                 return ApiResponse<string>.ErrorResponse("Old Password is Incorrect", HttpStatusCodes.BadRequest);
@@ -49,15 +49,15 @@ namespace StreamlineAcademy.Application.Services
             user.Password = AppEncryption.CreatePassword(model.NewPassword!, user.Salt);
             int returnVal = await authRepository.UpdateAsync(user);
             if (returnVal > 0)
-                return ApiResponse<string>.SuccessResponse("Password Changed Successfully", HttpStatusCodes.OK.ToString());
-            return ApiResponse<string>.ErrorResponse("Something Went Wrong", HttpStatusCodes.InternalServerError);   
+                return ApiResponse<string>.SuccessResponse(APIMessages.Auth.PasswordChangedSuccess, HttpStatusCodes.OK.ToString());
+            return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);   
         }
 
         public async Task<ApiResponse<LoginResponseModel>> Login(LoginRequestModel request)
         {
             var user = await authRepository.FirstOrDefaultAsync(x=>x.Email==request.Email);
             if (user is null)
-                return ApiResponse<LoginResponseModel>.ErrorResponse("Invalid credentials",HttpStatusCodes.BadRequest);
+                return ApiResponse<LoginResponseModel>.ErrorResponse(APIMessages.EnquiryManagement.InvalidCredential,HttpStatusCodes.BadRequest);
 
             var res = AppEncryption.ComparePassword(user.Password!, request.Password!, user.Salt!);
             if(!res)
