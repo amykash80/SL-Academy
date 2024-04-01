@@ -12,6 +12,8 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
     public interface IAuthService
     { 
         Task<ApiResponse<LoginResponseModel>> Login(LoginRequestModel request);
-        Task<ApiResponse<string>> ChangePassword(ChangePasswordRequestModel model); 
-    }
+        Task<ApiResponse<string>> ChangePassword(ChangePasswordRequestModel model);
+		Task<bool> IsEmailUnique(string email);
+		Task<bool> IsPhoneNumberUnique(string phoneNumber);
+	}
 }

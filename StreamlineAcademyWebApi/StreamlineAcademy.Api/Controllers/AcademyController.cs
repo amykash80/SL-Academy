@@ -46,12 +46,5 @@ namespace StreamlineAcademy.Api.Controllers
             return Results.Ok(isUnique);
         }
 
-        [HttpGet("check-email/{academyEmail}")]
-
-        public async Task<IResult> IsAcademyEmailUnique(string academyEmail)
-        {
-            var isUnique = await academyService.IsAcademyEmailUnique(academyEmail);
-            return Results.Ok(isUnique);
-        }
     }
 }

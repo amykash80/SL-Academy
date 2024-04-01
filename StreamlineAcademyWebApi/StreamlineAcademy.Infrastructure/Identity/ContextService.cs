@@ -36,5 +36,18 @@ namespace StreamlineAcademy.Infrastructure.Identity
 		    return httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type == AppClaimTypes.UserRole)?.Value;
 			
 		}
+
+
+		public string HttpContextCurrentURL()
+		{
+			var path = httpContextAccessor?.HttpContext?.Request.Path;
+			return $" {httpContextAccessor?.HttpContext?.Request.Scheme}://{httpContextAccessor?.HttpContext?.Request.Host}{httpContextAccessor?.HttpContext?.Request.PathBase}";
+		}
+
+		public string HttpContextClientURL()
+		{
+			var clientRequest = httpContextAccessor?.HttpContext?.Request.Headers["Referer"];
+			return $"{clientRequest}";
+		}
 	}
 }

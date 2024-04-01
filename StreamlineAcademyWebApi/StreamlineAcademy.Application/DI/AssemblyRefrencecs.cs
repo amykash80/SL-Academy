@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using StreamlineAcademy.Application.Abstractions.IEmailService;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
@@ -16,9 +18,30 @@ namespace StreamlineAcademy.Application.DI
     public static class AssemblyRefrencecs
     {
 
-        public static IServiceCollection AddAplicationService(this IServiceCollection services,string WebRootPath )
+        public static IServiceCollection AddAplicationService(this IServiceCollection services,string WebRootPath,IConfiguration configuration )
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+			services.AddAuthentication(options =>
+			{
+
+				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+			}).AddJwtBearer(options =>
+			{
+				options.SaveToken = true;
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuer = false,
+					ValidateAudience = false,
+					ValidateLifetime = true,
+
+					ValidIssuer = configuration["Jwt:Issuer"],
+					ValidAudience = configuration["Jwt:Audience"],
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+				};
+			});
+			services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped<IEnquiryService,EnquiryService>();
             services.AddScoped<IFileService, FileService>();
             services.AddSingleton<IStorageService>(new StorageService(WebRootPath));

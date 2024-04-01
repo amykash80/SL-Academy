@@ -110,10 +110,13 @@ namespace StreamlineAcademy.Application.Services
                 var result = await academyRepository.InsertAsync(academy);
                 if (result > 0)
 				{
-                    //var isEmailSent = await emailHelperService.SendRegistrationEmail(user.Email!, user.Name!, user.Password);
-					var updateStatusResponse = await academyRepository.UpdateRegistrationStatus(academy.Id, RegistrationStatus.Approved);
-                    var res = await academyRepository.GetAcademyById(academy.Id);
-                    return ApiResponse<AcademyResponseModel>.SuccessResponse(mapper.Map<AcademyResponseModel>(res)); 
+                    if (await emailHelperService.SendRegistrationEmail(user.Email!, user.Name!, request.Password!))
+                    {
+
+                        var updateStatusResponse = await academyRepository.UpdateRegistrationStatus(academy.Id, RegistrationStatus.Approved);
+                        var res = await academyRepository.GetAcademyById(academy.Id);
+                        return ApiResponse<AcademyResponseModel>.SuccessResponse(mapper.Map<AcademyResponseModel>(res));
+                    }
                 } 
                 return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest); 
             }
