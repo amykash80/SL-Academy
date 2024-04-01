@@ -13,25 +13,45 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace StreamlineAcademy.Persistence.Repositories
 {
-    public class AcademyRepository:BaseRepository<Academy>,IAcademyRepository
+    public class AcademyRepository:IAcademyRepository
     {
 		private readonly StreamlineDbContet context;
 
-        public AcademyRepository(StreamlineDbContet context):base(context) 
+        public AcademyRepository(StreamlineDbContet context)
         {
 			this.context = context;
         }
+
 
 		public async Task<int> Delete(User model)
 		{
 			await Task.Run(()=>context.Set<User>().Update(model));
 		    return await context.SaveChangesAsync();
+		}
+
+		public async Task<int> DeleteAsync(Academy model)
+		{
+			context.Set<Academy>().Remove(model);
+			return await context.SaveChangesAsync();
+		}
+
+		public Task<IEnumerable<Academy>> FindByAsync(Expression<Func<Academy, bool>> expression)
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<Academy> FirstOrDefaultAsync(Expression<Func<Academy, bool>> expression)
+		{
+			var res = await context.Set<Academy>().FirstOrDefaultAsync(expression);
+			return res!;
 		}
 
 		public async Task<AcademyResponseModel> GetAcademyById(Guid id)
@@ -82,15 +102,15 @@ namespace StreamlineAcademy.Persistence.Repositories
 				{
 					Id = a.Id,
 					AcademyName = a.AcademyName,
-					Email = a.User.Email,
+					Email = a.User!.Email,
 					PhoneNumber = a.User.PhoneNumber,
 					AcademyAdmin = a.User.Name,
 					PostalCode = a.User.PostalCode,
 					Address = a.User.Address,
-					AcademyType = a.AcademyType.Name,
-					CountryName = a.Country.CountryName,
-					StateName = a.State.StateName,
-					CityName = a.City.CityName,
+					AcademyType = a.AcademyType!.Name,
+					CountryName = a.Country!.CountryName,
+					StateName = a.State!.StateName,
+					CityName = a.City!.CityName,
 					UserRole = a.User.UserRole
 				})
 				.ToListAsync();
@@ -98,6 +118,35 @@ namespace StreamlineAcademy.Persistence.Repositories
 			return academies;
 		}
 
+		public async Task<IEnumerable<Academy>> GetAllAsync()
+		{
+           return await context.Set<Academy>().ToListAsync();
+
+		}
+
+		public Task<Academy> GetByIdAsync(Expression<Func<Academy, bool>> expression)
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<int> InsertAsync(Academy model)
+		{
+
+			await context.Set<Academy>().AddAsync(model);
+			return await context.SaveChangesAsync();
+		}
+
+		public async Task<int> InsertRangeAsync(List<Academy> models)
+		{
+			await context.Set<Academy>().AddRangeAsync(models);
+			return await context.SaveChangesAsync();
+		}
+
+		public async Task<int> UpdateAsync(Academy model)
+		{
+			await Task.Run(() => context.Set<Academy>().Update(model));
+			return await context.SaveChangesAsync();
+		}
 
 		public async Task<bool> UpdateRegistrationStatus(Guid id, RegistrationStatus status)
         {

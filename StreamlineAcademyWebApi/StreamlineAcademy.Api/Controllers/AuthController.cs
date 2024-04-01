@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
 using StreamlineAcademy.Application.Shared;
+using StreamlineAcademy.Domain.Enums;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
 
@@ -20,7 +21,6 @@ namespace StreamlineAcademy.Api.Controllers
             this.authService = authService;
         }
 
-        [Authorize]
         [HttpPost("ChangePassword")]
         public async Task<ApiResponse<string>> ChangePassword(ChangePasswordRequestModel model) => await authService.ChangePassword(model);
 

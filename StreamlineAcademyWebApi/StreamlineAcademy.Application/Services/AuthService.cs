@@ -42,8 +42,8 @@ namespace StreamlineAcademy.Application.Services
             if (user is null)
                 return ApiResponse<string>.ErrorResponse(APIMessages.Auth.UserNotFound, HttpStatusCodes.NotFound);
 
-            if (AppEncryption.ComparePassword(model.OldPassword!, user.Password, user.Salt))
-                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.IncorrectOldPassword, HttpStatusCodes.BadRequest);
+            if (AppEncryption.ComparePassword(model.OldPassword!, user.Password!, user.Salt!))
+                return ApiResponse<string>.ErrorResponse("Old Password is Incorrect", HttpStatusCodes.BadRequest);
 
             user.Salt = AppEncryption.GenerateSalt();
             user.Password = AppEncryption.CreatePassword(model.NewPassword!, user.Salt);
@@ -59,8 +59,9 @@ namespace StreamlineAcademy.Application.Services
             if (user is null)
                 return ApiResponse<LoginResponseModel>.ErrorResponse(APIMessages.EnquiryManagement.InvalidCredential,HttpStatusCodes.BadRequest);
 
-            if (AppEncryption.ComparePassword(request.Password!,user.Password, user.Salt))
-                return ApiResponse<LoginResponseModel>.ErrorResponse(APIMessages.EnquiryManagement.InvalidCredential, HttpStatusCodes.BadRequest);
+            var res = AppEncryption.ComparePassword(user.Password!, request.Password!, user.Salt!);
+            if(!res)
+                return ApiResponse<LoginResponseModel>.ErrorResponse("Invalid credentials", HttpStatusCodes.BadRequest);
 
             var response = new LoginResponseModel()
             {

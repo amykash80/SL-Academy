@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Domain.Entities
 {
-    public class Academy:BaseModel
+    public class Academy
     {
+        public Guid Id { get; set; }
         public string? AcademyName { get; set; } 
   
         [ForeignKey(nameof(Id))]

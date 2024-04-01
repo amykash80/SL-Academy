@@ -5,14 +5,26 @@ using StreamlineAcademy.Domain.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Application.Abstractions.IRepositories
 {
-    public interface IAcademyRepository:IBaseRepository<Academy>
+    public interface IAcademyRepository
     {
-        public Task<List<AcademyResponseModel>> GetAllAcademies();
+		#region async methods
+		Task<int> InsertAsync(Academy model);
+		Task<int> InsertRangeAsync(List<Academy> models);
+		Task<int> UpdateAsync(Academy model);
+		Task<int> DeleteAsync(Academy model);
+		Task<IEnumerable<Academy>> GetAllAsync();
+		Task<IEnumerable<Academy>> FindByAsync(Expression<Func<Academy, bool>> expression);
+		Task<Academy> GetByIdAsync(Expression<Func<Academy, bool>> expression);
+		Task<Academy> FirstOrDefaultAsync(Expression<Func<Academy, bool>> expression);
+		#endregion
+
+		public Task<List<AcademyResponseModel>> GetAllAcademies();
 		Task<AcademyResponseModel> GetAcademyById(Guid id);
 		Task<bool> UpdateRegistrationStatus(Guid id, RegistrationStatus status);
 		Task<int> Delete(User model);
