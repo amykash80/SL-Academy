@@ -70,9 +70,19 @@ namespace StreamlineAcademy.Application.Services
                 Token = jwtProvider.GenerateToken(user) 
             };
 
-            return ApiResponse<LoginResponseModel>.SuccessResponse(response);
+            return ApiResponse<LoginResponseModel>.SuccessResponse(response,"Successfully Logged In");
         }
-         
-    }
+
+		public async Task<bool> IsEmailUnique(string email)
+		{
+			return await authRepository.FirstOrDefaultAsync(x => x.Email == email) == null;
+		}
+
+		public async Task<bool> IsPhoneNumberUnique(string phoneNumber)
+		{
+			return await authRepository.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber) == null;
+		}
+
+	}
      
 }

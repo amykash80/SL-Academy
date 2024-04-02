@@ -10,6 +10,8 @@ namespace StreamlineAcademy.Application.Abstractions.Identity
     {
         Guid? GetUserId();
 		string? GetRoleName();
+		string HttpContextClientURL();
+		string HttpContextCurrentURL();
 
 	}
 }

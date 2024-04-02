@@ -87,8 +87,7 @@ public static class APIMessages
             public static readonly string EnquiryDeleted = "Enquiry Deleted Successfully.";
             public static readonly string EnquiryNameExist = "Name already Exist.";
             public static readonly string EnquiryEmailExist = "Email already Exist.";
-            public static readonly string InvalidCredential = "Credential Required.";
-
+            public static readonly string InvalidCredential = "Invalid Credentials.";
         }
 
         public static class UserManagement

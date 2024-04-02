@@ -124,9 +124,9 @@ namespace StreamlineAcademy.Persistence.Repositories
 
 		}
 
-		public Task<Academy> GetByIdAsync(Expression<Func<Academy, bool>> expression)
+		public async Task<Academy> GetByIdAsync(Expression<Func<Academy, bool>> expression)
 		{
-			throw new NotImplementedException();
+			return await context.Academies.FirstOrDefaultAsync(expression);
 		}
 
 		public async Task<int> InsertAsync(Academy model)

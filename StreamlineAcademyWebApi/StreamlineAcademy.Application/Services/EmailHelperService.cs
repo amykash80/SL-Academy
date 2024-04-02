@@ -26,10 +26,10 @@ namespace StreamlineAcademy.Application.Services
         
             var baseUrl = configuration.GetValue<string>("EmailSettings:DomainUrl");
             var subject = "Stramline Academies Registration";
-            string body = "Hi " + name + ",<br /><br />Thank you for registering with Streamline academies. Please find your UserName and Password below<br /><br />"
-                                        + "<strong>User Name:</strong>  " + emailAddress + "<br />"
+            string body = "Hi " + name + ",<br /><br />Thank you for registering with Streamline academies. Please find your Email and Password below as Login Credentials<br /><br />"
+                                        + "<strong>Email:</strong>  " + emailAddress + "<br />"
                                         + "<strong>Password:</strong>  " + password + "<br />"
-                                        + "Please Click Here to Login: " + baseUrl + "<br /><br />"
+                                        //+ "Please Click Here to Login: " + baseUrl + "<br /><br />"
                                          + "Have a nice day...<br /><br />"
                                     + "Thanks,<br />"
                                     + "Team Streamline Academies";
@@ -45,7 +45,8 @@ namespace StreamlineAcademy.Application.Services
 			emailParameters.Port = configuration.GetValue<int>("EmailSettings:Port");
 			emailParameters.UserName = configuration.GetValue<string>("EmailSettings:RegisterMail");
 			emailParameters.Password = configuration.GetValue<string>("EmailSettings:RegisterMailPassword");
-			return await Send(emailMessage, emailParameters);
+			var res= await Send(emailMessage, emailParameters);
+			return res;
 		}
 
 		private async Task<bool> Send(MimeMessage email, EmailParameters emailParameters)

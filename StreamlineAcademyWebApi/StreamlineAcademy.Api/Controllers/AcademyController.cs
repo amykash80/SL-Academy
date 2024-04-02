@@ -23,6 +23,7 @@ namespace StreamlineAcademy.Api.Controllers
             this.academyService = academyService;
         }
 
+        [Authorize(Roles =nameof(UserRole.SuperAdmin))]
         [HttpPost("register")]
         public async Task<ApiResponse<AcademyResponseModel>> RegisterAcademy(AcademyRequestModel request) => await academyService.RegisterAcademy(request);
 
@@ -46,12 +47,5 @@ namespace StreamlineAcademy.Api.Controllers
             return Results.Ok(isUnique);
         }
 
-        [HttpGet("check-email/{academyEmail}")]
-
-        public async Task<IResult> IsAcademyEmailUnique(string academyEmail)
-        {
-            var isUnique = await academyService.IsAcademyEmailUnique(academyEmail);
-            return Results.Ok(isUnique);
-        }
     }
 }
