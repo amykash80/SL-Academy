@@ -12,7 +12,7 @@ namespace StreamlineAcademy.Application.MapperProfiles
 {
     public class MapperProfile
     {
-        public class EnqiryProfile : Profile
+        public class EnqiryProfile : AutoMapper.Profile
         {
 
             public EnqiryProfile()
@@ -25,7 +25,7 @@ namespace StreamlineAcademy.Application.MapperProfiles
 
         }
 
-        public class AcademyProfile : Profile
+        public class AcademyProfile : AutoMapper.Profile
         {
 
             public AcademyProfile()
@@ -37,7 +37,7 @@ namespace StreamlineAcademy.Application.MapperProfiles
 
         }
 
-        public class LoginProfile : Profile
+        public class LoginProfile : AutoMapper.Profile
         {
 
             public LoginProfile()
@@ -48,6 +48,15 @@ namespace StreamlineAcademy.Application.MapperProfiles
 
         }
 
+        public class UserProfile : AutoMapper.Profile
+        {
 
+            public UserProfile()
+            {
+                CreateMap<ContactInfoResponse, User>();
+                CreateMap<User, ContactInfoResponse>();
+            }
+
+        }
     }
 }

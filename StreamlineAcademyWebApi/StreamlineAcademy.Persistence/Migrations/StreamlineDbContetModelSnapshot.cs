@@ -258,50 +258,7 @@ namespace StreamlineAcademy.Persistence.Migrations
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.SuperAdmin", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("DeletedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("ModifiedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Salt")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte?>("UserRole")
-                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -310,16 +267,7 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("19700f39-c11f-48e1-86f2-ab6d543c1846"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 29, 15, 4, 35, 370, DateTimeKind.Unspecified).AddTicks(8097), new TimeSpan(0, 5, 30, 0, 0)),
-                            Email = "ram@gmail.com",
-                            IsActive = false,
-                            Name = "Ram",
-                            Password = "3ixUSbUjQWqHJJ3Zo7XT9JcOcrnfVgGhW6TGCkfvbRA=",
-                            PhoneNumber = "7267636376",
-                            Salt = "T5mEISJczRgmdsEAjppWYw==",
-                            UserName = "superadmin@123",
-                            UserRole = (byte)1
+                            Id = new Guid("3cdf7cf6-b0f8-4c97-855f-2b59b1c529cb")
                         });
                 });
 
@@ -380,6 +328,26 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3cdf7cf6-b0f8-4c97-855f-2b59b1c529cb"),
+                            Address = "123 Main Street,Bangalore",
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 1, 12, 22, 41, 92, DateTimeKind.Unspecified).AddTicks(4802), new TimeSpan(0, 5, 30, 0, 0)),
+                            DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "ram@gmail.com",
+                            IsActive = true,
+                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 1, 12, 22, 41, 92, DateTimeKind.Unspecified).AddTicks(4851), new TimeSpan(0, 5, 30, 0, 0)),
+                            Name = "Ram",
+                            Password = "9MylLKnnj+bK/771cqsLijhQ6GqTnMkT+eOvr/pPHo0=",
+                            PhoneNumber = "8997654556",
+                            PostalCode = "786545",
+                            Salt = "BfjbuXzcNQQce5oNSGBRnQ==",
+                            UserRole = (byte)1
+                        });
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Academy", b =>
@@ -443,6 +411,17 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.SuperAdmin", b =>
+                {
+                    b.HasOne("StreamlineAcademy.Domain.Entities.User", "User")
+                        .WithOne("SuperAdmin")
+                        .HasForeignKey("StreamlineAcademy.Domain.Entities.SuperAdmin", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.AcademyType", b =>
                 {
                     b.Navigation("Academies");
@@ -466,6 +445,8 @@ namespace StreamlineAcademy.Persistence.Migrations
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.User", b =>
                 {
                     b.Navigation("Academy");
+
+                    b.Navigation("SuperAdmin");
                 });
 #pragma warning restore 612, 618
         }

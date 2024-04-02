@@ -21,6 +21,7 @@ namespace StreamlineAcademy.Domain.Entities
         public string? ResetCode { get; set; } 
 		#region navigation
 		public Academy? Academy { get; set; } 
+        public SuperAdmin? SuperAdmin { get; set; }
 		#endregion
 	}
 }

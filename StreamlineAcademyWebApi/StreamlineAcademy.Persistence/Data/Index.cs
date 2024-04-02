@@ -22,20 +22,32 @@ namespace StreamlineAcademy.Persistence.Data
         private static void SetData(ModelBuilder modelBuilder)
         {
             var Passwordsalt = AppEncryption.GenerateSalt();
+            var commonId = Guid.NewGuid();
+            modelBuilder.Entity<User>().HasData(
+           new User
+           {
+               Id = commonId,
+               Name = "Ram",
+               Address = "123 Main Street,Bangalore",
+               PostalCode = "786545",
+               PhoneNumber = "8997654556",
+               Email = "ram@gmail.com",
+               Password = AppEncryption.CreatePassword("superadmin", Passwordsalt),
+               Salt = Passwordsalt,
+               UserRole = UserRole.SuperAdmin, 
+               IsActive= true,
+               CreatedBy=Guid.Empty,
+               CreatedDate = DateTime.Now,
+               ModifiedBy=Guid.Empty,
+               ModifiedDate = DateTime.Now,
+               DeletedBy=Guid.Empty 
+           }
+       );
             modelBuilder.Entity<SuperAdmin>().HasData(
-
+               
                     new SuperAdmin()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Ram",
-                        Email = "ram@gmail.com",
-                        UserName = "superadmin@123",
-                        Salt = Passwordsalt,
-                        Password = AppEncryption.CreatePassword("superadmin", Passwordsalt),
-                        PhoneNumber = "7267636376",
-                        UserRole = UserRole.SuperAdmin,
-                        CreatedDate = DateTime.Now,
-
+                    { 
+                        Id = commonId,  
                     }
 
             );
