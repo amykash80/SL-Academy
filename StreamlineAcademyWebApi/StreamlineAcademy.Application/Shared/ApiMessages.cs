@@ -88,9 +88,16 @@ public static class APIMessages
             public static readonly string EnquiryNameExist = "Name already Exist.";
             public static readonly string EnquiryEmailExist = "Email already Exist.";
             public static readonly string InvalidCredential = "Credential Required.";
+
         }
 
-		public static class Auth
+        public static class UserManagement
+        {
+            public static readonly string UserNotFound = "Enquiry not found.";
+
+        }
+
+        public static class Auth
     {
         public const string NameAlreadyTaken = "Name is already taken.";
        
