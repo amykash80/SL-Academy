@@ -9,6 +9,8 @@ using MailKit.Security;
 using System.Text;
 using System.Threading.Tasks;
 using StreamlineAcademy.Domain.Models.Common;
+using StreamlineAcademy.Application.Abstractions.IServices;
+using StreamlineAcademy.Application.Shared;
 
 namespace StreamlineAcademy.Application.Services
 {
@@ -16,23 +18,27 @@ namespace StreamlineAcademy.Application.Services
 	{
 
 		private readonly IConfiguration configuration;
-		public EmailHelperService(IConfiguration configuration)
+        private readonly IEmailTempelateRenderer emailTempelateRenderer;
+
+        public EmailHelperService(IConfiguration configuration,
+			                      IEmailTempelateRenderer emailTempelateRenderer)
 		{
 			this.configuration = configuration;
-		}
+            this.emailTempelateRenderer = emailTempelateRenderer;
+        }
 
 		public async Task<bool> SendRegistrationEmail(string emailAddress, string name, string password)
 		{
         
             var baseUrl = configuration.GetValue<string>("EmailSettings:DomainUrl");
             var subject = "Stramline Academies Registration";
-            string body = "Hi " + name + ",<br /><br />Thank you for registering with Streamline academies. Please find your Email and Password below as Login Credentials<br /><br />"
-                                        + "<strong>Email:</strong>  " + emailAddress + "<br />"
-                                        + "<strong>Password:</strong>  " + password + "<br />"
-                                        //+ "Please Click Here to Login: " + baseUrl + "<br /><br />"
-                                         + "Have a nice day...<br /><br />"
-                                    + "Thanks,<br />"
-                                    + "Team Streamline Academies";
+            string body = await emailTempelateRenderer.RenderTemplateAsync(APIMessages.TemplateNames.AcademyRegistration, new
+            {
+                Name = name,
+                Email = emailAddress,
+				CompanyName="Streamline Academies",
+                Password = password,
+            });
             var emailMessage = CreateMailMessage(emailAddress, subject, body);
             return await SendRegistrationEmail(emailMessage);
         

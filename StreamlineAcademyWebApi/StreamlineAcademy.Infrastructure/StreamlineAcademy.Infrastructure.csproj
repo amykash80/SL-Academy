@@ -17,4 +17,10 @@
     <ProjectReference Include="..\StreamlineAcademy.Application\StreamlineAcademy.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="EmailTemplates\AcademyRegistration.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
