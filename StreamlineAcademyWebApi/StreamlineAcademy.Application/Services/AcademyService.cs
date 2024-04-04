@@ -99,7 +99,6 @@ namespace StreamlineAcademy.Application.Services
 				{
                     if (await emailHelperService.SendRegistrationEmail(user.Email!, user.Name!, request.Password!))
                     {
-
                         var updateStatusResponse = await academyRepository.UpdateRegistrationStatus(academy.Id, RegistrationStatus.Approved);
                         var res = await academyRepository.GetAcademyById(academy.Id);
                         return ApiResponse<AcademyResponseModel>.SuccessResponse(res);
