@@ -36,7 +36,7 @@ namespace StreamlineAcademy.Application.Services
             {
                 Name = name,
                 Email = emailAddress,
-				CompanyName="Streamline Academies",
+				CompanyName=APIMessages.ProjectName,
                 Password = password,
             });
             var emailMessage = CreateMailMessage(emailAddress, subject, body);
@@ -83,5 +83,17 @@ namespace StreamlineAcademy.Application.Services
 			email.Body = builder.ToMessageBody();
 			return email;
 		}
-	}
+
+        public async Task<bool> SendResetPasswordEmail(string emailAddress)
+        {
+            var baseUrl = configuration.GetValue<string>("EmailSettings:DomainUrl");
+            var subject = "Stramline Academies Reset Password";
+            string body = await emailTempelateRenderer.RenderTemplateAsync(APIMessages.TemplateNames.PasswordReset, new
+            {
+                CompanyName = APIMessages.ProjectName,
+            });
+            var emailMessage = CreateMailMessage(emailAddress, subject, body);
+            return await SendRegistrationEmail(emailMessage);
+        }
+    }
 }

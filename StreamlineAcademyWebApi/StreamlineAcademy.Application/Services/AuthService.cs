@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity.Data;
 using StreamlineAcademy.Application.Abstractions.Identity;
+using StreamlineAcademy.Application.Abstractions.IEmailService;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Abstractions.JWT;
@@ -20,18 +22,21 @@ namespace StreamlineAcademy.Application.Services
     public class AuthService : IAuthService
     {
         private readonly IAuthRepository authRepository;
-        private readonly IMapper mapper;
+        private readonly IUserRepository userRepository;
         private readonly IContextService contextService;
+        private readonly IEmailHelperService emailHelperService;
         private readonly IJwtProvider jwtProvider;
 
-        public AuthService(IAuthRepository authRepository, 
-                           IMapper mapper, 
+        public AuthService(IAuthRepository authRepository,
+                           IUserRepository userRepository,
                            IContextService contextService,
+                           IEmailHelperService emailHelperService,
                            IJwtProvider jwtProvider)
         {
             this.authRepository = authRepository;
-            this.mapper = mapper;
+            this.userRepository = userRepository;
             this.contextService = contextService;
+            this.emailHelperService = emailHelperService;
             this.jwtProvider = jwtProvider;
         }
 
@@ -83,6 +88,52 @@ namespace StreamlineAcademy.Application.Services
 			return await authRepository.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber) == null;
 		}
 
-	}
+        public async Task<ApiResponse<string>> ForgotPassword(ForgotPasswordRequestModel model)
+        {
+            var user = await userRepository.FirstOrDefaultAsync(user => user.Email == model.Email);
+            if (user is null) return ApiResponse<string>.ErrorResponse(APIMessages.Auth.InVaildEmailAddress);
+            user.ResetCode = await GenerateConfirmationCode();
+
+            var returnVal=await userRepository.UpdateAsync(user);
+            if (returnVal > 0)
+            {
+              var isEmailSent= await emailHelperService.SendResetPasswordEmail(user.Email!);
+                if(isEmailSent) 
+             return ApiResponse<string>.SuccessResponse(APIMessages.Auth.CheckEmailToResetPassword);
+
+            }
+            return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError);
+
+        }
+
+        public async Task<ApiResponse<string>> ResetPassword(ResetPasswordRequestModel model)
+        {
+            var user = await userRepository.FirstOrDefaultAsync(x => x.ResetCode!.Trim() == model.ResetCode!.Trim());
+
+            if (user is null)
+                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.LinkExpired, HttpStatusCodes.NotFound);
+            user.Salt = AppEncryption.GenerateSalt();
+            user.Password = AppEncryption.CreatePassword(model.NewPassword!, user.Salt);
+            user.ResetCode = string.Empty;
+            int updateResult = await userRepository.UpdateAsync(user);
+            if (updateResult > 0)
+                return ApiResponse<string>.SuccessResponse(APIMessages.Auth.PasswordResetSuccess);
+
+            return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError);
+        }
+
+        private async Task<string> GenerateConfirmationCode()
+        {
+            string randomValue = AppEncryption.GetRandomConfirmationCode();
+
+            var user = await userRepository.FirstOrDefaultAsync(x => x.ConfirmationCode == randomValue);
+            while (user is not null)
+            {
+                randomValue = AppEncryption.GetRandomConfirmationCode();
+                user = await userRepository.FirstOrDefaultAsync(x => x.ConfirmationCode == randomValue);
+            }
+            return randomValue;
+        }
+    }
      
 }

@@ -1,4 +1,5 @@
-﻿using StreamlineAcademy.Application.Shared;
+﻿using Microsoft.AspNetCore.Identity.Data;
+using StreamlineAcademy.Application.Shared;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
 using System;
@@ -13,7 +14,9 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
     { 
         Task<ApiResponse<LoginResponseModel>> Login(LoginRequestModel request);
         Task<ApiResponse<string>> ChangePassword(ChangePasswordRequestModel model);
-		Task<bool> IsEmailUnique(string email);
+        Task<ApiResponse<string>> ForgotPassword(ForgotPasswordRequestModel model);
+        Task<ApiResponse<string>> ResetPassword(ResetPasswordRequestModel model);
+        Task<bool> IsEmailUnique(string email);
 		Task<bool> IsPhoneNumberUnique(string phoneNumber);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
@@ -21,11 +22,18 @@ namespace StreamlineAcademy.Api.Controllers
             this.authService = authService;
         }
         [Authorize]
-        [HttpPost("ChangePassword")]
+        [HttpPost("changePassword")]
         public async Task<ApiResponse<string>> ChangePassword(ChangePasswordRequestModel model) => await authService.ChangePassword(model);
         
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ApiResponse<LoginResponseModel>> login(LoginRequestModel model) => await authService.Login(model);
+
+        [HttpPost("forgotPassword")]
+        public async Task<ApiResponse<string>> ForgotPassword(ForgotPasswordRequestModel model) => await authService.ForgotPassword(model);
+
+        [HttpPost("resetpassword")]
+        public async Task<ApiResponse<string>> ResetPassword(ResetPasswordRequestModel model) => await authService.ResetPassword(model);
+
 
         [HttpGet("check-email/{email}")]
        public async Task<IActionResult> CheckEmailAvailability(string email)

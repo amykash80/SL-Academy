@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StreamlineAcademy.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -25,5 +26,11 @@ namespace StreamlineAcademy.Application.Utils
 		{
 			return hashPassword == CreatePassword(password, salt);
 		}
-	}
+
+        public static string GetRandomConfirmationCode()
+        {
+            return RandomNumberGenerator.GetInt32(1111, 9999).ToString();
+        }
+        
+    }
 }

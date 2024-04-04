@@ -11,7 +11,7 @@ public static class APIMessages
     // Common Errors 
     public static readonly string TechnicalError = "There is some technical error, please try again later.";
 
-    public static readonly string ProjectName = "IUST-Convocation";
+    public static readonly string ProjectName = "Streamline Academies";
     public static readonly string AlreadyAvailable = "Already Registered";
 
 
