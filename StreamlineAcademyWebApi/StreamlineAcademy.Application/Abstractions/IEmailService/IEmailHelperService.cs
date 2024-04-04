@@ -8,10 +8,8 @@ namespace StreamlineAcademy.Application.Abstractions.IEmailService
 {
 	public interface IEmailHelperService
 	{
-
      	Task<bool> SendRegistrationEmail(string emailAddress, string name, string password);
 		Task<bool> SendResetPasswordEmail(string emailAddress, string confirmationCode);
-
 
 	}
 }
