@@ -30,11 +30,11 @@ namespace StreamlineAcademy.Persistence.Data
                 {
 
                     Id = commonId,
-                    Name = "Ram",
-                    Address = "123 Main Street,Bangalore",
+                    Name = "amir",
+                    Address = "Hsr,Bangalore",
                     PostalCode = "786545",
                     PhoneNumber = "8997654556",
-                    Email = "ram@gmail.com",
+                    Email = "aamir@anterntech.com",
                     Password = AppEncryption.CreatePassword("superadmin", Passwordsalt),
                     Salt = Passwordsalt,
                     UserRole = UserRole.SuperAdmin,

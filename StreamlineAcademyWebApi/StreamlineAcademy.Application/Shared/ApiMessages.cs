@@ -130,7 +130,6 @@ public static class APIMessages
     }
 		public static class AppRoutes
 		{
-			public static readonly string ClientVerifyEmailRoute = "verifyemail";
 			public static readonly string ClientResetPasswordRoute = "resetpassword";
 			public static readonly string loginRoute = "login";
 

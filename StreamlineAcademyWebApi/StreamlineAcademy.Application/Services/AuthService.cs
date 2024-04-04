@@ -97,7 +97,7 @@ namespace StreamlineAcademy.Application.Services
             var returnVal=await userRepository.UpdateAsync(user);
             if (returnVal > 0)
             {
-              var isEmailSent= await emailHelperService.SendResetPasswordEmail(user.Email!);
+              var isEmailSent= await emailHelperService.SendResetPasswordEmail(user.Email!,user.ConfirmationCode!);
                 if(isEmailSent) 
              return ApiResponse<string>.SuccessResponse(APIMessages.Auth.CheckEmailToResetPassword);
 
