@@ -11,7 +11,9 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
 {
     public interface IProfileService
     {
-        Task<ApiResponse<ContactInfoResponse>> GetContactInfoById(Guid id);
-        
+        Task<ApiResponse<ContactInfoResponseModel>> GetContactInfoById();
+        Task<ApiResponse<ContactUpdateModel>> UpdateContact(ContactUpdateModel request);
+        //Task<ApiResponse<AddressInfoResponseModel>> GetAddressInfoById();
+
     }
 }

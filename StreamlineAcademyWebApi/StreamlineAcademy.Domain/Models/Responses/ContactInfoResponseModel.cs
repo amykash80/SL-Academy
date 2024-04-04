@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Domain.Models.Responses
 {
-    public class ContactInfoResponse
+    public class ContactInfoResponseModel
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }

@@ -90,9 +90,10 @@ public static class APIMessages
             public static readonly string InvalidCredential = "Invalid Credentials.";
         }
 
-        public static class UserManagement
+        public static class ProfileManagement
         {
-            public static readonly string UserNotFound = "Enquiry not found.";
+            public static readonly string UserNotFound = "User not found.";
+            public static readonly string ContactUpdated = "Contact Updated Successfully.";
 
         }
 

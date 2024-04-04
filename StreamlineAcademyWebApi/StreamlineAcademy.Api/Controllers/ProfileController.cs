@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
@@ -14,7 +15,7 @@ namespace StreamlineAcademy.Api.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-        private readonly StreamlineDbContet contet;
+       
         private readonly IProfileService profileService;
 
         public ProfileController(IProfileService profileService)
@@ -22,11 +23,17 @@ namespace StreamlineAcademy.Api.Controllers
             
             this.profileService = profileService;
         }
-        [HttpGet("getById/{id:guid}")]
+        [Authorize]
+        [HttpGet("getContactInfo")] 
+        public async Task<ApiResponse<ContactInfoResponseModel>> GetContactInfoById() => await profileService.GetContactInfoById();
 
-        public async Task<ApiResponse<ContactInfoResponse>> GetEnquiryById(Guid id) => await profileService.GetContactInfoById(id);
-         
+        [Authorize]
+        [HttpPut("updateContactInfo")]
+        public async Task<ApiResponse<ContactUpdateModel>> UpdateContact(ContactUpdateModel model) => await profileService.UpdateContact(model);
 
-        
+        //[Authorize]
+        //[HttpGet("getAddressInfo")]
+        //public async Task<ApiResponse<AddressInfoResponseModel>> GetAddressInfoById() => await profileService.GetAddressInfoById();
+
     }
 }

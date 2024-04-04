@@ -9,5 +9,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
 {
     public interface IProfileRepository:IBaseRepository<User>
     {
+        //Task<User> GetAddressInfoByIdAsync(string query);
+        
     }
 }
