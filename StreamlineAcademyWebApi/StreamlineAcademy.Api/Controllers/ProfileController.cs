@@ -31,9 +31,12 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpPut("updateContactInfo")]
         public async Task<ApiResponse<ContactUpdateModel>> UpdateContact(ContactUpdateModel model) => await profileService.UpdateContact(model);
 
-        //[Authorize]
-        //[HttpGet("getAddressInfo")]
-        //public async Task<ApiResponse<AddressInfoResponseModel>> GetAddressInfoById() => await profileService.GetAddressInfoById();
+        [Authorize]
+        [HttpGet("getAddressInfo")]
+        public async Task<ApiResponse<AddressInfoResponseModel>> GetAddressInfoById() => await profileService.GetAddressInfoById();
+        [Authorize]
+        [HttpPut("updateAddressInfo")]
+        public async Task<ApiResponse<AddressInfoUpdateModel>> UpdateAddress(AddressInfoUpdateModel model) => await profileService.UpdateAddress(model);
 
     }
 }

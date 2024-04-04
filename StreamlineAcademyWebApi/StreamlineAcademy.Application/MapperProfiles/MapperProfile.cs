@@ -48,15 +48,6 @@ namespace StreamlineAcademy.Application.MapperProfiles
 
         }
 
-        public class UserProfile : AutoMapper.Profile
-        {
-
-            public UserProfile()
-            {
-                CreateMap<ContactInfoResponse, User>();
-                CreateMap<User, ContactInfoResponse>();
-            }
-
-        }
+       
     }
 }

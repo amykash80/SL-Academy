@@ -1,4 +1,5 @@
 ﻿using StreamlineAcademy.Domain.Entities;
+using StreamlineAcademy.Domain.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
 {
     public interface IProfileRepository:IBaseRepository<User>
     {
-        //Task<User> GetAddressInfoByIdAsync(string query);
-        
+
+        Task<AddressInfoResponseModel> GetAddressInfo(Guid? userId);
+
     }
 }
