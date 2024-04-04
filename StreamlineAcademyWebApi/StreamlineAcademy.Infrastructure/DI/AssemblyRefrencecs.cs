@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IEmailService;
+using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Abstractions.JWT;
 using StreamlineAcademy.Infrastructure.Identity;
 using StreamlineAcademy.Infrastructure.JWT;
+using StreamlineAcademy.Infrastructure.TempelateRenderer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,8 @@ namespace StreamlineAcademy.Infrastructure.DI
             services.AddSingleton<IContextService, ContextService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IJwtProvider, JwtProvider>();
-			return services;
+            services.AddScoped<IEmailTempelateRenderer, EmailTempelateRenderer>();
+            return services;
 
         }
     }

@@ -129,8 +129,8 @@ public static class APIMessages
     public static class TemplateNames
     {
         public static readonly string EmailConfirmation = "EmailConfirmation.cshtml";
-
-        public static readonly string PasswordReset = "PasswordReset.cshtml";
+            public static readonly string AcademyRegistration = "AcademyRegistration.cshtml";
+            public static readonly string PasswordReset = "PasswordReset.cshtml";
 
         public static readonly string ConfirmEmailWithUsername = "ConfirmEmailWithUsername.cshtml";
         public static readonly string WelcomeEmailWithUserInfo = "WelcomeEmailWithUserInfo.cshtml";

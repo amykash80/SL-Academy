@@ -26,20 +26,10 @@ namespace StreamlineAcademy.Persistence.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<AcademyType> AcademyTypes { get; set; }
 
-
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.ConfigureIndexesAndData();
-
         }
 
-        
-
-
-        
-        
     }
 }

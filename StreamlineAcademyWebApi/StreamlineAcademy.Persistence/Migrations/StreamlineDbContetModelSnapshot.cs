@@ -260,14 +260,32 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("StateId");
 
                     b.ToTable("SuperAdmins");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3cdf7cf6-b0f8-4c97-855f-2b59b1c529cb")
+                            Id = new Guid("0f6bd4e5-69fe-4d42-85f2-e84a4e357f77"),
+                            CityId = new Guid("677483a5-5af3-47d0-9a99-fd876c3ca0c9"),
+                            CountryId = new Guid("4d67c002-eaa2-4519-b83b-0690abd17483"),
+                            StateId = new Guid("bd0eba4e-77b7-47fb-929c-12a793e158b9")
                         });
                 });
 
@@ -413,11 +431,35 @@ namespace StreamlineAcademy.Persistence.Migrations
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.SuperAdmin", b =>
                 {
-                    b.HasOne("StreamlineAcademy.Domain.Entities.User", "User")
-                        .WithOne("SuperAdmin")
-                        .HasForeignKey("StreamlineAcademy.Domain.Entities.SuperAdmin", "Id")
+                    b.HasOne("StreamlineAcademy.Domain.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("StreamlineAcademy.Domain.Entities.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StreamlineAcademy.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StreamlineAcademy.Domain.Entities.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("State");
 
                     b.Navigation("User");
                 });
