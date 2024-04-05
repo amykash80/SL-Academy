@@ -34,6 +34,8 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpPost("resetpassword")]
         public async Task<ApiResponse<string>> ResetPassword(ResetPasswordRequestModel model) => await authService.ResetPassword(model);
 
+        [HttpPost("resend-reset-code")]
+        public async Task<ApiResponse<string>> ResendResetCode(ResendResetCodeRequestModel model) => await authService.ResendResetCode(model);
 
         [HttpGet("check-email/{email}")]
        public async Task<IActionResult> CheckEmailAvailability(string email)

@@ -128,6 +128,25 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError);
         }
 
+        public async Task<ApiResponse<string>> ResendResetCode(ResendResetCodeRequestModel model)
+        {
+            var user = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
+            if (user is null)
+                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.UserNotFound, HttpStatusCodes.NotFound);
+            user.ResetCode = AppEncryption.GetRandomConfirmationCode();
+            user.ResetExpiry = DateTime.UtcNow.AddMinutes(10); 
+            int updateResult = await userRepository.UpdateAsync(user);
+            if (updateResult > 0)
+            {
+                var isEmailSent = await emailHelperService.SendResetPasswordEmail(user.Email!, user.ResetCode);
+                if (isEmailSent)
+                    return ApiResponse<string>.SuccessResponse(APIMessages.Auth.CheckEmailToResetPassword);
+            }
+
+            return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError);
+        }
+
+
     }
-     
+
 }
