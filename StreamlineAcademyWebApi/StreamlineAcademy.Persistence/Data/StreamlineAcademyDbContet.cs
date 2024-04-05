@@ -25,6 +25,7 @@ namespace StreamlineAcademy.Persistence.Data
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<AcademyType> AcademyTypes { get; set; }
+        public DbSet<AppFiles> AppFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
