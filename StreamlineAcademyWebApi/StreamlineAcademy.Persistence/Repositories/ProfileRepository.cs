@@ -35,7 +35,7 @@ namespace StreamlineAcademy.Persistence.Repositories
             { 
                 var response = new AddressInfoResponseModel
                 {
-                    Id =superadmin.User.Id,
+                    Id =superadmin.User!.Id,
                     Address = superadmin.User.Address,
                     PostalCode = superadmin.User.PostalCode,
                     CountryName = superadmin.Country!.CountryName,
@@ -47,7 +47,7 @@ namespace StreamlineAcademy.Persistence.Repositories
             return new AddressInfoResponseModel() { };
         }
 
-        public async Task<int> UpdateAsync(SuperAdmin superAdmin)
+        public async Task<int> UpdateAddressAsync(SuperAdmin superAdmin)
         {
             context.Set<SuperAdmin>().Update(superAdmin);
             return await context.SaveChangesAsync();

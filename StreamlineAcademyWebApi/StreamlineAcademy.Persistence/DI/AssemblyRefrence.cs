@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
+using StreamlineAcademy.Domain.Entities;
 using StreamlineAcademy.Persistence.Data;
 using StreamlineAcademy.Persistence.Repositories;
 using System;
@@ -26,6 +27,7 @@ namespace StreamlineAcademy.Persistence.DI
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
+            services.AddScoped<IPortalAdminRepository, PortalAdminRepository>();
             return services;
         }
     }

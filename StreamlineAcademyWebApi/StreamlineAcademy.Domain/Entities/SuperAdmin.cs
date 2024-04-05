@@ -16,13 +16,13 @@ namespace StreamlineAcademy.Domain.Entities
 
         [ForeignKey(nameof(Id))]
         public User? User { get; set; }
-        public Guid CountryId { get; set; }
+        public Guid? CountryId { get; set; }
         [ForeignKey(nameof(CountryId))]
         public Country? Country { get; set; }
-        public Guid StateId { get; set; }
+        public Guid? StateId { get; set; }
         [ForeignKey(nameof(StateId))]
         public State? State { get; set; }
-        public Guid CityId { get; set; }
+        public Guid? CityId { get; set; }
         [ForeignKey(nameof(CityId))]
         public City? City { get; set; }
     }
