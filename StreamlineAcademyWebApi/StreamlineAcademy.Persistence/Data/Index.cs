@@ -43,7 +43,9 @@ namespace StreamlineAcademy.Persistence.Data
                     CreatedDate = DateTime.Now,
                     ModifiedBy = Guid.Empty,
                     ModifiedDate = DateTime.Now,
-                    DeletedBy = Guid.Empty
+                    DeletedBy = Guid.Empty,
+                    ResetCode=string.Empty,
+                    
 
                 }
             );

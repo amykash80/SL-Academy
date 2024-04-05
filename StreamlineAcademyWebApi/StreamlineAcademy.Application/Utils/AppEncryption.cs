@@ -27,9 +27,9 @@ namespace StreamlineAcademy.Application.Utils
 			return hashPassword == CreatePassword(password, salt);
 		}
 
-        public static string GetRandomConfirmationCode()
+        public  static string GetRandomConfirmationCode()
         {
-            return RandomNumberGenerator.GetInt32(1111, 9999).ToString();
+            return  RandomNumberGenerator.GetInt32(1111, 9999).ToString();
         }
         
     }

@@ -89,14 +89,14 @@ namespace StreamlineAcademy.Application.Services
 			return email;
 		}
 
-        public async Task<bool> SendResetPasswordEmail(string emailAddress,string confirmationCode)
+        public async Task<bool> SendResetPasswordEmail(string emailAddress,string restcode)
         {
             var baseUrl = configuration.GetValue<string>("EmailSettings:DomainUrl");
             var subject = "Stramline Academies Reset Password";
             string body = await emailTempelateRenderer.RenderTemplateAsync(APIMessages.TemplateNames.PasswordReset, new
             {
                     CompanyName = APIMessages.ProjectName,
-                    Link = $"{contextService.HttpContextClientURL()}/{AppRoutes.ClientResetPasswordRoute}?token={confirmationCode}"
+                    Link = $"{contextService.HttpContextClientURL()}/{AppRoutes.ClientResetPasswordRoute}?token={restcode}"
 			
             });
             var emailMessage = CreateMailMessage(emailAddress, subject, body);
