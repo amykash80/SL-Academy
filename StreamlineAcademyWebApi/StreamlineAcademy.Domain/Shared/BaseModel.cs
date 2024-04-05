@@ -8,7 +8,7 @@ namespace StreamlineAcademy.Domain.Shared
 {
     public  class BaseModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 		public bool IsActive { get; set; }
 		public Guid? CreatedBy { get; set; }
 		public DateTimeOffset? CreatedDate { get; set; }

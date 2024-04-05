@@ -20,6 +20,7 @@ namespace StreamlineAcademy.Application.Services
         private readonly IProfileRepository profileRepository;
         private readonly IMapper mapper;
         private readonly IContextService contextService;
+        
 
         public ProfileService(IProfileRepository profileRepository, IMapper mapper, IContextService contextService)
         {
@@ -85,20 +86,34 @@ namespace StreamlineAcademy.Application.Services
         {
             var id = contextService.GetUserId();
             var superadmin = await profileRepository.GetAddressInfo(id);
-            
-            if (superadmin is not null)
+            var user = new User()
             {
-                superadmin.Address = request.Address;
-                superadmin.PostalCode = request.PostalCode;
-                superadmin.CountryName = request.CountryName;
-                superadmin.StateName = request.StateName;
-                superadmin.CityName = request.CityName;
-              
-                return ApiResponse<AddressInfoUpdateModel>.SuccessResponse(request, APIMessages.ProfileManagement.ContactUpdated, HttpStatusCodes.Created);
+
+                Id = id,
+                Address = request.Address,
+                PostalCode = request.PostalCode,
+            };
+
+            var returnUser = await profileRepository.UpdateAsync(user);
+            if (returnUser > 0)
+            {
+                var superAdmin = new SuperAdmin()
+                {
+
+                    Id = user.Id,
+                    CountryId = Guid.Parse(request.CountryName),
+                    StateId = Guid.Parse(request.StateName),
+                    CityId = Guid.Parse(request.CityName),
+
+                };
+                var returnSuperadmin = await profileRepository.UpdateAsync(superAdmin);
+                if (returnSuperadmin > 0)
+                {
+                    return ApiResponse<AddressInfoUpdateModel>.SuccessResponse(request, APIMessages.ProfileManagement.ContactUpdated, HttpStatusCodes.Created);
+                }
             }
-
-
-            return ApiResponse<AddressInfoUpdateModel>.ErrorResponse(APIMessages.TechnicalError);
+            return ApiResponse<AddressInfoUpdateModel>.ErrorResponse(APIMessages.TechnicalError); 
         }
+
     }
 }
