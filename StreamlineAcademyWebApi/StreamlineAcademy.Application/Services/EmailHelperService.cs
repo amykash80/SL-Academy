@@ -43,6 +43,8 @@ namespace StreamlineAcademy.Application.Services
                 Email = emailAddress,
 				CompanyName=APIMessages.ProjectName,
                 Password = password,
+                Link = $"{contextService.HttpContextClientURL()}/{AppRoutes.loginRoute}"
+
             });
             var emailMessage = CreateMailMessage(emailAddress, subject, body);
             return await SendRegistrationEmail(emailMessage);
