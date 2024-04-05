@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Domain.Models.Requests
 {
-    public class ForgotPasswordRequestModel
+    public class ResendResetCodeRequestModel
     {
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]

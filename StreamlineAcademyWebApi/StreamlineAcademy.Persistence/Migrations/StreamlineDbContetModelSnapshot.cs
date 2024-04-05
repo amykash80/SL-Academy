@@ -289,9 +289,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ConfirmationCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -331,6 +328,9 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Property<string>("ResetCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset?>("ResetExpiry")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Salt")
                         .HasColumnType("nvarchar(max)");
 
@@ -344,20 +344,21 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f351e6af-ce60-4166-9835-287edebe5431"),
+                            Id = new Guid("ae8a85ec-c3aa-4c95-9325-30f4434176f6"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 15, 6, 23, 155, DateTimeKind.Unspecified).AddTicks(5275), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 5, 10, 29, 0, 240, DateTimeKind.Unspecified).AddTicks(3848), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 15, 6, 23, 155, DateTimeKind.Unspecified).AddTicks(5304), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 5, 10, 29, 0, 240, DateTimeKind.Unspecified).AddTicks(3884), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "86rJ11CT+PSBxHmZAizslKV0whSWxPuOQCBNo6WthCM=",
+                            Password = "lRKuZ1rOmdRth0AXfQ6Z7R4AUJDBarwC5CjfUa4PxKk=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
-                            Salt = "6SgMmQDK89tEYkU7RmMqJg==",
+                            ResetCode = "",
+                            Salt = "JwkN0wX5x2V0AiGA36+g4A==",
                             UserRole = (byte)1
                         });
                 });

@@ -48,7 +48,7 @@ namespace StreamlineAcademy.Application.Services
                 return ApiResponse<string>.ErrorResponse(APIMessages.Auth.UserNotFound, HttpStatusCodes.NotFound);
 
             if (AppEncryption.ComparePassword(model.OldPassword!, user.Password!, user.Salt!))
-                return ApiResponse<string>.ErrorResponse("Old Password is Incorrect", HttpStatusCodes.BadRequest);
+                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.IncorrectOldPassword, HttpStatusCodes.BadRequest);
 
             user.Salt = AppEncryption.GenerateSalt();
             user.Password = AppEncryption.CreatePassword(model.NewPassword!, user.Salt);
@@ -75,7 +75,7 @@ namespace StreamlineAcademy.Application.Services
                 Token = jwtProvider.GenerateToken(user) 
             };
 
-            return ApiResponse<LoginResponseModel>.SuccessResponse(response,"Successfully Logged In");
+            return ApiResponse<LoginResponseModel>.SuccessResponse(response,APIMessages.Auth.LoggedIn);
         }
 
 		public async Task<bool> IsEmailUnique(string email)
@@ -92,12 +92,12 @@ namespace StreamlineAcademy.Application.Services
         {
             var user = await userRepository.FirstOrDefaultAsync(user => user.Email == model.Email);
             if (user is null) return ApiResponse<string>.ErrorResponse(APIMessages.Auth.InVaildEmailAddress);
-            user.ResetCode = await GenerateConfirmationCode();
-
+            user.ResetCode = AppEncryption.GetRandomConfirmationCode();
+            user.ResetExpiry = DateTime.Now.AddMinutes(3);
             var returnVal=await userRepository.UpdateAsync(user);
             if (returnVal > 0)
             {
-              var isEmailSent= await emailHelperService.SendResetPasswordEmail(user.Email!,user.ConfirmationCode!);
+              var isEmailSent= await emailHelperService.SendResetPasswordEmail(user.Email!,user.ResetCode);
                 if(isEmailSent) 
              return ApiResponse<string>.SuccessResponse(APIMessages.Auth.CheckEmailToResetPassword);
 
@@ -108,13 +108,19 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<string>> ResetPassword(ResetPasswordRequestModel model)
         {
-            var user = await userRepository.FirstOrDefaultAsync(x => x.ResetCode!.Trim() == model.ResetCode!.Trim());
+            var currentTime = DateTime.UtcNow;
+            var user = await userRepository.FirstOrDefaultAsync(x =>x.ResetCode==model.ResetCode);
 
             if (user is null)
+                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.InValidResetCode, HttpStatusCodes.NotFound);
+
+            if (user.ResetExpiry <= currentTime)
                 return ApiResponse<string>.ErrorResponse(APIMessages.Auth.LinkExpired, HttpStatusCodes.NotFound);
+
             user.Salt = AppEncryption.GenerateSalt();
             user.Password = AppEncryption.CreatePassword(model.NewPassword!, user.Salt);
             user.ResetCode = string.Empty;
+            user.ResetExpiry = null;
             int updateResult = await userRepository.UpdateAsync(user);
             if (updateResult > 0)
                 return ApiResponse<string>.SuccessResponse(APIMessages.Auth.PasswordResetSuccess);
@@ -122,18 +128,25 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError);
         }
 
-        private async Task<string> GenerateConfirmationCode()
+        public async Task<ApiResponse<string>> ResendResetCode(ResendResetCodeRequestModel model)
         {
-            string randomValue = AppEncryption.GetRandomConfirmationCode();
-
-            var user = await userRepository.FirstOrDefaultAsync(x => x.ConfirmationCode == randomValue);
-            while (user is not null)
+            var user = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
+            if (user is null)
+                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.UserNotFound, HttpStatusCodes.NotFound);
+            user.ResetCode = AppEncryption.GetRandomConfirmationCode();
+            user.ResetExpiry = DateTime.UtcNow.AddMinutes(10); 
+            int updateResult = await userRepository.UpdateAsync(user);
+            if (updateResult > 0)
             {
-                randomValue = AppEncryption.GetRandomConfirmationCode();
-                user = await userRepository.FirstOrDefaultAsync(x => x.ConfirmationCode == randomValue);
+                var isEmailSent = await emailHelperService.SendResetPasswordEmail(user.Email!, user.ResetCode);
+                if (isEmailSent)
+                    return ApiResponse<string>.SuccessResponse(APIMessages.Auth.CheckEmailToResetPassword);
             }
-            return randomValue;
+
+            return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError);
         }
+
+
     }
-     
+
 }

@@ -90,9 +90,12 @@ public static class APIMessages
         public const string PasswordResetSuccess = "Your password has been successfully reset. You can now log in using your new password.";
         public const string UserNotFound = "User not found";
         public const string IncorrectOldPassword = "Old Password is Incorrect";
+        public const string LoggedIn = "Successfully logged in";
+        public const string InValidResetCode = "Invalid Reset Code";
+
         }
 
-    public static class TemplateNames
+        public static class TemplateNames
     {
             public static readonly string AcademyRegistration = "AcademyRegistration.cshtml";
             public static readonly string PasswordReset = "PasswordReset.cshtml";

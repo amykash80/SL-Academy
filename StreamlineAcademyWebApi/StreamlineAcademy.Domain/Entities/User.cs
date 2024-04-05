@@ -19,7 +19,7 @@ namespace StreamlineAcademy.Domain.Entities
         public string? Salt { get; set; } 
         public UserRole UserRole { get; set; }
         public string? ResetCode { get; set; }
-        public string? ConfirmationCode { get; set; }
+        public DateTimeOffset? ResetExpiry { get; set; }
 
         #region navigation
         public Academy? Academy { get; set; } 

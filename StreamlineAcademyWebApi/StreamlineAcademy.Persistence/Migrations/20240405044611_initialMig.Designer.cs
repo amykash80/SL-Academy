@@ -12,8 +12,8 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    [Migration("20240404043947_initialMigration")]
-    partial class initialMigration
+    [Migration("20240405044611_initialMig")]
+    partial class initialMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace StreamlineAcademy.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AcademyName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("AcademyTypeId")
                         .HasColumnType("uniqueidentifier");
@@ -46,6 +46,8 @@ namespace StreamlineAcademy.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AcademyName");
 
                     b.HasIndex("AcademyTypeId");
 
@@ -187,7 +189,7 @@ namespace StreamlineAcademy.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -199,7 +201,7 @@ namespace StreamlineAcademy.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -208,6 +210,10 @@ namespace StreamlineAcademy.Persistence.Migrations
                         .HasColumnType("tinyint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Enquiries");
                 });
@@ -325,6 +331,9 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Property<string>("ResetCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ResetExpiry")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Salt")
                         .HasColumnType("nvarchar(max)");
 
@@ -334,6 +343,27 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e6a47921-9985-403a-ac73-098e43c4d06e"),
+                            Address = "Hsr,Bangalore",
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 5, 10, 16, 10, 601, DateTimeKind.Unspecified).AddTicks(887), new TimeSpan(0, 5, 30, 0, 0)),
+                            DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "aamir@anterntech.com",
+                            IsActive = true,
+                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 5, 10, 16, 10, 601, DateTimeKind.Unspecified).AddTicks(924), new TimeSpan(0, 5, 30, 0, 0)),
+                            Name = "amir",
+                            Password = "/dq/ldqFDAmtxHviashvHH+tgWhxifa4xuKYz4TrUXs=",
+                            PhoneNumber = "8997654556",
+                            PostalCode = "786545",
+                            ResetCode = "",
+                            Salt = "NljCmOLIOHH34RG0xmT/gg==",
+                            UserRole = (byte)1
+                        });
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Academy", b =>

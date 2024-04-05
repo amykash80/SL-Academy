@@ -12,8 +12,8 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    [Migration("20240404071225_confirmationCode")]
-    partial class confirmationCode
+    [Migration("20240405044748_resetExpiry")]
+    partial class resetExpiry
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -292,9 +292,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ConfirmationCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -334,6 +331,9 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Property<string>("ResetCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ResetExpiry")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Salt")
                         .HasColumnType("nvarchar(max)");
 
@@ -347,20 +347,22 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1ec366ca-072b-4088-a8c4-510822110d8c"),
-                            Address = "123 Main Street,Bangalore",
+                            Id = new Guid("103b4012-e712-4a70-a5e5-8f211b2f9806"),
+                            Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 12, 42, 24, 345, DateTimeKind.Unspecified).AddTicks(1550), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 5, 10, 17, 48, 496, DateTimeKind.Unspecified).AddTicks(2794), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Email = "ram@gmail.com",
+                            Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 12, 42, 24, 345, DateTimeKind.Unspecified).AddTicks(1588), new TimeSpan(0, 5, 30, 0, 0)),
-                            Name = "Ram",
-                            Password = "+HaQE5Vp8qEZFDIHpZOZG7S59exAyrAcpfKqeVSyfvs=",
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 5, 10, 17, 48, 496, DateTimeKind.Unspecified).AddTicks(2838), new TimeSpan(0, 5, 30, 0, 0)),
+                            Name = "amir",
+                            Password = "ez+Gbp13n/qOtzZKINuceAA6OPXrTe4SGWabFqFmdxQ=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
-                            Salt = "AUucac9X4gWRxtpKBiAe7A==",
+                            ResetCode = "",
+                            ResetExpiry = "",
+                            Salt = "XNkVfDeIJ2DzM/LIJLcjrA==",
                             UserRole = (byte)1
                         });
                 });
