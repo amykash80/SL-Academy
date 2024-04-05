@@ -10,9 +10,9 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public class AppFiles:BaseModel
     {
-        public Module Module { get; set; }
+        public Module? Module { get; set; }
         public string? FilePath { get; set; }
-        public Guid EntityId { get; set; }
+        public Guid? EntityId { get; set; }
 
     }
 }

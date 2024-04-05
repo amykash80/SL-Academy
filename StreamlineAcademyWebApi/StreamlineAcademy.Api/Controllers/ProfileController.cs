@@ -29,7 +29,7 @@ namespace StreamlineAcademy.Api.Controllers
 
         [Authorize]
         [HttpPut("updateContactInfo")]
-        public async Task<ApiResponse<ContactUpdateModel>> UpdateContact(ContactUpdateModel model) => await profileService.UpdateContact(model);
+        public async Task<ApiResponse<ContactUpdateModel>> UpdaContact(ContactUpdateModel model) => await profileService.UpdateContact(model);
 
         [Authorize]
         [HttpGet("getAddressInfo")]
@@ -38,5 +38,8 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpPut("updateAddressInfo")]
         public async Task<ApiResponse<AddressInfoUpdateModel>> UpdateAddress(AddressInfoUpdateModel model) => await profileService.UpdateAddress(model);
 
+        [Authorize]
+        [HttpPost("uploadPhoto")]
+        public async Task<ApiResponse<FileResponseModel>> UploadPhoto([FromForm]FileRequestModel model) => await profileService.UploadPhoto(model);
     }
 }

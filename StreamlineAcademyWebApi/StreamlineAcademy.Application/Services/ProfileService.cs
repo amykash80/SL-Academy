@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
@@ -9,6 +10,7 @@ using StreamlineAcademy.Domain.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,13 +22,18 @@ namespace StreamlineAcademy.Application.Services
         private readonly IProfileRepository profileRepository;
         private readonly IMapper mapper;
         private readonly IContextService contextService;
-        
+        private readonly IFileService fileService;
+        private readonly IStorageService storageService;
+        private readonly IFileRepository fileRepository;
 
-        public ProfileService(IProfileRepository profileRepository, IMapper mapper, IContextService contextService)
+        public ProfileService(IProfileRepository profileRepository, IMapper mapper, IContextService contextService,IFileService fileService,IStorageService storageService,IFileRepository fileRepository)
         {
             this.profileRepository = profileRepository;
             this.mapper = mapper;
             this.contextService = contextService;
+            this.fileService = fileService;
+            this.storageService = storageService;
+            this.fileRepository = fileRepository;
         }
         public async Task<ApiResponse<ContactInfoResponseModel>> GetContactInfoById()
         {
@@ -115,5 +122,27 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<AddressInfoUpdateModel>.ErrorResponse(APIMessages.TechnicalError); 
         }
 
+        public async Task<ApiResponse<FileResponseModel>> UploadPhoto(FileRequestModel request)
+        {
+            var userId = contextService.GetUserId();
+            if(userId is null)
+            {
+                return ApiResponse<FileResponseModel>.ErrorResponse((APIMessages.ProfileManagement.UserNotFound));
+            }
+            var filePath = await storageService.UploadFileAsync(request.File!);
+            var appFiles = new AppFiles
+            {
+                Module = request.Module,
+                FilePath = filePath,
+                EntityId=userId   
+            };
+            
+           var fileSave = await fileRepository.InsertAsync(appFiles);
+            if(fileSave > 0)
+            return ApiResponse<FileResponseModel>.SuccessResponse(new FileResponseModel() {Id =userId,FilePath =filePath}, APIMessages.ProfileManagement.PhotoUploaded);
+            return ApiResponse<FileResponseModel>.ErrorResponse(APIMessages.TechnicalError);
+        }
+
+       
     }
 }

@@ -15,6 +15,7 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
         Task<ApiResponse<ContactUpdateModel>> UpdateContact(ContactUpdateModel request);
         Task<ApiResponse<AddressInfoResponseModel>> GetAddressInfoById();
         Task<ApiResponse<AddressInfoUpdateModel>> UpdateAddress(AddressInfoUpdateModel request);
+        Task<ApiResponse<FileResponseModel>> UploadPhoto(FileRequestModel request);
 
     }
 }
