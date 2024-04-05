@@ -523,6 +523,8 @@ namespace StreamlineAcademy.Persistence.Migrations
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.User", b =>
                 {
                     b.Navigation("Academy");
+
+                    b.Navigation("SuperAdmin");
                 });
 #pragma warning restore 612, 618
         }

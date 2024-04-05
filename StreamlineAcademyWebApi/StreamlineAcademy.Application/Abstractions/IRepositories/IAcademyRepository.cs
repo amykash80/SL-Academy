@@ -25,8 +25,8 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
 		#endregion
 
 		public Task<List<AcademyResponseModel>> GetAllAcademies();
-		Task<AcademyResponseModel> GetAcademyById(Guid id);
-		Task<bool> UpdateRegistrationStatus(Guid id, RegistrationStatus status);
+		Task<AcademyResponseModel> GetAcademyById(Guid? id);
+		Task<bool> UpdateRegistrationStatus(Guid? id, RegistrationStatus status);
 		Task<int> Delete(User model);
 	  
 

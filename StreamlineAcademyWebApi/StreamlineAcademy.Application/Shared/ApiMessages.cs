@@ -63,7 +63,18 @@ public static class APIMessages
             public static readonly string InvalidCredential = "Invalid Credentials.";
         }
 
-		public static class Auth
+        public static class ProfileManagement
+        {
+            public static readonly string UserNotFound = "User not found.";
+            public static readonly string ContactUpdated = "Contact Updated Successfully.";
+            public static readonly string UserFound = "Userfound.";
+            public static readonly string AddressUpdated = "Address Updated Successfully.";
+            public static readonly string PhotoUploaded = "Photo Uploaded Successfully.";
+            
+
+        }
+
+        public static class Auth
     {
         public const string NameAlreadyTaken = "Name is already taken.";
         public const string EmailAlreadyRegistered = "Email already registered.";

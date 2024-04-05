@@ -66,7 +66,7 @@ namespace StreamlineAcademy.Application.Services
 
             var res = AppEncryption.ComparePassword(user.Password!, request.Password!, user.Salt!);
             if(!res)
-                return ApiResponse<LoginResponseModel>.ErrorResponse(APIMessages.EnquiryManagement.InvalidCredential, HttpStatusCodes.BadRequest);
+                return ApiResponse<LoginResponseModel>.ErrorResponse("Invalid credentials", HttpStatusCodes.BadRequest);
 
             var response = new LoginResponseModel()
             {

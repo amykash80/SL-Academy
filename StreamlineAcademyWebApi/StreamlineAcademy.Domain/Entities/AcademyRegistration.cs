@@ -12,7 +12,7 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public class Academy
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string? AcademyName { get; set; } 
   
         [ForeignKey(nameof(Id))]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Application.Services
 {
-    internal class StorageService : IStorageService
+    public class StorageService : IStorageService
     {
         private readonly string webRootPath; 
         public StorageService(string WebRootPath)

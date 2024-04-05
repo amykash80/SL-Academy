@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
+using StreamlineAcademy.Application.Services;
 using StreamlineAcademy.Persistence.Data;
 using StreamlineAcademy.Persistence.Repositories;
 using System;
@@ -24,6 +25,7 @@ namespace StreamlineAcademy.Persistence.DI
             services.AddScoped<IAcademyRepository, AcademyRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
             return services;
         }
     }

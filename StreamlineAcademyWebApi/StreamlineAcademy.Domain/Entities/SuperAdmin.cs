@@ -12,7 +12,7 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public  class SuperAdmin
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         [ForeignKey(nameof(Id))]
         public User? User { get; set; }
