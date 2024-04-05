@@ -54,7 +54,7 @@ namespace StreamlineAcademy.Persistence.Repositories
 			return res!;
 		}
 
-		public async Task<AcademyResponseModel> GetAcademyById(Guid id)
+		public async Task<AcademyResponseModel> GetAcademyById(Guid? id)
         {
 
             var academy = await context.Academies
@@ -148,7 +148,7 @@ namespace StreamlineAcademy.Persistence.Repositories
 			return await context.SaveChangesAsync();
 		}
 
-		public async Task<bool> UpdateRegistrationStatus(Guid id, RegistrationStatus status)
+		public async Task<bool> UpdateRegistrationStatus(Guid? id, RegistrationStatus status)
         {
 			var enquiry = await context.Enquiries.FirstOrDefaultAsync(e => e.Id == id);
 

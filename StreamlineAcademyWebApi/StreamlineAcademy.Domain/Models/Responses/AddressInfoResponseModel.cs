@@ -8,7 +8,7 @@ namespace StreamlineAcademy.Domain.Models.Responses
 {
     public class AddressInfoResponseModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string? Address { get; set; }
         public string? PostalCode { get; set; }
         public string? CountryName { get; set; }

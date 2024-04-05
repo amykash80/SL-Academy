@@ -13,5 +13,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
 
         Task<AddressInfoResponseModel> GetAddressInfo(Guid? userId);
 
+        Task<int> UpdateAsync(SuperAdmin superAdmin);
+
     }
 }

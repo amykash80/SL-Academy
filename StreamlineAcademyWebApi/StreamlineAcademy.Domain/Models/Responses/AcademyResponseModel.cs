@@ -9,7 +9,7 @@ namespace StreamlineAcademy.Domain.Models.Responses
 {
     public class AcademyResponseModel
     { 
-            public Guid Id { get; set; }
+            public Guid? Id { get; set; }
             public string? AcademyAdmin { get; set; }
             public string? AcademyName { get; set; } 
             public string? Address { get; set; } 
