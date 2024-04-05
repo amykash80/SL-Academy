@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using StreamlineAcademy.Domain.Models.Common;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Shared;
+using StreamlineAcademy.Application.Abstractions.Identity;
+using static StreamlineAcademy.Application.Shared.APIMessages;
 
 namespace StreamlineAcademy.Application.Services
 {
@@ -19,12 +21,15 @@ namespace StreamlineAcademy.Application.Services
 
 		private readonly IConfiguration configuration;
         private readonly IEmailTempelateRenderer emailTempelateRenderer;
+        private readonly IContextService contextService;
 
         public EmailHelperService(IConfiguration configuration,
-			                      IEmailTempelateRenderer emailTempelateRenderer)
+			                      IEmailTempelateRenderer emailTempelateRenderer,
+								  IContextService contextService)
 		{
 			this.configuration = configuration;
             this.emailTempelateRenderer = emailTempelateRenderer;
+            this.contextService = contextService;
         }
 
 		public async Task<bool> SendRegistrationEmail(string emailAddress, string name, string password)
@@ -36,7 +41,7 @@ namespace StreamlineAcademy.Application.Services
             {
                 Name = name,
                 Email = emailAddress,
-				CompanyName="Streamline Academies",
+				CompanyName=APIMessages.ProjectName,
                 Password = password,
             });
             var emailMessage = CreateMailMessage(emailAddress, subject, body);
@@ -83,5 +88,19 @@ namespace StreamlineAcademy.Application.Services
 			email.Body = builder.ToMessageBody();
 			return email;
 		}
-	}
+
+        public async Task<bool> SendResetPasswordEmail(string emailAddress,string confirmationCode)
+        {
+            var baseUrl = configuration.GetValue<string>("EmailSettings:DomainUrl");
+            var subject = "Stramline Academies Reset Password";
+            string body = await emailTempelateRenderer.RenderTemplateAsync(APIMessages.TemplateNames.PasswordReset, new
+            {
+                    CompanyName = APIMessages.ProjectName,
+                    Link = $"{contextService.HttpContextClientURL()}/{AppRoutes.ClientResetPasswordRoute}?token={confirmationCode}"
+			
+            });
+            var emailMessage = CreateMailMessage(emailAddress, subject, body);
+            return await SendRegistrationEmail(emailMessage);
+        }
+    }
 }

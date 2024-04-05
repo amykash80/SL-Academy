@@ -13,7 +13,6 @@ namespace StreamlineAcademy.Infrastructure.Identity
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-
 		public ContextService(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
@@ -25,18 +24,15 @@ namespace StreamlineAcademy.Infrastructure.Identity
 
             if (userId == null)
                 return null;
-
             Guid.TryParse(userId, out Guid result);
             return result;
         }
 
 		public string? GetRoleName()
 		{
-			
 		    return httpContextAccessor?.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type == AppClaimTypes.UserRole)?.Value;
 			
 		}
-
 
 		public string HttpContextCurrentURL()
 		{

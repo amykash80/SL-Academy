@@ -18,10 +18,11 @@ namespace StreamlineAcademy.Domain.Entities
         public string? Password { get; set; } 
         public string? Salt { get; set; } 
         public UserRole UserRole { get; set; }
-        public string? ResetCode { get; set; } 
-		#region navigation
-		public Academy? Academy { get; set; } 
-        public SuperAdmin? SuperAdmin { get; set; }
+        public string? ResetCode { get; set; }
+        public string? ConfirmationCode { get; set; }
+
+        #region navigation
+        public Academy? Academy { get; set; } 
 		#endregion
 	}
 }

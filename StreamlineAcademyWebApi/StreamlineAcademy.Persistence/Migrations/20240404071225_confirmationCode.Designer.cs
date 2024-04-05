@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240404071225_confirmationCode")]
+    partial class confirmationCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -344,20 +347,20 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f351e6af-ce60-4166-9835-287edebe5431"),
-                            Address = "Hsr,Bangalore",
+                            Id = new Guid("1ec366ca-072b-4088-a8c4-510822110d8c"),
+                            Address = "123 Main Street,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 15, 6, 23, 155, DateTimeKind.Unspecified).AddTicks(5275), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 12, 42, 24, 345, DateTimeKind.Unspecified).AddTicks(1550), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Email = "aamir@anterntech.com",
+                            Email = "ram@gmail.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 15, 6, 23, 155, DateTimeKind.Unspecified).AddTicks(5304), new TimeSpan(0, 5, 30, 0, 0)),
-                            Name = "amir",
-                            Password = "86rJ11CT+PSBxHmZAizslKV0whSWxPuOQCBNo6WthCM=",
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 4, 12, 42, 24, 345, DateTimeKind.Unspecified).AddTicks(1588), new TimeSpan(0, 5, 30, 0, 0)),
+                            Name = "Ram",
+                            Password = "+HaQE5Vp8qEZFDIHpZOZG7S59exAyrAcpfKqeVSyfvs=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
-                            Salt = "6SgMmQDK89tEYkU7RmMqJg==",
+                            Salt = "AUucac9X4gWRxtpKBiAe7A==",
                             UserRole = (byte)1
                         });
                 });
@@ -481,8 +484,6 @@ namespace StreamlineAcademy.Persistence.Migrations
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.User", b =>
                 {
                     b.Navigation("Academy");
-
-                    b.Navigation("SuperAdmin");
                 });
 #pragma warning restore 612, 618
         }
