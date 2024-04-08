@@ -20,20 +20,29 @@ namespace StreamlineAcademy.Application.Services
     public class ProfileService : IProfileService
     {
         private readonly IProfileRepository profileRepository;
-        private readonly IMapper mapper;
         private readonly IContextService contextService;
         private readonly IFileService fileService;
         private readonly IStorageService storageService;
         private readonly IFileRepository fileRepository;
+        private readonly IUserRepository userRepository;
+        private readonly IPortalAdminRepository portalAdminRepository;
 
-        public ProfileService(IProfileRepository profileRepository, IMapper mapper, IContextService contextService,IFileService fileService,IStorageService storageService,IFileRepository fileRepository)
+        public ProfileService(IProfileRepository profileRepository,
+                              IContextService contextService,
+                              IFileService fileService,
+                              IStorageService storageService,
+                              IFileRepository fileRepository,
+                              IUserRepository userRepository,
+                              IPortalAdminRepository portalAdminRepository
+                             )
         {
             this.profileRepository = profileRepository;
-            this.mapper = mapper;
             this.contextService = contextService;
             this.fileService = fileService;
             this.storageService = storageService;
             this.fileRepository = fileRepository;
+            this.userRepository = userRepository;
+            this.portalAdminRepository = portalAdminRepository;
         }
         public async Task<ApiResponse<ContactInfoResponseModel>> GetContactInfoById()
         {
@@ -92,32 +101,20 @@ namespace StreamlineAcademy.Application.Services
         public async Task<ApiResponse<AddressInfoUpdateModel>> UpdateAddress(AddressInfoUpdateModel request)
         {
             var id = contextService.GetUserId();
-            var superadmin = await profileRepository.GetAddressInfo(id);
-            var user = new User()
+            var returnVal = await userRepository.FirstOrDefaultAsync(x => x.Id == id);
+            if(returnVal is not null)
+                returnVal.Address = request.Address;
+                returnVal!.PostalCode = request.PostalCode;
+                var updatedUser = await userRepository.UpdateAsync(returnVal);
+
+              if(updatedUser > 0)
             {
-
-                Id = id,
-                Address = request.Address,
-                PostalCode = request.PostalCode,
-            };
-
-            var returnUser = await profileRepository.UpdateAsync(user);
-            if (returnUser > 0)
-            {
-                var superAdmin = new SuperAdmin()
-                {
-
-                    Id = user.Id,
-                    CountryId = Guid.Parse(request.CountryName),
-                    StateId = Guid.Parse(request.StateName),
-                    CityId = Guid.Parse(request.CityName),
-
-                };
-                var returnSuperadmin = await profileRepository.UpdateAsync(superAdmin);
-                if (returnSuperadmin > 0)
-                {
-                    return ApiResponse<AddressInfoUpdateModel>.SuccessResponse(request, APIMessages.ProfileManagement.ContactUpdated, HttpStatusCodes.Created);
-                }
+                var superAdmin = await portalAdminRepository.FirstOrDefaultAsync(x => x.Id == id);
+                superAdmin.CountryId = request.CountryId;
+                superAdmin.StateId = request.StateId;
+                superAdmin.CityId = request.CityId;
+               var res= await portalAdminRepository.UpdateAsync(superAdmin);
+                return ApiResponse<AddressInfoUpdateModel>.SuccessResponse(request, APIMessages.ProfileManagement.ContactUpdated, HttpStatusCodes.Created);
             }
             return ApiResponse<AddressInfoUpdateModel>.ErrorResponse(APIMessages.TechnicalError); 
         }
