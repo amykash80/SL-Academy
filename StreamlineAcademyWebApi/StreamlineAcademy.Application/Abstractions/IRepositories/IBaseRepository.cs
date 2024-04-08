@@ -1,4 +1,5 @@
-﻿using StreamlineAcademy.Domain.Shared;
+﻿using StreamlineAcademy.Domain.Entities;
+using StreamlineAcademy.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         Task<IEnumerable<T>> FindByAsync(Expression<Func<T, bool>> expression);
         Task<T> GetByIdAsync(Expression<Func<T,bool>> expression);
         Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression);
+        
         #endregion 
     }
 }
