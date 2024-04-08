@@ -36,7 +36,7 @@ namespace StreamlineAcademy.Api.Controllers
         public async Task<ApiResponse<AddressInfoResponseModel>> GetAddressInfoById() => await profileService.GetAddressInfoById();
         [Authorize]
         [HttpPut("updateAddressInfo")]
-        public async Task<ApiResponse<AddressInfoUpdateModel>> UpdateAddress(AddressInfoUpdateModel model) => await profileService.UpdateAddress(model);
+        public async Task<ApiResponse<AddressInfoResponseModel>> UpdateAddress(AddressInfoUpdateModel model) => await profileService.UpdateAddress(model);
 
         [Authorize]
         [HttpPost("uploadPhoto")]
