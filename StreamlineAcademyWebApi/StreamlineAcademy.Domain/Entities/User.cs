@@ -23,6 +23,8 @@ namespace StreamlineAcademy.Domain.Entities
 
         #region navigation
         public Academy? Academy { get; set; } 
+        public SuperAdmin? SuperAdmin { get; set; }
+        public Instructor? Instructor { get; set; }
 		#endregion
 	}
 }
