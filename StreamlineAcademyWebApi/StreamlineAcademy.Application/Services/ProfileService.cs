@@ -26,6 +26,7 @@ namespace StreamlineAcademy.Application.Services
         private readonly IFileRepository fileRepository;
         private readonly IUserRepository userRepository;
         private readonly IPortalAdminRepository portalAdminRepository;
+        private readonly IAcademyRepository academyRepository;
 
         public ProfileService(IProfileRepository profileRepository,
                               IContextService contextService,
@@ -33,7 +34,8 @@ namespace StreamlineAcademy.Application.Services
                               IStorageService storageService,
                               IFileRepository fileRepository,
                               IUserRepository userRepository,
-                              IPortalAdminRepository portalAdminRepository
+                              IPortalAdminRepository portalAdminRepository,
+                              IAcademyRepository academyRepository
                              )
         {
             this.profileRepository = profileRepository;
@@ -43,6 +45,7 @@ namespace StreamlineAcademy.Application.Services
             this.fileRepository = fileRepository;
             this.userRepository = userRepository;
             this.portalAdminRepository = portalAdminRepository;
+            this.academyRepository = academyRepository;
         }
         public async Task<ApiResponse<ContactInfoResponseModel>> GetContactInfoById()
         {
@@ -98,7 +101,7 @@ namespace StreamlineAcademy.Application.Services
         }
 
 
-        public async Task<ApiResponse<AddressInfoUpdateModel>> UpdateAddress(AddressInfoUpdateModel request)
+        public async Task<ApiResponse<AddressInfoResponseModel>> UpdateAddress(AddressInfoUpdateModel request)
         {
             var id = contextService.GetUserId();
             var returnVal = await userRepository.FirstOrDefaultAsync(x => x.Id == id);
@@ -109,14 +112,30 @@ namespace StreamlineAcademy.Application.Services
 
               if(updatedUser > 0)
             {
-                var superAdmin = await portalAdminRepository.FirstOrDefaultAsync(x => x.Id == id);
-                superAdmin.CountryId = request.CountryId;
-                superAdmin.StateId = request.StateId;
-                superAdmin.CityId = request.CityId;
-               var res= await portalAdminRepository.UpdateAsync(superAdmin);
-                return ApiResponse<AddressInfoUpdateModel>.SuccessResponse(request, APIMessages.ProfileManagement.ContactUpdated, HttpStatusCodes.Created);
+                if(returnVal.Academy is not null)
+                {
+                    var academy = await academyRepository.FirstOrDefaultAsync(x => x.Id == id);
+                    academy.CountryId = request.CountryId;
+                    academy.StateId = request.StateId;
+                    academy.CityId = request.CityId;
+                    var res = await academyRepository.UpdateAsync(academy);
+                    var result = await academyRepository.GetAcademyById(academy.Id);
+                    var resultSet = new AddressInfoResponseModel() { 
+                    Id= academy.Id,
+                    Address = returnVal.Address,
+                    PostalCode= returnVal.PostalCode,
+                    CountryName=result.CountryName,
+                    StateName= result.StateName,
+                    CityName= result.CityName,
+
+                    };
+
+                    return ApiResponse<AddressInfoResponseModel>.SuccessResponse(resultSet,HttpStatusCodes.OK.ToString());
+                }
+                return ApiResponse<AddressInfoResponseModel>.ErrorResponse(APIMessages.TechnicalError);
+
             }
-            return ApiResponse<AddressInfoUpdateModel>.ErrorResponse(APIMessages.TechnicalError); 
+            return ApiResponse<AddressInfoResponseModel>.ErrorResponse(APIMessages.TechnicalError); 
         }
 
         public async Task<ApiResponse<FileResponseModel>> UploadPhoto(FileRequestModel request)

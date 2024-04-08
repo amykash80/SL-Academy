@@ -1,5 +1,6 @@
 ﻿using StreamlineAcademy.Domain.Entities;
 using StreamlineAcademy.Domain.Models.Responses;
+using StreamlineAcademy.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,8 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     public interface IProfileRepository:IBaseRepository<User>
     {
 
-        Task<AddressInfoResponseModel> GetAddressInfo(Guid? userId);
+        Task<AddressInfoResponseModel> GetAddressInfo(Guid? id);
 
-        Task<int> UpdateAddressAsync(SuperAdmin superAdmin);
 
     }
 }
