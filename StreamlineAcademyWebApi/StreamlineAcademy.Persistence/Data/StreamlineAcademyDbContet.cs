@@ -26,6 +26,10 @@ namespace StreamlineAcademy.Persistence.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<AcademyType> AcademyTypes { get; set; }
         public DbSet<AppFiles> AppFiles { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<CourseCategory> CourseCategories { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
