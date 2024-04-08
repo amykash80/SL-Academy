@@ -26,7 +26,6 @@ namespace StreamlineAcademy.Persistence.Repositories
         public async Task<AddressInfoResponseModel> GetAddressInfo(Guid? userId)
         {   
             var superadmin = await context.SuperAdmins
-             .Include(a => a.User)
              .Include(a => a.Country)
              .Include(a => a.State)
              .Include(a => a.City)
@@ -35,9 +34,7 @@ namespace StreamlineAcademy.Persistence.Repositories
             { 
                 var response = new AddressInfoResponseModel
                 {
-                    Id =superadmin.User!.Id,
-                    Address = superadmin.User.Address,
-                    PostalCode = superadmin.User.PostalCode,
+                    Id =superadmin.Id,
                     CountryName = superadmin.Country!.CountryName,
                     StateName = superadmin.State!.StateName,
                     CityName = superadmin.City!.CityName, 

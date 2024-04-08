@@ -31,6 +31,27 @@ namespace StreamlineAcademy.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Module = table.Column<byte>(type: "tinyint", nullable: true),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppFiles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
@@ -47,6 +68,25 @@ namespace StreamlineAcademy.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourseCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,7 +125,7 @@ namespace StreamlineAcademy.Persistence.Migrations
                     Salt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserRole = table.Column<byte>(type: "tinyint", nullable: false),
                     ResetCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ResetExpiry = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetExpiry = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -196,7 +236,7 @@ namespace StreamlineAcademy.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SuperAdmins",
+                name: "Instructors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -206,37 +246,109 @@ namespace StreamlineAcademy.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SuperAdmins", x => x.Id);
+                    table.PrimaryKey("PK_Instructors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SuperAdmins_Cities_CityId",
+                        name: "FK_Instructors_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SuperAdmins_Countries_CountryId",
+                        name: "FK_Instructors_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SuperAdmins_States_StateId",
+                        name: "FK_Instructors_States_StateId",
                         column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SuperAdmins_Users_Id",
+                        name: "FK_Instructors_Users_Id",
                         column: x => x.Id,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SuperAdmins",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserRole = table.Column<byte>(type: "tinyint", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    StateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SuperAdmins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SuperAdmins_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SuperAdmins_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SuperAdmins_States_StateId",
+                        column: x => x.StateId,
+                        principalTable: "States",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DurationInWeeks = table.Column<int>(type: "int", nullable: true),
+                    InstructorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fee = table.Column<int>(type: "int", nullable: true),
+                    InstructorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Courses_CourseCategories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "CourseCategories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Courses_Instructors_InstructorId",
+                        column: x => x.InstructorId,
+                        principalTable: "Instructors",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Address", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "Email", "IsActive", "ModifiedBy", "ModifiedDate", "Name", "Password", "PhoneNumber", "PostalCode", "ResetCode", "ResetExpiry", "Salt", "UserRole" },
-                values: new object[] { new Guid("e6a47921-9985-403a-ac73-098e43c4d06e"), "Hsr,Bangalore", new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2024, 4, 5, 10, 16, 10, 601, DateTimeKind.Unspecified).AddTicks(887), new TimeSpan(0, 5, 30, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), null, "aamir@anterntech.com", true, new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2024, 4, 5, 10, 16, 10, 601, DateTimeKind.Unspecified).AddTicks(924), new TimeSpan(0, 5, 30, 0, 0)), "amir", "/dq/ldqFDAmtxHviashvHH+tgWhxifa4xuKYz4TrUXs=", "8997654556", "786545", "", null, "NljCmOLIOHH34RG0xmT/gg==", (byte)1 });
+                values: new object[] { new Guid("62b334dc-b5d4-4465-bc9d-1f228457c888"), "Hsr,Bangalore", new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2024, 4, 8, 11, 18, 20, 569, DateTimeKind.Unspecified).AddTicks(3703), new TimeSpan(0, 5, 30, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), null, "aamir@anterntech.com", true, new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2024, 4, 8, 11, 18, 20, 569, DateTimeKind.Unspecified).AddTicks(3744), new TimeSpan(0, 5, 30, 0, 0)), "amir", "M/S0GOokbNjIy/4XLQh+85NUb2xEaU3UYXiVjBNv4Hw=", "8997654556", "786545", "", null, "nObDdazeJYzDs26OZG/4Tg==", (byte)1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Academies_AcademyName",
@@ -269,6 +381,16 @@ namespace StreamlineAcademy.Persistence.Migrations
                 column: "StateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Courses_CategoryId",
+                table: "Courses",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_InstructorId",
+                table: "Courses",
+                column: "InstructorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Enquiries_Email",
                 table: "Enquiries",
                 column: "Email");
@@ -277,6 +399,21 @@ namespace StreamlineAcademy.Persistence.Migrations
                 name: "IX_Enquiries_Name",
                 table: "Enquiries",
                 column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Instructors_CityId",
+                table: "Instructors",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Instructors_CountryId",
+                table: "Instructors",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Instructors_StateId",
+                table: "Instructors",
+                column: "StateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId",
@@ -306,6 +443,12 @@ namespace StreamlineAcademy.Persistence.Migrations
                 name: "Academies");
 
             migrationBuilder.DropTable(
+                name: "AppFiles");
+
+            migrationBuilder.DropTable(
+                name: "Courses");
+
+            migrationBuilder.DropTable(
                 name: "Enquiries");
 
             migrationBuilder.DropTable(
@@ -313,6 +456,12 @@ namespace StreamlineAcademy.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "AcademyTypes");
+
+            migrationBuilder.DropTable(
+                name: "CourseCategories");
+
+            migrationBuilder.DropTable(
+                name: "Instructors");
 
             migrationBuilder.DropTable(
                 name: "Cities");
