@@ -49,6 +49,7 @@ namespace StreamlineAcademy.Application.DI
             services.AddScoped<IAuthService, AuthService>();
             services.AddTransient<IEmailHelperService, EmailHelperService>();
             services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<ICourseService, CourseService>();
             return services;
         }
     }

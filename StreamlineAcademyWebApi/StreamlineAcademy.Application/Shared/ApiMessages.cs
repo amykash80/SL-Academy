@@ -41,8 +41,10 @@ public static class APIMessages
         public static readonly string CourseNotFound = "Course not found.";
         public static readonly string CourseAdded = "Course Added Successfully.";
         public static readonly string CourseUpdated = "Course Updated Successfully.";
-    }
-		public static class AcademyManagement
+        public static readonly string CourseAlreadyRegistered = "Course already Added";
+
+        }
+        public static class AcademyManagement
 		{
 			public static readonly string AcademyNotFound = "Academy not found.";
 			public static readonly string AcademyAdded = "Academy Registered Successfully.";
@@ -52,7 +54,10 @@ public static class APIMessages
 
 		}
 
-		public static class EnquiryManagement
+        
+
+
+        public static class EnquiryManagement
 		{
 			public static readonly string EnquiryNotFound = "Enquiry not found.";
 			public static readonly string EnquiryAdded = "Enquiry Added Successfully.";
