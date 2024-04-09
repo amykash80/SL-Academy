@@ -48,6 +48,8 @@ namespace StreamlineAcademy.Domain.Models.Requests
     public class AcademyUpdateRequest : AcademyRequestModel
     {
         public Guid Id { get; set; }
+        public bool IsActive { get; set; }
+
     }
 
 

@@ -87,7 +87,7 @@ namespace StreamlineAcademy.Application.Services
             var existingInstructor = await instructorRepository.GetInstructorById(id);
 
             if (existingInstructor is null)
-                return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyNotFound, HttpStatusCodes.NotFound);
+                return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.InstructorManagement.InstructorNotFound, HttpStatusCodes.NotFound);
 
             var result = await userRepository.FirstOrDefaultAsync(x => x.Id == existingInstructor.Id);
             result.IsActive = false;
@@ -135,6 +135,8 @@ namespace StreamlineAcademy.Application.Services
             user.Address=request.Address;
             user.PostalCode= request.PostalCode;
             user.Name=request.Name;
+            user.ModifiedDate = DateTime.Now;
+            user.IsActive = request.IsActive;
             var userResponse = await userRepository.UpdateAsync(user);
 
             var instructor = await instructorRepository.GetByIdAsync(x=>x.Id==user.Id);
@@ -144,6 +146,7 @@ namespace StreamlineAcademy.Application.Services
             instructor.CountryId= request.CountryId;
             instructor.StateId=request.StateId;
             instructor.CityId=request.CityId;
+            
             var instructorResponse = await userRepository.UpdateAsync(user);
 
             if (instructorResponse is > 0)

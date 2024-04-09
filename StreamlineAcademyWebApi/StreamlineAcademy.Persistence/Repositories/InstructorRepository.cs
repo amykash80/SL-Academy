@@ -63,6 +63,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                 var response = new InstructorResponseModel()
                 {
                     Id = instructor.Id,
+                    Name = instructor.User!.Name,
                     Email = instructor.User!.Email,
                     PhoneNumber = instructor.User.PhoneNumber,
                     PostalCode = instructor.User.PostalCode,
@@ -73,7 +74,9 @@ namespace StreamlineAcademy.Persistence.Repositories
                     CountryName = instructor.Country!.CountryName,
                     StateName = instructor.State!.StateName,
                     CityName = instructor.City!.CityName,
-                    UserRole = instructor.User.UserRole
+                    IsActive=instructor.User.IsActive,
+                    UserRole = instructor.User.UserRole,
+                    
 
                 };
 

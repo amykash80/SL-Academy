@@ -144,6 +144,8 @@ namespace StreamlineAcademy.Application.Services
             user.Address = request.Address;
             user.PostalCode = request.PostalCode;
             user.Name = request.Name;
+            user.ModifiedDate = DateTime.Now;
+            user.IsActive = request.IsActive;
             var userResponse = await userRepository.UpdateAsync(user);
 
             var academy = await academyRepository.GetByIdAsync(x => x.Id == user.Id);
@@ -218,7 +220,7 @@ namespace StreamlineAcademy.Application.Services
                     };
                     academyTypeRequestModels.Add(academyTypeResponse);
                 }
-                return ApiResponse<IEnumerable<AcademyTypeResponseModel>>.SuccessResponse(academyTypeRequestModels.ToList().OrderBy(_ => _.AcademyTypeName), $"Found {academyTypeRequestModels.Count()} Academies");
+                return ApiResponse<IEnumerable<AcademyTypeResponseModel>>.SuccessResponse(academyTypeRequestModels.ToList().OrderBy(_ => _.AcademyTypeName), $"Found {academyTypeRequestModels.Count()} AcademyTypes");
 
             }
 
