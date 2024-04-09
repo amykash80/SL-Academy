@@ -12,5 +12,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
 {
     public interface ICourseRepository:IBaseRepository<Course>
     {
+        Task<CourseResponseModel> GetCourseById(Guid? id);
+
     }
 }

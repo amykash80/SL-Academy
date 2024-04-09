@@ -26,12 +26,10 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
 
 		public Task<List<AcademyResponseModel>> GetAllAcademies();
         public Task<List<AcademyType>> GetAllAcademyTypes();
-
         Task<AcademyResponseModel> GetAcademyById(Guid? id);
 		Task<AcademyType> GetAcademyTypeById(Expression<Func<AcademyType, bool>> expression);
 		Task<bool> UpdateRegistrationStatus(Guid? id, RegistrationStatus status);
 		Task<int> Delete(User model);
-
 		Task<int> CreateAcademyType(AcademyType model);
 	  
 

@@ -15,20 +15,16 @@ namespace StreamlineAcademy.Domain.Models.Requests
         [StringLength(40, ErrorMessage = "Name must not exceed 40 characters.")]
         public string? Name { get; set; }
 
-        [Required(ErrorMessage = "Category is required")]
-        public string? Category { get; set; }
+        [Required(ErrorMessage = "Description is required")]
+        public string? Description { get; set; }
 
         [Required(ErrorMessage = "Duration in weeks is required")]
         [Range(1, int.MaxValue, ErrorMessage = "Duration must be a positive integer")]
         public int? DurationInWeeks { get; set; }
 
-        [StringLength(50, ErrorMessage = "Instructor name must not exceed 40 characters.")]
-        public string? InstructorName { get; set; }
-
         [Range(0, int.MaxValue, ErrorMessage = "Fee must be a non-negative integer")]
         public int? Fee { get; set; }
 
-        // Assuming InstructorId and CategoryId are required
         [Required(ErrorMessage = "InstructorId is required")]
         public Guid? InstructorId { get; set; }
 

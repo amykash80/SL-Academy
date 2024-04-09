@@ -35,7 +35,7 @@ namespace StreamlineAcademy.Application.Services
 
             var existingEmail = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (existingEmail is not null)
-                return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.InstructorManagement.EmailAlreadyTaken, HttpStatusCodes.Conflict);
+                return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.InstructorManagement.InstructorAlreadyRegistered, HttpStatusCodes.Conflict);
             var UserSalt = AppEncryption.GenerateSalt();
 
             var user = new User()
