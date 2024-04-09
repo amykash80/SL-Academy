@@ -30,8 +30,14 @@ namespace StreamlineAcademy.Persistence.Repositories
 			this.context = context;
         }
 
+        public async Task<int> CreateAcademyType(AcademyType model)
+        {
 
-		public async Task<int> Delete(User model)
+            await context.Set<AcademyType>().AddAsync(model);
+            return await context.SaveChangesAsync();
+        }
+
+        public async Task<int> Delete(User model)
 		{
 			await Task.Run(()=>context.Set<User>().Update(model));
 		    return await context.SaveChangesAsync();
@@ -90,7 +96,8 @@ namespace StreamlineAcademy.Persistence.Repositories
 
         }
 
-		public async Task<List<AcademyResponseModel>> GetAllAcademies()
+
+        public async Task<List<AcademyResponseModel>> GetAllAcademies()
 		{
 			var academies = await context.Academies
 				.Include(a => a.User) 
@@ -118,7 +125,13 @@ namespace StreamlineAcademy.Persistence.Repositories
 			return academies;
 		}
 
-		public async Task<IEnumerable<Academy>> GetAllAsync()
+        public async Task<List<AcademyType>> GetAllAcademyTypes()
+        {
+           return await context.Set<AcademyType>().ToListAsync();
+
+        }
+
+        public async Task<IEnumerable<Academy>> GetAllAsync()
 		{
            return await context.Set<Academy>().ToListAsync();
 
@@ -164,7 +177,12 @@ namespace StreamlineAcademy.Persistence.Repositories
 			return rowsAffected > 0;
 		}
 
-	}
+        public async Task<AcademyType> GetAcademyTypeById(Expression<Func<AcademyType, bool>> expression)
+        {
+            return await context.AcademyTypes.FirstOrDefaultAsync(expression);
+
+        }
+    }
 
        
     }

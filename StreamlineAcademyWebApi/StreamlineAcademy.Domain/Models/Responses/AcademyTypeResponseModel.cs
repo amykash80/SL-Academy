@@ -9,6 +9,7 @@ namespace StreamlineAcademy.Domain.Models.Responses
 {
     public class AcademyTypeResponseModel
     { 
-        public Guid Id { get; set; } 
+        public Guid? Id { get; set; } 
+        public string? AcademyTypeName { get; set; }    
     }
 }

@@ -10,7 +10,7 @@ namespace StreamlineAcademy.Domain.Enums
     {
         SuperAdmin = 1,
         AcademyAdmin = 2,
-        Instructoe = 3,
+        Instructor = 3,
         Student = 4,
     }
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
 using StreamlineAcademy.Application.Shared;
+using StreamlineAcademy.Domain.Entities;
 using StreamlineAcademy.Domain.Enums;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
@@ -26,8 +27,14 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpPost("register")]
         public async Task<ApiResponse<AcademyResponseModel>> RegisterAcademy(AcademyRequestModel request) => await academyService.RegisterAcademy(request);
 
-        [HttpGet("getAll")]
+        [HttpPost("academy-type")]
+        public async Task<ApiResponse<AcademyTypeResponseModel>> CreateAcademyType(AcademyTypeRequestModel request) => await academyService.CreateAcademyType(request);
+
+        [HttpGet("getAll-acadamies")]
         public async Task<ApiResponse<IEnumerable<AcademyResponseModel>>> GetAllAcademies() => await academyService.GetAllAcademies();
+
+        [HttpGet("getAll-acadamyTypes")]
+        public async Task<ApiResponse<IEnumerable<AcademyTypeResponseModel>>> GetAllAcademyTypes() => await academyService.GetAllAcademyTypes();
 
         [HttpGet("getById/{id:guid}")]
         public async Task<ApiResponse<AcademyResponseModel>> GetAcademyById(Guid id) => await academyService.GetAcademyById(id);
