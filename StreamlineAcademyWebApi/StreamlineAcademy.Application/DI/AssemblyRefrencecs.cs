@@ -50,6 +50,7 @@ namespace StreamlineAcademy.Application.DI
             services.AddTransient<IEmailHelperService, EmailHelperService>();
             services.AddScoped<IProfileService, ProfileService>();
 			services.AddScoped<IInstructorService, InstructorService>();
+            services.AddScoped<ICourseService, CourseService>();
             return services;
         }
     }

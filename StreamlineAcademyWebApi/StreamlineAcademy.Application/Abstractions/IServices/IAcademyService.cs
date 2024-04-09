@@ -20,6 +20,6 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
       Task<ApiResponse<AcademyResponseModel>> GetAcademyById(Guid id);
         Task<ApiResponse<AcademyResponseModel>> DeleteAcademy(Guid id);
         Task<ApiResponse<AcademyResponseModel>> UpdateAcademy(AcademyUpdateRequest request);
-        Task<bool> IsAcademyNameUnique (string name);
+        Task<bool> IsAcademyNameUnique(string name);
     }
 }
