@@ -76,5 +76,9 @@ namespace StreamlineAcademy.Persistence.Repositories
             return course;
         }
 
+        public Task<List<CourseCategory>> GetAllCourseCategories()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -21,29 +21,18 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpPost("createCourses")]
         public async Task<ApiResponse<CourseResponseModel>> CreateCourse(CourseRequestModel request) => await courseService.CreateCourse(request);
         [HttpPost("course-category")]
-        public async Task<ApiResponse<CourseCategoryResponseModel>> CreateCourseCategory(CourseCategoryRequestModel request) => await courseService.CreateCourseCategory(request);
-
-        [HttpGet("getAllCourses")] 
-        public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllEnquiries() => await courseService.GetAllCourses();
-
-
-        [HttpGet("getCourseById/{id:guid}")]
-
-        public async Task<ApiResponse<CourseResponseModel>> GetEnquiryById(Guid id) => await courseService.GetCourseById(id);
-        [HttpPut("updateCourse")]
-        [HttpGet("getAll")] 
-        public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllEnquiries() => await courseService.GetAllCourses();
-
+        public async Task<ApiResponse<CourseCategoryResponseModel>> CreateCourseCategory(CourseCategoryRequestModel request) => await courseService.CreateCourseCategory(request); 
+        [HttpGet("getAllCourses")]
+        public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCourses() => await courseService.GetAllCourses();  
+        [HttpGet("getCourseById/{id:guid}")] 
+        public async Task<ApiResponse<CourseResponseModel>> GetCourseById(Guid id) => await courseService.GetCourseById(id);
+        
         [HttpGet("getAll-CourseCategories")]
-        public async Task<ApiResponse<IEnumerable<CourseCategoryResponseModel>>> GetAllAcademyTypes() => await courseService.GetAllCourseCategories();
-
-        [HttpGet("getById/{id:guid}")]
-        public async Task<ApiResponse<CourseResponseModel>> GetEnquiryById(Guid id) => await courseService.GetCourseById(id);
+        public async Task<ApiResponse<IEnumerable<CourseCategoryResponseModel>>> GetAllAcademyTypes() => await courseService.GetAllCourseCategories();  
 
         [HttpGet("getCourseCategoryById/{id:guid}")]
         public async Task<ApiResponse<CourseCategoryResponseModel>> GetCourseCategorywithId(Guid id) => await courseService.GetCourseCategoryById(id);
-        [HttpPut("update")]
-
+        [HttpPut("update")] 
         public async Task<ApiResponse<CourseResponseModel>> UpdateCourse(CourseUpdateRequest model) => await courseService.UpdateCourse(model);
         [HttpDelete("delete/{id:guid}")]
         public async Task<ApiResponse<CourseResponseModel>> DeleteCourse(Guid id) => await courseService.DeleteCourse(id);

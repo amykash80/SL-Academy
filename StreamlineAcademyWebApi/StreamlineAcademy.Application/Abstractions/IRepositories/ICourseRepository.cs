@@ -15,7 +15,6 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     {
         Task<CourseResponseModel> GetCourseById(Guid? id);
         public Task<List<CourseResponseModel>> GetAllCourses();
-        Task<CourseResponseModel> GetCourseById(Guid? id);
         Task<int> CreateCourseCategory(CourseCategory model);
         Task<CourseCategory> GetCourseCategoryById(Expression<Func<CourseCategory, bool>> expression);
         public Task<List<CourseCategory>> GetAllCourseCategories();
