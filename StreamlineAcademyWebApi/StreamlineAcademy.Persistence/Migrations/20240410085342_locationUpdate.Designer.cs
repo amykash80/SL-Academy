@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240410085342_locationUpdate")]
+    partial class locationUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -443,9 +446,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Property<Guid>("AcademyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
@@ -469,6 +469,9 @@ namespace StreamlineAcademy.Persistence.Migrations
 
                     b.Property<double?>("Latitude")
                         .HasColumnType("float");
+
+                    b.Property<string>("LocationName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("Longitude")
                         .HasColumnType("float");
@@ -673,21 +676,21 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("139589d5-7002-4e78-b1f9-059671eeb1fe"),
+                            Id = new Guid("2ab4c80f-59c1-4490-96c5-6229ff2b9fc2"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 10, 14, 27, 30, 303, DateTimeKind.Unspecified).AddTicks(6226), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 10, 14, 23, 41, 579, DateTimeKind.Unspecified).AddTicks(761), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 10, 14, 27, 30, 303, DateTimeKind.Unspecified).AddTicks(6263), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 10, 14, 23, 41, 579, DateTimeKind.Unspecified).AddTicks(796), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "sK7B5B7hZXlNQfXIjukyfTo9uM0h8Axsmv7kxtlLoj4=",
+                            Password = "O7bIqf/vdJaEaxv0sB/3InwlOu+QDsuLFhrGwOTR4zw=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
                             ResetCode = "",
-                            Salt = "mkUBBB9k53ZvlJp8Fgt4pA==",
+                            Salt = "ERqtpzqHhnGfssVuvVIjTQ==",
                             UserRole = (byte)1
                         });
                 });

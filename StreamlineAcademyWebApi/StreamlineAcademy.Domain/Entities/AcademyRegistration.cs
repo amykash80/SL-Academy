@@ -29,6 +29,9 @@ namespace StreamlineAcademy.Domain.Entities
         public State? State { get; set; } 
         public Guid? CityId { get; set; }
         [ForeignKey(nameof(CityId))]
-        public City? City { get; set; }  
+        public City? City { get; set; }
+        #region navigation
+        public ICollection<Location>? Locations { get; set; }
+        #endregion
     }
 }
