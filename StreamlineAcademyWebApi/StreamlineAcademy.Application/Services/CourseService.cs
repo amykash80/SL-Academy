@@ -110,37 +110,18 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCourses()
         {
-            var courseList = await courseRepository.GetAllAsync();
+            var courseList = await courseRepository.GetAllCourses();
             if (courseList.Any())
-            {
-                var sortedCourse = courseList.OrderBy(x => x.Name).Select(e => new CourseResponseModel
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    DurationInWeeks = e.DurationInWeeks,
-                    Fee= e.Fee,  
-                });
-                return ApiResponse<IEnumerable<CourseResponseModel>>.SuccessResponse(sortedCourse, $"Found {courseList.Count()} Courses");
-               
-            }
+             return ApiResponse<IEnumerable<CourseResponseModel>>.SuccessResponse(courseList, $"Found {courseList.Count()} Courses");
             return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
         }
 
         public async Task<ApiResponse<CourseResponseModel>> GetCourseById(Guid id)
         {
-            var course = await courseRepository.GetByIdAsync(x => x.Id == id);
-            if (course == null)
-            {
-                return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.EnquiryManagement.EnquiryNotFound);
-            }
-            var response = new CourseResponseModel
-            {
-                Id = course.Id,
-                Name = course.Name,
-                DurationInWeeks = course.DurationInWeeks,
-                Fee = course.Fee
-            };
-            return ApiResponse<CourseResponseModel>.SuccessResponse(response);
+            var course = await courseRepository.GetCourseById(id);
+            if (course is not null)
+                return ApiResponse<CourseResponseModel>.SuccessResponse(course, APIMessages.EnquiryManagement.EnquiryNotFound);
+               return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
 
         public async Task<ApiResponse<CourseCategoryResponseModel>> GetCourseCategoryById(Guid id)
