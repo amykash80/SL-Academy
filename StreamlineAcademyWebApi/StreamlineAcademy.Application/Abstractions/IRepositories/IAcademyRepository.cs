@@ -23,7 +23,6 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
 		Task<Academy> GetByIdAsync(Expression<Func<Academy, bool>> expression);
 		Task<Academy> FirstOrDefaultAsync(Expression<Func<Academy, bool>> expression);
 		#endregion
-
 		public Task<List<AcademyResponseModel>> GetAllAcademies();
         public Task<List<AcademyType>> GetAllAcademyTypes();
         Task<AcademyResponseModel> GetAcademyById(Guid? id);

@@ -69,7 +69,7 @@ namespace StreamlineAcademy.Persistence.Repositories
               .Include(a => a.Country)
               .Include(a => a.State)
               .Include(a => a.City)
-              .FirstOrDefaultAsync(a => a.Id == id);
+              .FirstOrDefaultAsync(a=>a.Id==id);
 
             if (academy is not null)
             {

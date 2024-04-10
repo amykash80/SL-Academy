@@ -21,6 +21,18 @@ namespace StreamlineAcademy.Persistence.Repositories
             this.context = context;
         }
 
+        public async Task<int> CreateCourseCategory(CourseCategory model)
+        {
+            await context.Set<CourseCategory>().AddAsync(model);
+            return await context.SaveChangesAsync();
+        }
+
+        public async Task<CourseCategory> GetCourseCategoryById(Expression<Func<CourseCategory, bool>> expression)
+        {
+            return await context.CourseCategories.FirstOrDefaultAsync(expression);
+
+        }
+
         public async Task<CourseResponseModel> GetCourseById(Guid? id)
         {
             var course = await context.Courses

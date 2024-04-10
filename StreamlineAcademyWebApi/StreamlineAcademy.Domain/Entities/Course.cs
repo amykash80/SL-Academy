@@ -14,12 +14,13 @@ namespace StreamlineAcademy.Domain.Entities
         public string? Description { get; set; }
         public int? DurationInWeeks{ get; set; }
         public int? Fee { get; set; }
-        public Guid? InstructorId { get; set; }
-        [ForeignKey(nameof(InstructorId))]
-        public Instructor? Instructor { get; set; }
         public Guid? CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
-        public CourseCategory? CourseCategory { get; set; } 
-        
+        public CourseCategory? CourseCategory { get; set; }
+
+        #region navigation
+        public ICollection<Batch>? batches { get; set; }
+        #endregion
+
     }
 }

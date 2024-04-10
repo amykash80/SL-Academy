@@ -182,7 +182,7 @@ namespace StreamlineAcademy.Application.Services
             if (existingAcademy is not null)
                 return ApiResponse<AcademyTypeResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered, HttpStatusCodes.Conflict);
             var acdemyType = new AcademyType() {
-
+                Name= model.Name,
                 CreatedBy = Guid.Empty,
                 CreatedDate = DateTime.Now,
                 ModifiedBy = Guid.Empty,
