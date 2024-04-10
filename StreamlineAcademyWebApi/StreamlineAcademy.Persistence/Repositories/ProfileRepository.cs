@@ -34,7 +34,7 @@ namespace StreamlineAcademy.Persistence.Repositories
         public async Task<AddressInfoResponseModel> GetAddressInfo(Guid? userId)
         {
             var user = await userRepository.FirstOrDefaultAsync(_ => _.Id == userId);
-             if(user.Academy is not null)
+             if(user is not null)
             {
                 var academy=await academyRepository.GetAcademyById(userId);
                 var res = new AddressInfoResponseModel() { 

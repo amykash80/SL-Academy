@@ -42,6 +42,7 @@ public static class APIMessages
         public static readonly string CourseAdded = "Course Added Successfully.";
         public static readonly string CourseUpdated = "Course Updated Successfully.";
         public static readonly string CourseAlreadyRegistered = "Course already Added";
+        public static readonly string CourseDeleted = "Course deleted Successfully";
 
         }
         public static class CourseCategoryManagement
@@ -77,6 +78,7 @@ public static class APIMessages
             public static readonly string UserDeleted = "user Deleted Successfully.";
             public static readonly string UserAlreadyRegistered = "user with this email already registered";
 
+        
         }
         public static class InstructorManagement
         {
@@ -103,7 +105,7 @@ public static class APIMessages
         {
             public static readonly string UserNotFound = "User not found.";
             public static readonly string ContactUpdated = "Contact Updated Successfully.";
-            public static readonly string UserFound = "Userfound.";
+            public static readonly string UserFound = "User found.";
             public static readonly string AddressUpdated = "Address Updated Successfully.";
             public static readonly string PhotoUploaded = "Photo Uploaded Successfully.";
             
