@@ -42,6 +42,14 @@ public static class APIMessages
         public static readonly string CourseAdded = "Course Added Successfully.";
         public static readonly string CourseUpdated = "Course Updated Successfully.";
         public static readonly string CourseAlreadyRegistered = "Course already Added";
+    }
+        public static class InstructorManagement
+        {
+            public static readonly string InstructorNotFound = "Instructor not found.";
+            public static readonly string InstructorAdded = "Instructor Registered Successfully.";
+            public static readonly string InstructorUpdated = "Instructor Updated Successfully.";
+            public static readonly string InstructorDeleted = "Instructor Deleted Successfully.";
+            public static readonly string EmailAlreadyTaken = "Email already Taken.Please chose different one.";
 
         }
         public static class AcademyManagement
@@ -53,9 +61,17 @@ public static class APIMessages
             public static readonly string AcademyAlreadyRegistered = "Academy with this email already registered";
 
 		}
+        public static class UserManagement
+        {
+            public static readonly string UserNotFound = "user not found.";
+            public static readonly string UserAdded = "user Registered Successfully.";
+            public static readonly string UserUpdated = "user Updated Successfully.";
+            public static readonly string UserDeleted = "user Deleted Successfully.";
+            public static readonly string UserAlreadyRegistered = "user with this email already registered";
 
         
 
+        }
 
         public static class EnquiryManagement
 		{

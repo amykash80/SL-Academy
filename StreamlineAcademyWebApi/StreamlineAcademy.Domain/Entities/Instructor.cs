@@ -1,4 +1,5 @@
-﻿using StreamlineAcademy.Domain.Shared;
+﻿using StreamlineAcademy.Domain.Enums;
+using StreamlineAcademy.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,9 +11,14 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public class Instructor
     {
-        public Guid Id { get; set; }
+       
+        public Guid? Id { get; set; }
         [ForeignKey(nameof(Id))]
         public User? User { get; set; }
+
+        public int WorkExperiance { get; set; }
+        public Skill Skill { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
         public Guid CountryId { get; set; }
         [ForeignKey(nameof(CountryId))]
         public Country? Country { get; set; }

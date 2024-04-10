@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Org.BouncyCastle.Asn1.Cmp;
+using Org.BouncyCastle.Asn1.Ocsp;
 using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IEmailService;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
@@ -134,41 +135,33 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<AcademyResponseModel>> UpdateAcademy(AcademyUpdateRequest request)
         {
-            var existAcademy = await academyRepository.GetByIdAsync(x => x.Id == request.Id);
-            if (existAcademy is null)
-                return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyNotFound, HttpStatusCodes.NotFound);
+            var user = await userRepository.GetByIdAsync(x => x.Id == request.Id);
 
-            var academy = new Academy
+            if (user is null)
+                return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.UserManagement.UserNotFound, HttpStatusCodes.NotFound);
+            user.Email = request.Email;
+            user.PhoneNumber = request.PhoneNumber;
+            user.Address = request.Address;
+            user.PostalCode = request.PostalCode;
+            user.Name = request.Name;
+            var userResponse = await userRepository.UpdateAsync(user);
+
+            var academy = await academyRepository.GetByIdAsync(x => x.Id == user.Id);
+            academy.AcademyName = request.AcademyName;
+            academy.AcademyTypeId = request.AcademyTypeId;
+            academy.CountryId = request.CountryId;
+            academy.StateId = request.StateId;
+            academy.CityId = request.CityId;
+            var academyResponse = await userRepository.UpdateAsync(user);
+
+            if (academyResponse is > 0)
             {
-                Id = existAcademy.Id,
-                AcademyName = request.AcademyName,
-                AcademyTypeId = request.AcademyTypeId,
-                CountryId = request.CountryId,
-                StateId = request.StateId,
-                CityId = request.CityId
-            };
-            var updateAcademy = await academyRepository.UpdateAsync(existAcademy);
-            if (updateAcademy is > 0)
-            {
-                var responseModel = new AcademyResponseModel
-                {
-                    Id = existAcademy.Id,
-                    AcademyName = existAcademy.AcademyName,
-                    Email = existAcademy.User!.Email,
-                    PhoneNumber = existAcademy.User.PhoneNumber,
-                    AcademyAdmin = existAcademy.User.Name,
-                    PostalCode = existAcademy.User.PostalCode,
-                    Address = existAcademy.User.Address,
-                    AcademyType = existAcademy.AcademyType!.Name,
-                    CountryName = existAcademy.Country!.CountryName,
-                    StateName = existAcademy.State!.StateName,
-                    CityName = existAcademy.City!.CityName,
-                    UserRole = existAcademy.User.UserRole
-                };
-                return ApiResponse<AcademyResponseModel>.SuccessResponse(responseModel,APIMessages.AcademyManagement.AcademyUpdated);
+                var responseModel = await academyRepository.GetAcademyById(user.Id);
+                return ApiResponse<AcademyResponseModel>.SuccessResponse(responseModel, APIMessages.AcademyManagement.AcademyUpdated);
             }
             return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
+    
 
         public async Task<bool> IsAcademyNameUnique(string name)
         {
@@ -178,6 +171,58 @@ namespace StreamlineAcademy.Application.Services
         public async Task<bool> IsAcademyEmailUnique(string email)
         {
             return await userRepository.FirstOrDefaultAsync(x => x.Email == email) == null; 
+        }
+
+        public async Task<ApiResponse<AcademyTypeResponseModel>> CreateAcademyType(AcademyTypeRequestModel model)
+        {
+
+            var existingAcademy = await academyRepository.GetAcademyTypeById(x =>x.Name==model.Name);
+            if (existingAcademy is not null)
+                return ApiResponse<AcademyTypeResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered, HttpStatusCodes.Conflict);
+            var acdemyType = new AcademyType() {
+
+                CreatedBy = Guid.Empty,
+                CreatedDate = DateTime.Now,
+                ModifiedBy = Guid.Empty,
+                ModifiedDate = DateTime.Now,
+                DeletedBy = Guid.Empty,
+                IsActive = true
+            };
+          var res=  await academyRepository.CreateAcademyType(acdemyType);
+            if (res > 0)
+            {
+                var returnModel = new AcademyTypeResponseModel() { 
+                
+                Id= acdemyType.Id,
+                AcademyTypeName=model.Name,
+                };
+                return ApiResponse<AcademyTypeResponseModel>.SuccessResponse(returnModel);
+            }
+            return ApiResponse<AcademyTypeResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+
+        }
+
+        public async Task<ApiResponse<IEnumerable<AcademyTypeResponseModel>>> GetAllAcademyTypes()
+        {
+            var returnVal = await academyRepository.GetAllAcademyTypes();
+            List<AcademyTypeResponseModel> academyTypeRequestModels=new List<AcademyTypeResponseModel>();
+            if (returnVal is not null)
+            {
+                foreach (var item in returnVal)
+                {
+                    var academyTypeResponse = new AcademyTypeResponseModel
+                    { 
+                        Id = item.Id,
+                        AcademyTypeName = item.Name,
+                  
+                    };
+                    academyTypeRequestModels.Add(academyTypeResponse);
+                }
+                return ApiResponse<IEnumerable<AcademyTypeResponseModel>>.SuccessResponse(academyTypeRequestModels.ToList().OrderBy(_ => _.AcademyTypeName), $"Found {academyTypeRequestModels.Count()} Academies");
+
+            }
+
+            return ApiResponse<IEnumerable<AcademyTypeResponseModel>>.ErrorResponse(APIMessages.AcademyManagement.AcademyNotFound, HttpStatusCodes.NotFound);
         }
     }
 }

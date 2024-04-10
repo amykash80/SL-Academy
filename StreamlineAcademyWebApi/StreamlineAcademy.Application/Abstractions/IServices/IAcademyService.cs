@@ -1,4 +1,5 @@
 ﻿using StreamlineAcademy.Application.Shared;
+using StreamlineAcademy.Domain.Entities;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
 using System;
@@ -13,8 +14,10 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
     public interface IAcademyService
     {
         Task<ApiResponse<AcademyResponseModel>> RegisterAcademy(AcademyRequestModel request);
+        Task<ApiResponse<AcademyTypeResponseModel>> CreateAcademyType(AcademyTypeRequestModel model);
         Task<ApiResponse<IEnumerable<AcademyResponseModel>>> GetAllAcademies();
-        Task<ApiResponse<AcademyResponseModel>> GetAcademyById(Guid id);
+        Task<ApiResponse<IEnumerable<AcademyTypeResponseModel>>> GetAllAcademyTypes();
+      Task<ApiResponse<AcademyResponseModel>> GetAcademyById(Guid id);
         Task<ApiResponse<AcademyResponseModel>> DeleteAcademy(Guid id);
         Task<ApiResponse<AcademyResponseModel>> UpdateAcademy(AcademyUpdateRequest request);
         Task<bool> IsAcademyNameUnique(string name);
