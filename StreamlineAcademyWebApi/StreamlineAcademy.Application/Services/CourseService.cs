@@ -33,7 +33,6 @@ namespace StreamlineAcademy.Application.Services
                 Description=request.Description,
                 CategoryId = request.CategoryId,
                 DurationInWeeks = request.DurationInWeeks,
-                InstructorId = request.InstructorId,
                 Fee = request.Fee,
                 IsActive = true,
                 CreatedBy = Guid.Empty,
@@ -53,107 +52,77 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
-        public Task<ApiResponse<CourseResponseModel>> DeleteCourse(Guid id)
+        public async Task<ApiResponse<CourseResponseModel>> DeleteCourse(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var existingCourse = await courseRepository.GetByIdAsync(x => x.Id == id);
 
+            if (existingCourse == null)
+                return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
+
+            existingCourse.IsActive = false; 
+            existingCourse.DeletedDate = DateTime.Now; 
+
+            int isSoftDeleted = await courseRepository.UpdateAsync(existingCourse);
+
+            if (isSoftDeleted > 0)
+            {
+                return ApiResponse<CourseResponseModel>.SuccessResponse(null, APIMessages.CourseManagement.CourseDeleted);
+            }
+
+            return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+        }
+        
         public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCourses()
         {
-            var courseList = await courseRepository.GetAllAsync();
-            if (courseList.Any())
-            {
-                var sortedCourse = courseList.OrderBy(x => x.Name).Select(e => new CourseResponseModel
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    DurationInWeeks = e.DurationInWeeks,
-                    Fee= e.Fee,  
-                });
-                return ApiResponse<IEnumerable<CourseResponseModel>>.SuccessResponse(sortedCourse, $"Found {courseList.Count()} Courses");
-               
-            }
-            return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
+            var returnVal = await courseRepository.GetAllCourses();
+            if (returnVal is not null)
+                return ApiResponse<IEnumerable<CourseResponseModel>>.SuccessResponse(returnVal.OrderBy(_ => _.Name), $"Found {returnVal.Count()} Courses");
+            return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.AcademyManagement.AcademyNotFound, HttpStatusCodes.NotFound);
         }
-
+        
         public async Task<ApiResponse<CourseResponseModel>> GetCourseById(Guid id)
         {
             var course = await courseRepository.GetByIdAsync(x => x.Id == id);
-            if (course == null)
-            {
-                return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.EnquiryManagement.EnquiryNotFound);
-            }
-            var response = new CourseResponseModel
-            {
-                Id = course.Id,
-                Name = course.Name,
-                DurationInWeeks = course.DurationInWeeks,
-                Fee = course.Fee
-            };
-            return ApiResponse<CourseResponseModel>.SuccessResponse(response);
+            if (course is null)
+                return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
+
+            var responseModel = await courseRepository.GetCourseById(id);
+
+            return ApiResponse<CourseResponseModel>.SuccessResponse(responseModel);
         }
-       
+        
 
         public async Task<ApiResponse<CourseResponseModel>> UpdateCourse(CourseUpdateRequest request)
         {
-            var existCourse = await courseRepository.GetByIdAsync(x => x.Id == request.Id);
-            if (existCourse is null)
+            var existingCourse = await courseRepository.GetByIdAsync(x => x.Id == request.Id);
+            if (existingCourse == null)
                 return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
-            var course = new Course()
-            {
-                Name = request.Name,
-                CategoryId = request.CategoryId,
-                DurationInWeeks = request.DurationInWeeks,
-                InstructorId = request.InstructorId,
-                Fee = request.Fee,
-                IsActive = true,
-                CreatedBy = Guid.Empty,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
-                DeletedBy = Guid.Empty,
-                DeletedDate = DateTime.Now,
-            };
-            var returnVal = await courseRepository.UpdateAsync(course);
+            existingCourse.Name = request.Name;
+            existingCourse.Description = request.Description;
+            existingCourse.DurationInWeeks = request.DurationInWeeks;
+            existingCourse.Fee = request.Fee;
+            existingCourse.CategoryId = request.CategoryId;
+            existingCourse.ModifiedDate = DateTime.Now;
+
+            var returnVal = await courseRepository.UpdateAsync(existingCourse);
             if (returnVal > 0)
-            {
+            {   
                 var response = new CourseResponseModel()
                 {
-                    Id = existCourse.Id,
-                    Name = existCourse.Name,
-                    DurationInWeeks = existCourse.DurationInWeeks,
-                    Fee = existCourse.Fee
+                    Id = existingCourse.Id,
+                    Name = existingCourse.Name,
+                    Description = existingCourse.Description,
+                    DurationInWeeks = existingCourse.DurationInWeeks,
+                    CategoryName = existingCourse.CourseCategory?.CategoryName, 
+                    Fee = existingCourse.Fee,
+                    IsActive = existingCourse.IsActive
                 };
-                return ApiResponse<CourseResponseModel>.SuccessResponse(response, APIMessages.CourseManagement.CourseUpdated, HttpStatusCodes.Created);
+                return ApiResponse<CourseResponseModel>.SuccessResponse(response, APIMessages.CourseManagement.CourseUpdated, HttpStatusCodes.OK);
             }
             return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
-
-        public Task<ApiResponse<CourseResponseModel>> UpdateCourse(CourseRequestModel request)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public async Task<ApiResponse<CourseResponseModel>> DeleteAcademy(Guid id)
-        //{
-        //    var existingCourse = await courseRepository.GetByIdAsync(x => x.Id == id);
-
-        //    if (existingCourse is null)
-        //        return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
-
-        //    var result = await courseRepository.FirstOrDefaultAsync(x => x.Id == existingCourse.Id);
-        //    result.IsActive = false;
-        //    result.DeletedDate = DateTime.Now;
-        //    if (result is not null)
-        //    {
-        //        int isSoftDelted = await courseRepository.DeleteAsync(result);
-        //        if (isSoftDelted > 0)
-        //        {
-
-        //            return ApiResponse<CourseResponseModel>.SuccessResponse(returnVal, APIMessages.AcademyManagement.AcademyDeleted);
-        //        }
-        //    }
-        //    return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
-        //}
+        
+       
     }
 }
 

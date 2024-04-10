@@ -51,8 +51,7 @@ namespace StreamlineAcademy.Application.DI
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<ICourseService, CourseService>();
 			services.AddScoped<IInstructorService, InstructorService>();
-			services.AddScoped<IInstructorService, InstructorService>();
-            services.AddScoped<ICourseService, CourseService>();
+			
             return services;
         }
     }
