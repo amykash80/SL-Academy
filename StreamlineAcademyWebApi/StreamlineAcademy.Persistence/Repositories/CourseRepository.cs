@@ -6,6 +6,7 @@ using StreamlineAcademy.Persistence.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,18 @@ namespace StreamlineAcademy.Persistence.Repositories
             this.context = context;
         }
 
+        public async Task<int> CreateCourseCategory(CourseCategory model)
+        {
+            await context.Set<CourseCategory>().AddAsync(model);
+            return await context.SaveChangesAsync();
+        }
+
+        public async Task<CourseCategory> GetCourseCategoryById(Expression<Func<CourseCategory, bool>> expression)
+        {
+            return await context.CourseCategories.FirstOrDefaultAsync(expression);
+
+        }
+
         public async Task<CourseResponseModel> GetCourseById(Guid? id)
         {
             var course = await context.Courses
@@ -29,7 +42,6 @@ namespace StreamlineAcademy.Persistence.Repositories
 
             if (course is not null)
             {
-
                 var response = new CourseResponseModel
                 {
                     Id = course.Id,
@@ -45,6 +57,12 @@ namespace StreamlineAcademy.Persistence.Repositories
                 return response;
             }
             return new CourseResponseModel() { };
+        }
+
+        public async Task<List<CourseCategory>> GetAllCourseCategories()
+        {
+           return await context.Set<CourseCategory>().ToListAsync();
+
         }
     }
 }

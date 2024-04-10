@@ -5,6 +5,7 @@ using StreamlineAcademy.Domain.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,10 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     public interface ICourseRepository:IBaseRepository<Course>
     {
         Task<CourseResponseModel> GetCourseById(Guid? id);
+        Task<int> CreateCourseCategory(CourseCategory model);
+        Task<CourseCategory> GetCourseCategoryById(Expression<Func<CourseCategory, bool>> expression);
+        public Task<List<CourseCategory>> GetAllCourseCategories();
+
 
     }
 }

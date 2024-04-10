@@ -44,6 +44,14 @@ public static class APIMessages
         public static readonly string CourseAlreadyRegistered = "Course already Added";
 
         }
+        public static class CourseCategoryManagement
+        {
+            public static readonly string CourseCategoryNotFound = "CourseCategory not found.";
+            public static readonly string CourseCategoryAdded = "CourseCategory Added Successfully.";
+            public static readonly string CourseUpdated = "Course Updated Successfully.";
+            public static readonly string CourseCategoryAlreadyRegistered = "CourseCategory already Added";
+
+        }
         public static class AcademyManagement
 		{
 			public static readonly string AcademyNotFound = "Academy not found.";
