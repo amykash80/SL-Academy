@@ -28,7 +28,7 @@ namespace StreamlineAcademy.Api.Controllers
         public async Task<ApiResponse<CourseResponseModel>> GetCourseById(Guid id) => await courseService.GetCourseById(id);
         
         [HttpGet("getAll-CourseCategories")]
-        public async Task<ApiResponse<IEnumerable<CourseCategoryResponseModel>>> GetAllAcademyTypes() => await courseService.GetAllCourseCategories();  
+        public async Task<ApiResponse<IEnumerable<CourseCategoryResponseModel>>> GetAllCoursecategories() => await courseService.GetAllCourseCategories();  
 
         [HttpGet("getCourseCategoryById/{id:guid}")]
         public async Task<ApiResponse<CourseCategoryResponseModel>> GetCourseCategorywithId(Guid id) => await courseService.GetCourseCategoryById(id);

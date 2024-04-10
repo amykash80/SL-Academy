@@ -76,9 +76,10 @@ namespace StreamlineAcademy.Persistence.Repositories
             return course;
         }
 
-        public Task<List<CourseCategory>> GetAllCourseCategories()
+        public async Task<List<CourseCategory>> GetAllCourseCategories()
         {
-            throw new NotImplementedException();
+           return await context.CourseCategories.ToListAsync();
+
         }
     }
 }
