@@ -37,7 +37,6 @@ namespace StreamlineAcademy.Persistence.Repositories
         {
             var course = await context.Courses
             .Include(a => a.CourseCategory)
-            .Include(a => a.Instructor)
             .FirstOrDefaultAsync(a => a.Id == id);
 
             if (course is not null)
@@ -48,7 +47,6 @@ namespace StreamlineAcademy.Persistence.Repositories
                     Name = course.Name,
                     Description = course.Description,
                     DurationInWeeks = course.DurationInWeeks,
-                    InstructorName = course.Instructor!.User!.Name,
                     CategoryName = course.CourseCategory!.CategoryName,
                     IsActive = course.IsActive,
                     Fee = course.Fee,

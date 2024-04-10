@@ -25,9 +25,6 @@ namespace StreamlineAcademy.Domain.Models.Requests
         [Range(0, int.MaxValue, ErrorMessage = "Fee must be a non-negative integer")]
         public int? Fee { get; set; }
 
-        [Required(ErrorMessage = "InstructorId is required")]
-        public Guid? InstructorId { get; set; }
-
         [Required(ErrorMessage = "CategoryId is required")]
         public Guid? CategoryId { get; set; }
     }

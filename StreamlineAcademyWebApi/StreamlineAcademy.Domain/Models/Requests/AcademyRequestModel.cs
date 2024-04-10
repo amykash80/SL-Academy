@@ -15,10 +15,10 @@ namespace StreamlineAcademy.Domain.Models.Requests
     public class AcademyRequestModel
     {
         [Required(ErrorMessage = "Name is required")]
-        [StringLength(40, ErrorMessage = "Name must not exceed 50 characters.")]
+        [StringLength(40, ErrorMessage = "Name must not exceed 40 characters.")]
         public string? Name { get; set; } 
         [Required(ErrorMessage = "AcademyName is required")]
-        [StringLength(40, ErrorMessage = "Name must not exceed 50 characters.")]
+        [StringLength(40, ErrorMessage = "Name must not exceed 40 characters.")]
         public string? AcademyName { get; set; } 
         [Required(ErrorMessage = "Address is required")]
         public string? Address { get; set; } 

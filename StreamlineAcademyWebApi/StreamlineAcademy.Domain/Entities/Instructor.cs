@@ -15,7 +15,6 @@ namespace StreamlineAcademy.Domain.Entities
         public Guid? Id { get; set; }
         [ForeignKey(nameof(Id))]
         public User? User { get; set; }
-
         public int WorkExperiance { get; set; }
         public Skill Skill { get; set; }
         public DateTimeOffset DateOfBirth { get; set; }
@@ -28,5 +27,9 @@ namespace StreamlineAcademy.Domain.Entities
         public Guid CityId { get; set; }
         [ForeignKey(nameof(CityId))]
         public City? City { get; set; }
+
+        #region navigation
+        public Batch? Batch { get; set; }
+        #endregion
     }
 }
