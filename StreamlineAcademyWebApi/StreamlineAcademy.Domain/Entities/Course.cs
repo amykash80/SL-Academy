@@ -11,9 +11,8 @@ namespace StreamlineAcademy.Domain.Entities
     public class Course:BaseModel
     {  
         public string? Name { get; set; }
-        public string? Category { get; set; }
+        public string? Description { get; set; }
         public int? DurationInWeeks{ get; set; }
-        public string? InstructorName { get; set; }
         public int? Fee { get; set; }
         public Guid? InstructorId { get; set; }
         [ForeignKey(nameof(InstructorId))]

@@ -87,6 +87,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     CountryName = academy.Country!.CountryName,
                     StateName = academy.State!.StateName,
                     CityName = academy.City!.CityName,
+					IsActive=academy.User.IsActive,
                     UserRole = academy.User.UserRole
                 };
 

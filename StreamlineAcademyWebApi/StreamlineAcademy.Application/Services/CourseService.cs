@@ -30,6 +30,7 @@ namespace StreamlineAcademy.Application.Services
             var course = new Course()
             {
                 Name = request.Name,
+                Description=request.Description,
                 CategoryId = request.CategoryId,
                 DurationInWeeks = request.DurationInWeeks,
                 InstructorId = request.InstructorId,
@@ -45,17 +46,9 @@ namespace StreamlineAcademy.Application.Services
             var res = await courseRepository.InsertAsync(course);
             if (res > 0)
             {
-                var courseResponse = await courseRepository.GetByIdAsync(x => x.Id == course.Id);
-                var response = new CourseResponseModel()
-                {
-                    Id = courseResponse.Id,
-                    Name = courseResponse.Name,
-                    Category= courseResponse.Category,
-                    DurationInWeeks = courseResponse.DurationInWeeks,
-                    InstructorName= courseResponse.InstructorName,
-                    Fee= courseResponse.Fee,
-                };
-                return ApiResponse<CourseResponseModel>.SuccessResponse(response, APIMessages.CourseManagement.CourseAdded, HttpStatusCodes.Created);
+                var courseResponse = await courseRepository.GetCourseById(course.Id);
+               
+                return ApiResponse<CourseResponseModel>.SuccessResponse(courseResponse, APIMessages.CourseManagement.CourseAdded, HttpStatusCodes.Created);
             }
             return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
@@ -74,9 +67,7 @@ namespace StreamlineAcademy.Application.Services
                 {
                     Id = e.Id,
                     Name = e.Name,
-                    Category = e.Category,
                     DurationInWeeks = e.DurationInWeeks,
-                    InstructorName= e.InstructorName,
                     Fee= e.Fee,  
                 });
                 return ApiResponse<IEnumerable<CourseResponseModel>>.SuccessResponse(sortedCourse, $"Found {courseList.Count()} Courses");
@@ -96,9 +87,7 @@ namespace StreamlineAcademy.Application.Services
             {
                 Id = course.Id,
                 Name = course.Name,
-                Category = course.Category,
                 DurationInWeeks = course.DurationInWeeks,
-                InstructorName = course.InstructorName,
                 Fee = course.Fee
             };
             return ApiResponse<CourseResponseModel>.SuccessResponse(response);
@@ -131,9 +120,7 @@ namespace StreamlineAcademy.Application.Services
                 {
                     Id = existCourse.Id,
                     Name = existCourse.Name,
-                    Category = existCourse.Category,
                     DurationInWeeks = existCourse.DurationInWeeks,
-                    InstructorName = existCourse.InstructorName,
                     Fee = existCourse.Fee
                 };
                 return ApiResponse<CourseResponseModel>.SuccessResponse(response, APIMessages.CourseManagement.CourseUpdated, HttpStatusCodes.Created);
