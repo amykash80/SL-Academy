@@ -46,14 +46,8 @@ namespace StreamlineAcademy.Application.Services
             var res = await locationRepository.InsertAsync(location);
             if (res > 0)
             {
-                var locationResponse = await locationRepository.GetByIdAsync(x => x.Id == location.Id);
-                var modelRes = new LocationResponseModel()
-                { Address = locationResponse.Address,
-                    PostalCode = locationResponse.PostalCode,
-                    Latitude = locationResponse.Latitude,
-                    Longitude = locationResponse.Longitude,
-                };
-                return ApiResponse<LocationResponseModel>.SuccessResponse(modelRes, HttpStatusCodes.OK.ToString());
+                var locationResponse = await locationRepository.GetLocationJoinById(location.Id);
+                return ApiResponse<LocationResponseModel>.SuccessResponse(locationResponse, HttpStatusCodes.OK.ToString());
             }
             return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }

@@ -8,7 +8,7 @@ namespace StreamlineAcademy.Domain.Models.Responses
 {
     public class LocationResponseModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string? Address { get; set; }
         public string? PostalCode { get; set; }
         public double? Latitude { get; set; }
@@ -16,6 +16,7 @@ namespace StreamlineAcademy.Domain.Models.Responses
         public string? CountryName { get; set; }
         public string? StateName { get; set; }
         public string? CityName { get; set; }
-        public Guid AcademyName { get; set; }
+        public string? AcademyName { get; set; }
+        public bool IsActive { get; set; }
     }
 }
