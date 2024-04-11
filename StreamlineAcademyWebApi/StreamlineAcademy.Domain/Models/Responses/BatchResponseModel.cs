@@ -8,7 +8,7 @@ namespace StreamlineAcademy.Domain.Models.Responses
 {
     public class BatchResponseModel
     {
-        public int Id { get; set; }
+        public Guid? Id { get; set; }
         public string? BatchName { get; set; }
         public int? BatchSize { get; set; }
         public DateTimeOffset StartDate { get; set; }

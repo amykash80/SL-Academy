@@ -32,4 +32,9 @@ namespace StreamlineAcademy.Domain.Models.Requests
         [Required(ErrorMessage = "LocationId is required")]
         public Guid LocationId { get; set; }
     }
+
+    public class BatchUpdateRequest : BatchRequestModel  // to update  response 
+    {
+        public Guid Id { get; set; }
+    }
 }

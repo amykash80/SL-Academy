@@ -35,8 +35,18 @@ public static class APIMessages
         public static readonly string NoAddressFound = "No addresses found";
         public static readonly string AddressUpdated = "Address updated successfully";
     }
+        public static class BatchManagement
+        {
+            public static readonly string BatchNotFound = "Batch not found.";
+            public static readonly string BatchUpdated = "Batch Updated Successfully.";
+            public static readonly string BatchnotFound = "Batch not found.";
+            public static readonly string BatchAlreadyExists = "Batch already Exists";
+            public static readonly string BatchAdded = "Batch Added Successfully.";
+            public static readonly string BatchDeleted = "Batch deleted Successfully";
 
-    public static class CourseManagement
+        }
+
+        public static class CourseManagement
     {
         public static readonly string CourseNotFound = "Course not found.";
         public static readonly string CourseAdded = "Course Added Successfully.";
@@ -44,7 +54,7 @@ public static class APIMessages
         public static readonly string CourseAlreadyRegistered = "Course already Added";
         public static readonly string CourseDeleted = "Course deleted Successfully";
 
-        }
+    }
         public static class CourseCategoryManagement
         {
             public static readonly string CourseCategoryNotFound = "CourseCategory not found.";
@@ -107,9 +117,7 @@ public static class APIMessages
             public static readonly string ContactUpdated = "Contact Updated Successfully.";
             public static readonly string UserFound = "User found.";
             public static readonly string AddressUpdated = "Address Updated Successfully.";
-            public static readonly string PhotoUploaded = "Photo Uploaded Successfully.";
-            
-
+            public static readonly string PhotoUploaded = "Photo Uploaded Successfully."; 
         }
 
         public static class Auth

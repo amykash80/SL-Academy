@@ -1,5 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StreamlineAcademy.Application.Abstractions.IServices;
+using StreamlineAcademy.Application.Services;
+using StreamlineAcademy.Application.Shared;
+using StreamlineAcademy.Domain.Models.Requests;
+using StreamlineAcademy.Domain.Models.Responses;
 
 namespace StreamlineAcademy.Api.Controllers
 {
@@ -7,5 +13,23 @@ namespace StreamlineAcademy.Api.Controllers
     [ApiController]
     public class BatchController : ControllerBase
     {
+        private readonly IBatchService batchService;
+
+        public BatchController(IBatchService batchService)
+        {
+            this.batchService = batchService;
+        }
+
+        [HttpPost("create")]
+        public async Task<ApiResponse<BatchResponseModel>> CreateBatch(BatchRequestModel request) => await batchService.CreateBatch(request);
+        [HttpGet("getAll")]
+        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches() => await batchService.GetAllBatches();
+        [HttpGet("getCourseById/{id:guid}")]
+        public async Task<ApiResponse<BatchResponseModel>> GetBatchById(Guid id) => await batchService.GetBatchById(id);
+        [HttpPut("update")]
+        public async Task<ApiResponse<BatchResponseModel>> UpdateBatch(BatchUpdateRequest model) => await batchService.UpdateBatch(model);
+        [HttpDelete("delete/{id:guid}")]
+        public async Task<ApiResponse<BatchResponseModel>> DeleteBatch(Guid id) => await batchService.DeleteBatch(id);
+
     }
 }
