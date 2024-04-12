@@ -17,6 +17,9 @@ namespace StreamlineAcademy.Domain.Entities
         public Guid? CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
         public CourseCategory? CourseCategory { get; set; }
+        public Guid? AcademyId { get; set; }
+        [ForeignKey(nameof(AcademyId))]
+        public Academy? Academy { get; set; }
 
         #region navigation
         public ICollection<Batch>? batches { get; set; }

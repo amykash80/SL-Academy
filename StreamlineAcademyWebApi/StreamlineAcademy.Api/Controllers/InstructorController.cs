@@ -24,13 +24,13 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpGet("getAll-instructors")]
         public async Task<ApiResponse<IEnumerable<InstructorResponseModel>>> GetAllInstructors() => await instructorService.GetallInstructors();
 
-        [HttpGet("getById/{id:guid}")]
+        [HttpGet("getInstructorById/{id:guid}")]
         public async Task<ApiResponse<InstructorResponseModel>> GetInstructorById(Guid id) => await instructorService.GetInstructorById(id);
 
-        [HttpDelete("delete/{id:guid}")]
+        [HttpDelete("deleteInstructor/{id:guid}")]
         public async Task<ApiResponse<InstructorResponseModel>> DeleteInstructor(Guid id) => await instructorService.DeleteInstructor(id);
 
-        [HttpPut("update")]
+        [HttpPut("updateInstructor")]
         public async Task<ApiResponse<InstructorResponseModel>> UpdateInstructor(InstructorUpdateRequestModel model) => await instructorService.UpdateInstructor(model);
     }
 }
