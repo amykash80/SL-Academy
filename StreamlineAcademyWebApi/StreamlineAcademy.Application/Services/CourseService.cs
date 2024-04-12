@@ -16,10 +16,12 @@ namespace StreamlineAcademy.Application.Services
     public class CourseService:ICourseService
     {
         private readonly ICourseRepository courseRepository;
+        private readonly IAcademyRepository academyRepository;
 
-        public CourseService(ICourseRepository courseRepository)
+        public CourseService(ICourseRepository courseRepository,IAcademyRepository academyRepository)
         {
             this.courseRepository = courseRepository;
+            this.academyRepository = academyRepository;
         }
 
         public async Task<ApiResponse<CourseResponseModel>> CreateCourse(CourseRequestModel request)
@@ -32,6 +34,7 @@ namespace StreamlineAcademy.Application.Services
                 Name = request.Name,
                 Description=request.Description,
                 CategoryId = request.CategoryId,
+                AcademyId=request.AcademyId,
                 DurationInWeeks = request.DurationInWeeks,
                 Fee = request.Fee,
                 IsActive = true,
@@ -164,6 +167,7 @@ namespace StreamlineAcademy.Application.Services
             existingCourse.DurationInWeeks = request.DurationInWeeks;
             existingCourse.Fee = request.Fee;
             existingCourse.CategoryId = request.CategoryId;
+            existingCourse.AcademyId = request.AcademyId;
             existingCourse.ModifiedDate = DateTime.Now;
 
             var returnVal = await courseRepository.UpdateAsync(existingCourse);
@@ -177,6 +181,7 @@ namespace StreamlineAcademy.Application.Services
                     Description = existingCourse.Description,
                     DurationInWeeks = existingCourse.DurationInWeeks,
                     CategoryName = responseModel.CategoryName,
+                    AcademyName = responseModel.AcademyName,
                     Fee = existingCourse.Fee,
                     IsActive = existingCourse.IsActive
                 };
@@ -185,7 +190,24 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
-       
+        public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCoursesByAcademyId(Guid? academyId)
+        {
+            var academy = await academyRepository.GetAcademyById(academyId);
+            if (academy == null)
+            {
+                return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.AcademyManagement.AcademyNotFound, HttpStatusCodes.NotFound);
+            }
+            var courses = await courseRepository.GetAllCoursesByAcademyId(academyId);
+            if (courses != null && courses.Any())
+            {
+                var sortedCourses = courses.OrderBy(c => c.Name);
+                return ApiResponse<IEnumerable<CourseResponseModel>>.SuccessResponse(sortedCourses, $"Found {courses.Count()} Courses");
+            }
+
+            return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+        }
+
+
     }
 }
 

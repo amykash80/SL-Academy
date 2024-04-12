@@ -53,8 +53,9 @@ public static class APIMessages
         public static readonly string CourseUpdated = "Course Updated Successfully.";
         public static readonly string CourseAlreadyRegistered = "Course already Added";
         public static readonly string CourseDeleted = "Course deleted Successfully";
+        public static readonly string NoCourse = "No ourse found for Academy";
 
-    }
+        }
         public static class CourseCategoryManagement
         {
             public static readonly string CourseCategoryNotFound = "CourseCategory not found.";
