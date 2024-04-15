@@ -503,6 +503,52 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.ToTable("Locations");
                 });
 
+            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Schedule", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int?>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<TimeSpan?>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<TimeSpan?>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchId");
+
+                    b.ToTable("Schedules");
+                });
+
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.State", b =>
                 {
                     b.Property<Guid?>("Id")
@@ -678,21 +724,21 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7765047e-205b-4855-90fb-53960e982d2e"),
+                            Id = new Guid("e5d71f25-3d84-45b1-b1a1-d58f53e77d08"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 12, 9, 17, 35, 354, DateTimeKind.Unspecified).AddTicks(6603), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 15, 10, 28, 59, 504, DateTimeKind.Unspecified).AddTicks(5030), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 12, 9, 17, 35, 354, DateTimeKind.Unspecified).AddTicks(6638), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 15, 10, 28, 59, 504, DateTimeKind.Unspecified).AddTicks(5072), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "TYhpn4PK21jld18kRcGNLBhH9M0ePvxxOihLcMrpZaE=",
+                            Password = "RhmM4lcVDcP1jJeMGtSdFHSzR/y00M1/dXRHQScJA5M=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
                             ResetCode = "",
-                            Salt = "jNHJDRTg7o4nW2Bkl2OIbQ==",
+                            Salt = "KdLsd41VVBRyrY9v7fPkmQ==",
                             UserRole = (byte)1
                         });
                 });
@@ -853,6 +899,15 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Navigation("State");
                 });
 
+            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Schedule", b =>
+                {
+                    b.HasOne("StreamlineAcademy.Domain.Entities.Batch", "Batch")
+                        .WithMany("Schedules")
+                        .HasForeignKey("BatchId");
+
+                    b.Navigation("Batch");
+                });
+
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.State", b =>
                 {
                     b.HasOne("StreamlineAcademy.Domain.Entities.Country", "Country")
@@ -891,6 +946,11 @@ namespace StreamlineAcademy.Persistence.Migrations
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.AcademyType", b =>
                 {
                     b.Navigation("Academies");
+                });
+
+            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Batch", b =>
+                {
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.City", b =>
