@@ -21,6 +21,32 @@ namespace StreamlineAcademy.Persistence.Repositories
             this.context = context;
         }
 
+        public async Task<IEnumerable<LocationResponseModel>> GetAllLocations()
+        {
+
+            var location = await context.Locations
+                .Include(a => a.Academy)
+               .Include(a => a.Country)
+               .Include(a => a.State)
+               .Include(a => a.City)
+                .Select(a => new LocationResponseModel
+                {
+                    Id = a.Id,
+                    Address = a.Address,
+                    PostalCode = a.PostalCode,
+                    Latitude = a.Latitude,
+                    Longitude = a.Longitude,
+                    AcademyName = a.Academy!.AcademyName,
+                    CountryName = a.Country!.CountryName,
+                    StateName = a.State!.StateName,
+                    CityName = a.City!.CityName,
+                    IsActive = a.IsActive,
+                })
+                .ToListAsync();
+
+            return location;
+        }
+
         public async Task<LocationResponseModel> GetLocationJoinById(Guid? id)
         {
             var location = await context.Locations

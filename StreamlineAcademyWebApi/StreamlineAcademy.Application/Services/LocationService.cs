@@ -1,4 +1,6 @@
-﻿using Org.BouncyCastle.Asn1.Ocsp;
+﻿using Microsoft.AspNetCore.Http;
+using Org.BouncyCastle.Asn1.Ocsp;
+using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Shared;
@@ -16,23 +18,27 @@ namespace StreamlineAcademy.Application.Services
     public class LocationService : ILocationService
     {
         private readonly ILocationRepository locationRepository;
+        private readonly IContextService contextService;
 
-        public LocationService(ILocationRepository locationRepository)
+        public LocationService(ILocationRepository locationRepository,
+                               IContextService contextService)
         {
             this.locationRepository = locationRepository;
+            this.contextService = contextService;
         }
         public async Task<ApiResponse<LocationResponseModel>> AddLocation(LocationRequestModel model)
         {
             if (await locationRepository.FirstOrDefaultAsync(x => x.Address == model.Address) is not null)
                 return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.LocationManagement.LocationAlreadyRegistered, HttpStatusCodes.Conflict);
 
+            var academyId=contextService.GetUserId();
             var location = new Location()
             {
                 Address = model.Address,
                 PostalCode = model.PostalCode,
                 Latitude = model.Latitude,
                 Longitude = model.Longitude,
-                AcademyId=model.AcademyId,
+                AcademyId= academyId,
                 CountryId=model.CountryId,
                 StateId=model.StateId,
                 CityId=model.CityId,
@@ -51,5 +57,15 @@ namespace StreamlineAcademy.Application.Services
             }
             return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
+
+        public async Task<ApiResponse<IEnumerable<LocationResponseModel>>> GetAllLocations()
+        {
+            var locationList=await locationRepository.GetAllLocations();
+            if (locationList is not null)
+                return ApiResponse<IEnumerable<LocationResponseModel>>.SuccessResponse(locationList.ToList().OrderBy(_ => _.Address), $"Found {locationList.Count()} Locations");
+                return ApiResponse<IEnumerable<LocationResponseModel>>.ErrorResponse(APIMessages.LocationManagement.LocationNotFound, HttpStatusCodes.NotFound);
+
+        }
     }
 }
+
