@@ -16,6 +16,7 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
         Task<ApiResponse<BatchResponseModel>> GetBatchById(Guid id);
         Task<ApiResponse<BatchResponseModel>> UpdateBatch(BatchUpdateRequest request);
         Task<ApiResponse<BatchResponseModel>> DeleteBatch(Guid id);
+        Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchByCourseId(Guid? courseId);
 
     }
 }

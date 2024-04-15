@@ -12,6 +12,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     {
         Task<BatchResponseModel> GetBatchById(Guid? id);
         public Task<List<BatchResponseModel>> GetAllBatches();
+        public Task<List<BatchResponseModel>> GetAllBatchByCourseId(Guid? courseId);
 
     }
 }
