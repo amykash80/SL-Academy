@@ -12,5 +12,6 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
     public interface ILocationService
     {
         Task<ApiResponse<LocationResponseModel>> AddLocation(LocationRequestModel model);
+        Task<ApiResponse<IEnumerable<LocationResponseModel>>> GetAllLocations();
     }
 }
