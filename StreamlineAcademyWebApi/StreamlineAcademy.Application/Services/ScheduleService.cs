@@ -59,27 +59,27 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
-        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedulesByBatchId(Guid batchId)
-        {
-            var schedules = await GetByIdAsync(schedule => schedule.BatchId == batchId);
+    //    public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedulesByBatchId(Guid batchId)
+    //    {
+    //        var schedules = await GetByIdAsync(schedule => schedule.BatchId == batchId);
 
-            if (schedules != null && schedules.Any())
-            {
-                // Map schedules to response models
-                var scheduleResponseList = schedules.Select(schedule => new ScheduleResponseModel
-                {
-                    Id = schedule.Id,
-                    DayOfWeek = schedule.DayOfWeek,
-                    StartTime = schedule.StartTime,
-                    EndTime = schedule.EndTime,
-                    BatchName = schedule.Batch?.BatchName // Include batch name in the response
-                });
+    //        if (schedules != null && schedules.Any())
+    //        {
+    //            // Map schedules to response models
+    //            var scheduleResponseList = schedules.Select(schedule => new ScheduleResponseModel
+    //            {
+    //                Id = schedule.Id,
+    //                DayOfWeek = schedule.DayOfWeek,
+    //                StartTime = schedule.StartTime,
+    //                EndTime = schedule.EndTime,
+    //                BatchName = schedule.Batch?.BatchName // Include batch name in the response
+    //            });
 
-                return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(scheduleResponseList, $"Found {schedules.Count()} schedules for batch {schedules.First().Batch.BatchName}.");
-            }
+    //            return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(scheduleResponseList, $"Found {schedules.Count()} schedules for batch {schedules.First().Batch.BatchName}.");
+    //        }
 
-            return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse($"No schedules found for batch with ID {batchId}.", HttpStatusCodes.NotFound);
-        }
+    //        return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse($"No schedules found for batch with ID {batchId}.", HttpStatusCodes.NotFound);
+    //    }
 
     }
 
