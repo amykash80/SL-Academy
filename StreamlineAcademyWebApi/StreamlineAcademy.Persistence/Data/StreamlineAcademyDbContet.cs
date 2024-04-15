@@ -33,6 +33,7 @@ namespace StreamlineAcademy.Persistence.Data
         public DbSet<Batch> Batches { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<StudentInterests> StudentInterests { get; set; }
+        public DbSet<Student> Students { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

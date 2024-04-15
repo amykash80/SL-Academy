@@ -108,6 +108,15 @@ public static class APIMessages
             public static readonly string InstructorAlreadyRegistered = "Instructor with this email already registered";
 
         }
+        public static class StudentManagement
+        {
+            public static readonly string StudentNotFound = "Student not found.";
+            public static readonly string StudentAdded = "Student Registered Successfully.";
+            public static readonly string StudentUpdated = "Student Updated Successfully.";
+            public static readonly string StudentDeleted = "Student Deleted Successfully.";
+            public static readonly string StudentAlreadyRegistered = "Student with this email already registered";
+
+        }
 
         public static class EnquiryManagement
 		{

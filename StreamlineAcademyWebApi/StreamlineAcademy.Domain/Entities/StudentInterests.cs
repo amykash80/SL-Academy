@@ -10,7 +10,7 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public class StudentInterests:BaseModel
     {
-        public Guid StudentId { get; set; }
+        public Guid? StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]
         public Student? Student { get; set;}
         public Guid CourseId { get; set; }
