@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240415090800_studentTableAdd")]
+    partial class studentTableAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -627,7 +630,7 @@ namespace StreamlineAcademy.Persistence.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("Students");
+                    b.ToTable("students");
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.StudentInterests", b =>
@@ -807,21 +810,21 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("19b0591c-97f2-48b1-8e88-414b01f583ea"),
+                            Id = new Guid("18a6a940-2c44-4452-ba57-6064f1a65f99"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 15, 14, 40, 10, 132, DateTimeKind.Unspecified).AddTicks(8961), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 15, 14, 37, 59, 979, DateTimeKind.Unspecified).AddTicks(3128), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 15, 14, 40, 10, 132, DateTimeKind.Unspecified).AddTicks(8998), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 15, 14, 37, 59, 979, DateTimeKind.Unspecified).AddTicks(3166), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "NQzE3gyUaE268ckqs6pzknq8o8EvTidwBRLkmm/EZuw=",
+                            Password = "LckZo7cgycpAph1uyCD4APG50/NYM8LiwImDwQg+Q/4=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
                             ResetCode = "",
-                            Salt = "kvAAdegX2OWG/1TMiuUdmw==",
+                            Salt = "dLuiVFesrME2NGKjH+8ivQ==",
                             UserRole = (byte)1
                         });
                 });

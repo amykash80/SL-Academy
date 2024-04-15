@@ -33,6 +33,8 @@ namespace StreamlineAcademy.Domain.Entities
         #region navigation
         public ICollection<Location>? Locations { get; set; }
         public ICollection<Instructor>? Instructors { get; set; }
+        public ICollection<Student>? Students { get; set; }
+
         #endregion
     }
 }
