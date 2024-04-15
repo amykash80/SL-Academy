@@ -125,6 +125,22 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
-        
+        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchByCourseId(Guid? courseId)
+        {
+            var coueses = await batchRepository.GetByIdAsync(b => b.CourseId == courseId);
+            if (coueses == null)
+            {
+                return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.BatchManagement.BatchNotFound, HttpStatusCodes.NotFound);
+            }
+            var batches = await batchRepository.GetAllBatchByCourseId(courseId);
+            if (batches != null && batches.Any())
+            {
+                var sortedBatches = batches.OrderBy(c => c.CourseName);
+                return ApiResponse<IEnumerable<BatchResponseModel>>.SuccessResponse(sortedBatches, $"Found {batches.Count()} Batches");
+            }
+
+            return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+        }
     }
+    
 }

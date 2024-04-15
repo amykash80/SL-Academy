@@ -52,6 +52,7 @@ public static class APIMessages
             public static readonly string ScheduleFound = "Schedule  found for this batch.";
             public static readonly string AllScheduleNotFound = "Schedule not found.";
             public static readonly string ScheduleUpdated = "Schedule Updated Successfully.";
+            public static readonly string StartTimeMustbebeforeEndtime = "Start time must be before end time.";
         }
 
         public static class CourseManagement

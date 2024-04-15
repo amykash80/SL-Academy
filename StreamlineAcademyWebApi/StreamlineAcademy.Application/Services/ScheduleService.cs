@@ -119,11 +119,11 @@ namespace StreamlineAcademy.Application.Services
             if (existingBatch == null)
                 return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
             if (request.StartTime >= request.EndTime)
-                return ApiResponse<ScheduleResponseModel>.ErrorResponse("Start time must be before end time.", HttpStatusCodes.BadRequest);
+                return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.ScheduleManagement.StartTimeMustbebeforeEndtime);
 
             var existingSchedule = await scheduleRepository.GetByIdAsync(x => x.Id == request.Id);
             if (existingSchedule == null)
-                return ApiResponse<ScheduleResponseModel>.ErrorResponse("Schedule not found.", HttpStatusCodes.NotFound);
+                return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.ScheduleManagement.AllScheduleNotFound, HttpStatusCodes.NotFound);
 
             existingSchedule.DayOfWeek = (DayOfWeek)request.DayOfWeek!;
             existingSchedule.StartTime = request.StartTime;
@@ -144,13 +144,8 @@ namespace StreamlineAcademy.Application.Services
                 };
                 return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleUpdated, HttpStatusCodes.OK);
             }
-            return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
-
-
+            return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError); 
         }
-
-
-
-
+         
     }
 }
