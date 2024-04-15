@@ -196,10 +196,9 @@ namespace StreamlineAcademy.Application.Services
         public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCoursesByAcademyId(Guid? academyId)
         {
             var academy = contextService.GetUserId();
-            //var academy = await academyRepository.GetAcademyById(academyId);
             if (academy == null)
             {
-                return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.AcademyManagement.AcademyNotFound, HttpStatusCodes.NotFound);
+                return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
             }
             var courses = await courseRepository.GetAllCoursesByAcademyId(academyId);
             if (courses != null && courses.Any())

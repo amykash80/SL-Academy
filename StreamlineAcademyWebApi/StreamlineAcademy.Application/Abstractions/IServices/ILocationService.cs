@@ -13,5 +13,9 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
     {
         Task<ApiResponse<LocationResponseModel>> AddLocation(LocationRequestModel model);
         Task<ApiResponse<IEnumerable<LocationResponseModel>>> GetAllLocations();
+        Task<ApiResponse<LocationResponseModel>> DeleteLocation(Guid id);
+        Task<ApiResponse<LocationResponseModel>> GetLocationById(Guid id);
+        Task<ApiResponse<LocationResponseModel>> UpdateLocation(LocationUpdateRequestModel model);
+
     }
 }

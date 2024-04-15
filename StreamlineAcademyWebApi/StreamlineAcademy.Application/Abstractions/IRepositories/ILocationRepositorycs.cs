@@ -12,6 +12,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     public interface ILocationRepository:IBaseRepository<Location>
     {
         Task<LocationResponseModel> GetLocationJoinById(Guid? id);
-        Task<IEnumerable<LocationResponseModel>> GetAllLocations();
+        Task<IEnumerable<LocationResponseModel>> GetAllLocations(Guid? id);
+        Task<int> DeleteLocation(Location model);
     }
 }

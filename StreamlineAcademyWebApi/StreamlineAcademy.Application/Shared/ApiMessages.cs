@@ -76,6 +76,8 @@ public static class APIMessages
             public static readonly string LocationAdded = "Location Added Successfully.";
             public static readonly string LocationUpdated = "Location Updated Successfully.";
             public static readonly string LocationAlreadyRegistered = "Location already Added";
+            public static readonly string LocationDeleted = "Location Deleted";
+
 
         }
         public static class AcademyManagement
