@@ -48,8 +48,10 @@ public static class APIMessages
         public static class ScheduleManagement
         {
             public static readonly string ScheduleAdded = "Schedule Added Successfully.";
-            public static readonly string BatchNotFoundForSchedule = "Batch not found for Schedule.";
-            
+            public static readonly string ScheduleNotFound = "Schedule not found for this batch.";
+            public static readonly string ScheduleFound = "Schedule  found for this batch.";
+            public static readonly string AllScheduleNotFound = "Schedule not found.";
+            public static readonly string ScheduleUpdated = "Schedule Updated Successfully.";
         }
 
         public static class CourseManagement

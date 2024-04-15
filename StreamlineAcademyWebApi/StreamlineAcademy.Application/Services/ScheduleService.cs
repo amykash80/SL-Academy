@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Application.Services
 {
-    public class ScheduleService:IScheduleService
+    public class ScheduleService : IScheduleService
     {
         private readonly IScheduleRepository scheduleRepository;
         private readonly IBatchRepository batchRepository;
 
-        public ScheduleService(IScheduleRepository scheduleRepository,IBatchRepository batchRepository)
+        public ScheduleService(IScheduleRepository scheduleRepository, IBatchRepository batchRepository)
         {
             this.scheduleRepository = scheduleRepository;
             this.batchRepository = batchRepository;
@@ -27,14 +27,16 @@ namespace StreamlineAcademy.Application.Services
         {
             var existingBatch = await batchRepository.GetByIdAsync(x => x.Id == request.BatchId);
             if (existingBatch == null)
-                return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.ScheduleManagement.BatchNotFoundForSchedule, HttpStatusCodes.NotFound);
+                return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
             if (request.StartTime >= request.EndTime)
                 return ApiResponse<ScheduleResponseModel>.ErrorResponse("Start time must be before end time.", HttpStatusCodes.BadRequest);
+
             var schedule = new Schedule()
             {
-                DayOfWeek = request.DayOfWeek!.Value,
-                //StartTime = request.StartTime, // No need for .Value as it's already a TimeSpan?
-                //EndTime = request.EndTime,
+
+                DayOfWeek = (DayOfWeek)request.DayOfWeek!,
+                StartTime = request.StartTime,
+                EndTime = request.EndTime,
                 BatchId = request.BatchId!.Value,
                 IsActive = true,
                 CreatedBy = Guid.Empty,
@@ -42,7 +44,7 @@ namespace StreamlineAcademy.Application.Services
                 ModifiedDate = DateTime.Now,
                 DeletedBy = Guid.Empty,
                 DeletedDate = DateTime.Now,
-            };  
+            };
             var res = await scheduleRepository.InsertAsync(schedule);
             if (res > 0)
             {
@@ -50,37 +52,105 @@ namespace StreamlineAcademy.Application.Services
                 {
                     Id = schedule.Id,
                     DayOfWeek = schedule.DayOfWeek,
-                    //StartTime = schedule.StartTime,
-                    //EndTime = schedule.EndTime,
-                    BatchName = existingBatch.BatchName 
+                    StartTime = schedule.StartTime,
+                    EndTime = schedule.EndTime,
+                    BatchName = existingBatch.BatchName
                 };
                 return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleAdded, HttpStatusCodes.Created);
             }
             return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
-    //    public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedulesByBatchId(Guid batchId)
-    //    {
-    //        var schedules = await GetByIdAsync(schedule => schedule.BatchId == batchId);
+        public async Task<ApiResponse<ScheduleResponseModel>> DeleteSchedule(Guid id)
+        {
+            var existingSchedule = await scheduleRepository.GetByIdAsync(x => x.Id == id);
+            if (existingSchedule == null)
+            {
+                return ApiResponse<ScheduleResponseModel>.ErrorResponse("Schedule not found.", HttpStatusCodes.NotFound);
+            }
+            var result = await scheduleRepository.FirstOrDefaultAsync(x => x.Id == existingSchedule.Id);
+            existingSchedule.IsActive = false;
+            existingSchedule.DeletedDate = DateTime.Now;
+            if (result is not null)
+            {
+                int isSoftDelted = await scheduleRepository.DeleteAsync(result);
+                if (isSoftDelted > 0)
+                return ApiResponse<ScheduleResponseModel>.SuccessResponse(null, APIMessages.BatchManagement.BatchDeleted);
+                
+            }
+            return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
 
-    //        if (schedules != null && schedules.Any())
-    //        {
-    //            // Map schedules to response models
-    //            var scheduleResponseList = schedules.Select(schedule => new ScheduleResponseModel
-    //            {
-    //                Id = schedule.Id,
-    //                DayOfWeek = schedule.DayOfWeek,
-    //                StartTime = schedule.StartTime,
-    //                EndTime = schedule.EndTime,
-    //                BatchName = schedule.Batch?.BatchName // Include batch name in the response
-    //            });
+        }
 
-    //            return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(scheduleResponseList, $"Found {schedules.Count()} schedules for batch {schedules.First().Batch.BatchName}.");
-    //        }
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedules()
+        {
+            //var scheduleList = await scheduleRepository.GetAllAsync();
+            var returnVal = await scheduleRepository.GetAllSchedules();
+            if (returnVal is not null)
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(returnVal.OrderBy(_ => _.BatchName), $"Found {returnVal.Count()} Batches");
+            return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
+        }
 
-    //        return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse($"No schedules found for batch with ID {batchId}.", HttpStatusCodes.NotFound);
-    //    }
+
+
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedulesByBatchId(Guid? batchId)
+        {
+            var schedules = await scheduleRepository.GetAsync(x => x.BatchId == batchId);
+
+            if (schedules == null || !schedules.Any())
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.ScheduleManagement.ScheduleNotFound, HttpStatusCodes.NotFound);
+
+            var scheduleResponseList = schedules.Select(schedule => new ScheduleResponseModel
+            {
+                Id = schedule.Id,
+                DayOfWeek = schedule.DayOfWeek,
+                StartTime = schedule.StartTime,
+                EndTime = schedule.EndTime,
+                BatchName = schedule.Batch!.BatchName // Assuming Schedule has a navigation property Batch
+            }).ToList();
+
+            return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(scheduleResponseList, APIMessages.ScheduleManagement.ScheduleFound);
+
+        }
+
+        public async Task<ApiResponse<ScheduleResponseModel>> UpdateSchedule(ScheduleUpdateRequest request)
+        {
+            var existingBatch = await batchRepository.GetByIdAsync(x => x.Id == request.BatchId);
+            if (existingBatch == null)
+                return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
+            if (request.StartTime >= request.EndTime)
+                return ApiResponse<ScheduleResponseModel>.ErrorResponse("Start time must be before end time.", HttpStatusCodes.BadRequest);
+
+            var existingSchedule = await scheduleRepository.GetByIdAsync(x => x.Id == request.Id);
+            if (existingSchedule == null)
+                return ApiResponse<ScheduleResponseModel>.ErrorResponse("Schedule not found.", HttpStatusCodes.NotFound);
+
+            existingSchedule.DayOfWeek = (DayOfWeek)request.DayOfWeek!;
+            existingSchedule.StartTime = request.StartTime;
+            existingSchedule.EndTime = request.EndTime;
+            existingSchedule.BatchId = request.BatchId!.Value;
+            existingSchedule.ModifiedDate = DateTime.Now;
+
+            var res = await scheduleRepository.UpdateAsync(existingSchedule);
+            if (res > 0)
+            {
+                var scheduleResponse = new ScheduleResponseModel
+                {
+                    Id = existingSchedule.Id,
+                    DayOfWeek = existingSchedule.DayOfWeek,
+                    StartTime = existingSchedule.StartTime,
+                    EndTime = existingSchedule.EndTime,
+                    BatchName = existingBatch.BatchName
+                };
+                return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleUpdated, HttpStatusCodes.OK);
+            }
+            return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+
+
+        }
+
+
+
 
     }
-
 }
