@@ -53,7 +53,8 @@ namespace StreamlineAcademy.Application.DI
 			services.AddScoped<IBatchService, BatchService>();
 			services.AddScoped<ILocationService, LocationService>();
 			services.AddScoped<IInstructorService, InstructorService>();
-			
+            services.AddScoped<IScheduleService,ScheduleService>();
+
             return services;
         }
     }

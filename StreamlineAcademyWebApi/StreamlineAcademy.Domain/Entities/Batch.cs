@@ -25,6 +25,9 @@ namespace StreamlineAcademy.Domain.Entities
         public Guid LocationId { get; set; }
         [ForeignKey(nameof(LocationId))]
         public Location? Location { get; set; }
+        #region Navigation 
+        public ICollection<Schedule>? Schedules { get; set; }
+        #endregion
 
     }
 }

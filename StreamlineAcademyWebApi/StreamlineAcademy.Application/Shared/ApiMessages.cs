@@ -45,6 +45,12 @@ public static class APIMessages
             public static readonly string BatchDeleted = "Batch deleted Successfully";
 
         }
+        public static class ScheduleManagement
+        {
+            public static readonly string ScheduleAdded = "Schedule Added Successfully.";
+            public static readonly string BatchNotFoundForSchedule = "Batch not found for Schedule.";
+            
+        }
 
         public static class CourseManagement
     {
