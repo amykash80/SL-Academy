@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Shared;
@@ -17,11 +18,13 @@ namespace StreamlineAcademy.Application.Services
     {
         private readonly ICourseRepository courseRepository;
         private readonly IAcademyRepository academyRepository;
+        private readonly IContextService contextService;
 
-        public CourseService(ICourseRepository courseRepository,IAcademyRepository academyRepository)
+        public CourseService(ICourseRepository courseRepository,IAcademyRepository academyRepository,IContextService contextService)
         {
             this.courseRepository = courseRepository;
             this.academyRepository = academyRepository;
+            this.contextService = contextService;
         }
 
         public async Task<ApiResponse<CourseResponseModel>> CreateCourse(CourseRequestModel request)
@@ -192,7 +195,8 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCoursesByAcademyId(Guid? academyId)
         {
-            var academy = await academyRepository.GetAcademyById(academyId);
+            var academy = contextService.GetUserId();
+            //var academy = await academyRepository.GetAcademyById(academyId);
             if (academy == null)
             {
                 return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.AcademyManagement.AcademyNotFound, HttpStatusCodes.NotFound);

@@ -11,8 +11,8 @@ namespace StreamlineAcademy.Domain.Entities
     public class Schedule:BaseModel
     {
         public DayOfWeek? DayOfWeek { get; set; }
-        public DateTimeOffset? StartTime { get; set; }
-        public DateTimeOffset? EndTime { get; set; }
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
         public Guid? BatchId { get; set; } 
         [ForeignKey(nameof(BatchId))]
         public Batch? Batch { get; set; }

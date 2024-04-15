@@ -33,8 +33,8 @@ namespace StreamlineAcademy.Application.Services
             var schedule = new Schedule()
             {
                 DayOfWeek = request.DayOfWeek!.Value,
-                StartTime = request.StartTime!.Value,
-                EndTime = request.EndTime!.Value,
+                //StartTime = request.StartTime, // No need for .Value as it's already a TimeSpan?
+                //EndTime = request.EndTime,
                 BatchId = request.BatchId!.Value,
                 IsActive = true,
                 CreatedBy = Guid.Empty,
@@ -50,8 +50,8 @@ namespace StreamlineAcademy.Application.Services
                 {
                     Id = schedule.Id,
                     DayOfWeek = schedule.DayOfWeek,
-                    StartTime = schedule.StartTime,
-                    EndTime = schedule.EndTime,
+                    //StartTime = schedule.StartTime,
+                    //EndTime = schedule.EndTime,
                     BatchName = existingBatch.BatchName 
                 };
                 return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleAdded, HttpStatusCodes.Created);
