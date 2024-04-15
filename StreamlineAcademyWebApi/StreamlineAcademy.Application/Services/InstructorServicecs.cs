@@ -1,4 +1,5 @@
 ﻿using Org.BouncyCastle.Asn1.Ocsp;
+using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IEmailService;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
@@ -21,14 +22,17 @@ namespace StreamlineAcademy.Application.Services
         private readonly IInstructorReository instructorRepository;
         private readonly IUserRepository userRepository;
         private readonly IEmailHelperService emailHelperService;
+        private readonly IContextService contextService;
 
         public InstructorService(IInstructorReository instructorRepository,
                                   IUserRepository userRepository,
-                                  IEmailHelperService emailHelperService)
+                                  IEmailHelperService emailHelperService,
+                                  IContextService contextService)
         {
             this.instructorRepository = instructorRepository;
             this.userRepository = userRepository;
             this.emailHelperService = emailHelperService;
+            this.contextService = contextService;
         }
         public async Task<ApiResponse<InstructorResponseModel>> AddInstructor(InstructorRequestModel model)
         {
@@ -106,7 +110,8 @@ namespace StreamlineAcademy.Application.Services
 
         public async  Task<ApiResponse<IEnumerable<InstructorResponseModel>>> GetallInstructors()
         {
-            var returnVal = await instructorRepository.GetAllInstructors();
+            var academyId=contextService.GetUserId();
+            var returnVal = await instructorRepository.GetAllInstructors(academyId);
             if (returnVal is not null)
                 return ApiResponse<IEnumerable<InstructorResponseModel>>.SuccessResponse(returnVal.OrderBy(_ => _.Name), $"Found {returnVal.Count()} Instructors");
             return ApiResponse<IEnumerable<InstructorResponseModel>>.ErrorResponse(APIMessages.InstructorManagement.InstructorNotFound, HttpStatusCodes.NotFound);

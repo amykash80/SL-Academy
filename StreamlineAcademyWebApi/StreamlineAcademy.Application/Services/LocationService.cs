@@ -53,18 +53,77 @@ namespace StreamlineAcademy.Application.Services
             if (res > 0)
             {
                 var locationResponse = await locationRepository.GetLocationJoinById(location.Id);
-                return ApiResponse<LocationResponseModel>.SuccessResponse(locationResponse, HttpStatusCodes.OK.ToString());
+                return ApiResponse<LocationResponseModel>.SuccessResponse(locationResponse, APIMessages.LocationManagement.LocationAdded);
+            }
+            return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+        }
+
+        public async Task<ApiResponse<LocationResponseModel>> DeleteLocation(Guid id)
+        {
+            var existingLocation = await locationRepository.GetByIdAsync(x => x.Id == id);
+
+            if (existingLocation is null)
+                return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.LocationManagement.LocationNotFound, HttpStatusCodes.NotFound);
+
+            var result = await locationRepository.FirstOrDefaultAsync(x => x.Id == existingLocation.Id);
+            result.IsActive = false;
+            result.DeletedDate = DateTime.Now;
+            if (result is not null)
+            {
+                int isSoftDelted = await locationRepository.DeleteLocation(result);
+                if (isSoftDelted > 0)
+                {
+                    var returnVal = await locationRepository.GetLocationJoinById(existingLocation.Id);
+                    return ApiResponse<LocationResponseModel>.SuccessResponse(returnVal, APIMessages.LocationManagement.LocationDeleted);
+                }
             }
             return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
         public async Task<ApiResponse<IEnumerable<LocationResponseModel>>> GetAllLocations()
         {
-            var locationList=await locationRepository.GetAllLocations();
+            var academyId = contextService.GetUserId();
+            var locationList =await locationRepository.GetAllLocations(academyId);
             if (locationList is not null)
                 return ApiResponse<IEnumerable<LocationResponseModel>>.SuccessResponse(locationList.ToList().OrderBy(_ => _.Address), $"Found {locationList.Count()} Locations");
                 return ApiResponse<IEnumerable<LocationResponseModel>>.ErrorResponse(APIMessages.LocationManagement.LocationNotFound, HttpStatusCodes.NotFound);
 
+        }
+
+        public async Task<ApiResponse<LocationResponseModel>> GetLocationById(Guid id)
+        {
+            var location = await locationRepository.GetByIdAsync(x => x.Id == id);
+            if (location is null)
+                return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.LocationManagement.LocationNotFound, HttpStatusCodes.NotFound);
+
+            var responseModel = await locationRepository.GetLocationJoinById(id);
+
+            return ApiResponse<LocationResponseModel>.SuccessResponse(responseModel);
+        }
+
+        public async Task<ApiResponse<LocationResponseModel>> UpdateLocation(LocationUpdateRequestModel model)
+        {
+            var location = await locationRepository.GetByIdAsync(x => x.Id == model.Id);
+
+            if (location is null)
+                return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.LocationManagement.LocationNotFound, HttpStatusCodes.NotFound);
+
+            location.Address = model.Address;
+            location.PostalCode = model.PostalCode;
+            location.Latitude = model.Latitude;
+            location.Longitude = model.Longitude;
+            location.CountryId = model.CountryId;
+            location.StateId = model.StateId;
+            location.CityId = model.CityId;
+            location.ModifiedDate=DateTime.Now;
+            var locationResponse = await locationRepository.UpdateAsync(location);
+
+            if (locationResponse is > 0)
+            {
+                var responseModel = await locationRepository.GetLocationJoinById(location.Id);
+                return ApiResponse<LocationResponseModel>.SuccessResponse(responseModel, APIMessages.LocationManagement.LocationUpdated);
+            }
+            return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
     }
 }

@@ -27,6 +27,9 @@ namespace StreamlineAcademy.Domain.Entities
         public Guid CityId { get; set; }
         [ForeignKey(nameof(CityId))]
         public City? City { get; set; }
+        public Guid AcademyId { get; set; }
+        [ForeignKey(nameof(AcademyId))]
+        public Academy? Academy { get; set; }
 
         #region navigation
         public Batch? Batch { get; set; }

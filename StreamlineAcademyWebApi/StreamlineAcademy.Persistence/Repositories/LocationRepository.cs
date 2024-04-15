@@ -21,30 +21,36 @@ namespace StreamlineAcademy.Persistence.Repositories
             this.context = context;
         }
 
-        public async Task<IEnumerable<LocationResponseModel>> GetAllLocations()
+        public async Task<int> DeleteLocation(Location model)
         {
+            await Task.Run(() => context.Set<Location>().Update(model));
+            return await context.SaveChangesAsync();
+        }
 
-            var location = await context.Locations
-                .Include(a => a.Academy)
-               .Include(a => a.Country)
-               .Include(a => a.State)
-               .Include(a => a.City)
-                .Select(a => new LocationResponseModel
-                {
-                    Id = a.Id,
-                    Address = a.Address,
-                    PostalCode = a.PostalCode,
-                    Latitude = a.Latitude,
-                    Longitude = a.Longitude,
-                    AcademyName = a.Academy!.AcademyName,
-                    CountryName = a.Country!.CountryName,
-                    StateName = a.State!.StateName,
-                    CityName = a.City!.CityName,
-                    IsActive = a.IsActive,
-                })
-                .ToListAsync();
+        public async Task<IEnumerable<LocationResponseModel>> GetAllLocations(Guid? id)
+        {
+            var locations = await context.Locations
+                    .Where(a => a.AcademyId == id) 
+                    .Include(a => a.Academy)
+                    .Include(a => a.Country)
+                    .Include(a => a.State)
+                    .Include(a => a.City)
+                    .Select(a => new LocationResponseModel
+                    {
+                        Id = a.Id,
+                        Address = a.Address,
+                        PostalCode = a.PostalCode,
+                        Latitude = a.Latitude,
+                        Longitude = a.Longitude,
+                        AcademyName = a.Academy!.AcademyName,
+                        CountryName = a.Country!.CountryName,
+                        StateName = a.State!.StateName,
+                        CityName = a.City!.CityName,
+                        IsActive = a.IsActive,
+                    })
+                    .ToListAsync();
 
-            return location;
+            return locations;
         }
 
         public async Task<LocationResponseModel> GetLocationJoinById(Guid? id)

@@ -32,6 +32,7 @@ namespace StreamlineAcademy.Domain.Entities
         public City? City { get; set; }
         #region navigation
         public ICollection<Location>? Locations { get; set; }
+        public ICollection<Instructor>? Instructors { get; set; }
         #endregion
     }
 }
