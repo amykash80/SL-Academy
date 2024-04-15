@@ -10,8 +10,8 @@ namespace StreamlineAcademy.Domain.Models.Responses
     {
         public Guid? Id { get; set; }
         public DayOfWeek? DayOfWeek { get; set; }
-        public DateTimeOffset? StartTime { get; set; }
-        public DateTimeOffset? EndTime { get; set; }
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
         public string? BatchName { get; set; }
     }
 }

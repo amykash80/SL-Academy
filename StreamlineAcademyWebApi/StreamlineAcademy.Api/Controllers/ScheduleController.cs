@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
@@ -20,5 +21,14 @@ namespace StreamlineAcademy.Api.Controllers
         }
         [HttpPost("create")]
         public async Task<ApiResponse<ScheduleResponseModel>> CreateSchedule(ScheduleRequestModel request) => await scheduleService.CreateSchedule(request);
+        [HttpGet("getScheduleBatchById/{id:guid}")]
+       
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedulesByBatchId(Guid id) => await scheduleService.GetAllSchedulesByBatchId(id);
+        [HttpGet("getAllSchedules")]
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedules() => await scheduleService.GetAllSchedules();
+        [HttpPut("updateSchedule")]
+        public async Task<ApiResponse<ScheduleResponseModel>> UpdateSchedule(ScheduleUpdateRequest model) => await scheduleService.UpdateSchedule(model);
+        [HttpDelete("deleteSchedule/{id:guid}")]
+        public async Task<ApiResponse<ScheduleResponseModel>> DeleteSchedule(Guid id) => await scheduleService.DeleteSchedule(id);
     }
 }
