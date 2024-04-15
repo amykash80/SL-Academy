@@ -193,13 +193,9 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
-        public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCoursesByAcademyId(Guid? academyId)
+        public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllCoursesByAcademyId()
         {
-            var academy = contextService.GetUserId();
-            if (academy == null)
-            {
-                return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
-            }
+            var academyId = contextService.GetUserId();
             var courses = await courseRepository.GetAllCoursesByAcademyId(academyId);
             if (courses != null && courses.Any())
             {
