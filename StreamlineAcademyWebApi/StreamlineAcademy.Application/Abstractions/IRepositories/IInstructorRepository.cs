@@ -22,7 +22,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         Task<Instructor> FirstOrDefaultAsync(Expression<Func<Instructor, bool>> expression);
         #endregion
         Task<InstructorResponseModel> GetInstructorById(Guid? id);
-        Task<List<InstructorResponseModel>> GetAllInstructors();
+        Task<List<InstructorResponseModel>> GetAllInstructors(Guid? id);
         Task<int> Delete(User model);
 
 

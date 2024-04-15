@@ -87,9 +87,10 @@ namespace StreamlineAcademy.Persistence.Repositories
         }
 
 
-        public async Task<List<InstructorResponseModel>> GetAllInstructors()
+        public async Task<List<InstructorResponseModel>> GetAllInstructors(Guid? id)
         {
             var instructors = await context.Instructors
+                 .Where(a => a.AcademyId == id)
                 .Include(a => a.User)
                 .Include(a => a.Country)
                 .Include(a => a.State)
