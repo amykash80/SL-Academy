@@ -19,7 +19,7 @@ namespace StreamlineAcademy.Api.Controllers
         {
             this.instructorService = instructorService;
         }
-
+        [Authorize]
         [HttpPost("register")]
         public async Task<ApiResponse<InstructorResponseModel>> AddInstructor(InstructorRequestModel model) => await instructorService.AddInstructor(model);
         [Authorize]
