@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240416084214_newMigration")]
+    partial class newMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -794,20 +797,20 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5c6f609b-b5f3-4d5f-b77d-d074868647bf"),
+                            Id = new Guid("63c66225-9b42-4532-a2b9-6537f550319a"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 17, 12, 397, DateTimeKind.Unspecified).AddTicks(1575), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 12, 13, 538, DateTimeKind.Unspecified).AddTicks(1218), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 17, 12, 397, DateTimeKind.Unspecified).AddTicks(1608), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 12, 13, 538, DateTimeKind.Unspecified).AddTicks(1252), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "Rs/08JOS1y/pU6ojqAlhd8i7BwjOypHRCfevshCS47E=",
+                            Password = "g/k0TogfzEtLMMpAa7AMsuD9DH0AH+3+IiZVsumSNyU=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
-                            Salt = "HJO0KsVQl51ntoLvE7aUbQ==",
+                            Salt = "+IoA+Pmn8fFcp9X+mK09DA==",
                             UserRole = (byte)1
                         });
                 });

@@ -24,9 +24,9 @@ namespace StreamlineAcademy.Persistence.Data
         {
             var Passwordsalt = AppEncryption.GenerateSalt();
             var commonId = Guid.NewGuid();
-            modelbuilder.Entity<User>().HasData(
+            modelbuilder.Entity<SuperAdmin>().HasData(
 
-                new User()
+                new SuperAdmin()
                 {
 
                     Id = commonId,
@@ -44,7 +44,6 @@ namespace StreamlineAcademy.Persistence.Data
                     ModifiedBy = Guid.Empty,
                     ModifiedDate = DateTime.Now,
                     DeletedBy = Guid.Empty,
-                    ResetCode=string.Empty,
                     
 
                 }

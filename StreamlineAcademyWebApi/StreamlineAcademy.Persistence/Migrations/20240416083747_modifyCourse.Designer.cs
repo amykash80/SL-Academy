@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240416083747_modifyCourse")]
+    partial class modifyCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -790,26 +793,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasIndex("StateId");
 
                     b.ToTable("SuperAdmins");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("5c6f609b-b5f3-4d5f-b77d-d074868647bf"),
-                            Address = "Hsr,Bangalore",
-                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 17, 12, 397, DateTimeKind.Unspecified).AddTicks(1575), new TimeSpan(0, 5, 30, 0, 0)),
-                            DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Email = "aamir@anterntech.com",
-                            IsActive = true,
-                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 17, 12, 397, DateTimeKind.Unspecified).AddTicks(1608), new TimeSpan(0, 5, 30, 0, 0)),
-                            Name = "amir",
-                            Password = "Rs/08JOS1y/pU6ojqAlhd8i7BwjOypHRCfevshCS47E=",
-                            PhoneNumber = "8997654556",
-                            PostalCode = "786545",
-                            Salt = "HJO0KsVQl51ntoLvE7aUbQ==",
-                            UserRole = (byte)1
-                        });
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.User", b =>
@@ -872,6 +855,27 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("dd927788-90c5-474a-bb22-7e36e6e99d35"),
+                            Address = "Hsr,Bangalore",
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 7, 46, 754, DateTimeKind.Unspecified).AddTicks(658), new TimeSpan(0, 5, 30, 0, 0)),
+                            DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "aamir@anterntech.com",
+                            IsActive = true,
+                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 16, 14, 7, 46, 754, DateTimeKind.Unspecified).AddTicks(686), new TimeSpan(0, 5, 30, 0, 0)),
+                            Name = "amir",
+                            Password = "TflI97S8bmE/ghLHyajeDTUQgwNgqo5siT+nZ3L4yQA=",
+                            PhoneNumber = "8997654556",
+                            PostalCode = "786545",
+                            ResetCode = "",
+                            Salt = "biuLolmFmKTblRvIIWAHEw==",
+                            UserRole = (byte)1
+                        });
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Academy", b =>
