@@ -90,6 +90,7 @@ namespace StreamlineAcademy.Application.Services
                         };
                         StdIntrests.Add(StudentIntrests);
                     }
+                   var response= await studentRepository.InsertRangeAsync(StdIntrests);
                    
                     if (await emailHelperService.SendRegistrationEmail(user.Email!, user.Name!, model.Password!))
                     {
