@@ -45,7 +45,6 @@ namespace StreamlineAcademy.Domain.Models.Requests
         public Guid StateId { get; set; }
         [Required(ErrorMessage = "City  Id is required")]
         public Guid CityId { get; set; }
-        [Required(ErrorMessage = "AcademyId  Id is required")]
-        public Guid AcademyId { get; set; }
+    
     }
 }

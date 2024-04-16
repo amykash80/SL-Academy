@@ -61,13 +61,14 @@ namespace StreamlineAcademy.Application.Services
             var returnVal = await userRepository.InsertAsync(user);
             if (returnVal > 0)
             {
+                var academyId = contextService.GetUserId();
                 var student = new Student()
                 {
                     Id = user.Id,
                     CountryId = model.CountryId,
                     StateId = model.StateId,
                     CityId = model.CityId,
-                    AcademyId=model.AcademyId,
+                    AcademyId= academyId,
                     DateOfBirth = model.DateOfBirth,
                     EmergencyContactNo=model.EmergencyContactNo
                 };
