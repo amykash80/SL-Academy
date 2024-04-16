@@ -60,7 +60,12 @@ namespace StreamlineAcademy.Persistence.Repositories
 
             if (student is not null)
             {
-
+                var studentsInterests = await context.StudentInterests
+                     .Where(a => a.StudentId == id)
+                     .Include(a => a.Course)
+                    .Select(a => a.Course!.Name)
+                    .ToListAsync();
+                var courses = studentsInterests.Select(name => new Course { Name = name }).ToList();
                 var response = new StudentResponseModel()
                 {
                     Id = student.Id,
@@ -72,6 +77,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     DateOfBirth = student.DateOfBirth,
                     CountryName = student.Country!.CountryName,
                     AcademyName = student.Academy!.AcademyName,
+                    IntrestedIn= courses,
                     StateName = student.State!.StateName,
                     CityName = student.City!.CityName,
                     IsActive = student.User.IsActive,

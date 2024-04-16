@@ -78,9 +78,9 @@ namespace StreamlineAcademy.Persistence.Repositories
                 {
                     Id = academy.Id,
                     AcademyName = academy.AcademyName,
+					AcademyAdmin=academy.User!.Name,
                     Email = academy.User!.Email,
                     PhoneNumber = academy.User.PhoneNumber,
-                    AcademyAdmin = academy.User.Name,
                     PostalCode = academy.User.PostalCode,
                     Address = academy.User.Address,
                     AcademyType = academy.AcademyType!.Name,

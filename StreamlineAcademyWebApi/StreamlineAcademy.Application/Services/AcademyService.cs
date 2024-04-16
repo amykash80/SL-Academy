@@ -89,7 +89,7 @@ namespace StreamlineAcademy.Application.Services
                 var academy = new Academy() { 
                 
                 Id=user.Id,
-                AcademyName = request.Name,
+                AcademyName = request.AcademyName,
                 AcademyTypeId=request.AcademyTypeId,
                 CountryId=request.CountryId,
                 StateId=request.StateId,
