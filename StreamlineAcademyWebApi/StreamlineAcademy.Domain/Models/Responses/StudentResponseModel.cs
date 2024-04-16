@@ -16,7 +16,7 @@ namespace StreamlineAcademy.Domain.Models.Responses
         public string? PostalCode { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
-        public List<Course>? IntrestedIn {  get; set; }
+        public List<string> IntrestedIn {  get; set; }
         public DateTimeOffset DateOfBirth { get; set; }
         public string? CountryName { get; set; }
         public string? StateName { get; set; }
