@@ -127,8 +127,8 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchByCourseId(Guid? courseId)
         {
-            var coueses = await batchRepository.GetByIdAsync(b => b.CourseId == courseId);
-            if (coueses == null)
+            var batch = await batchRepository.GetByIdAsync(b => b.CourseId == courseId);
+            if (batch == null)
             {
                 return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.BatchManagement.BatchNotFound, HttpStatusCodes.NotFound);
             }
