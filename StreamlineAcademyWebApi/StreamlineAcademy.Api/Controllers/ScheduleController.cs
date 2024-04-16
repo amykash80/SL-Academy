@@ -21,7 +21,7 @@ namespace StreamlineAcademy.Api.Controllers
         }
         [HttpPost("create")]
         public async Task<ApiResponse<ScheduleResponseModel>> CreateSchedule(ScheduleRequestModel request) => await scheduleService.CreateSchedule(request);
-        [HttpGet("getScheduleBatchById/{id:guid}")]
+        [HttpGet("getSchedulesByBatchId/{id:guid}")]
        
         public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedulesByBatchId(Guid id) => await scheduleService.GetAllSchedulesByBatchId(id);
         [HttpGet("getAllSchedules")]
