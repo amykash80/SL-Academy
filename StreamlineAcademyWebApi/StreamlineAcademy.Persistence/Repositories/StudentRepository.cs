@@ -52,6 +52,7 @@ namespace StreamlineAcademy.Persistence.Repositories
 
             var student = await context.Students
               .Include(a => a.User)
+              .Include(a=>a.Academy)
               .Include(a => a.Country)
               .Include(a => a.State)
               .Include(a => a.City)
@@ -90,6 +91,7 @@ namespace StreamlineAcademy.Persistence.Repositories
             var students = await context.Students
                  .Where(a => a.AcademyId == id)
                 .Include(a => a.User)
+                .Include(a => a.Academy)
                 .Include(a => a.Country)
                 .Include(a => a.State)
                 .Include(a => a.City)
