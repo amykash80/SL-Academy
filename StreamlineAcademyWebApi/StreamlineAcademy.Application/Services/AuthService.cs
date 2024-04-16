@@ -8,6 +8,7 @@ using StreamlineAcademy.Application.Abstractions.JWT;
 using StreamlineAcademy.Application.Shared;
 using StreamlineAcademy.Application.Utils;
 using StreamlineAcademy.Domain.Entities;
+using StreamlineAcademy.Domain.Enums;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
 using System;
@@ -146,7 +147,35 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError);
         }
 
+        public async Task<ApiResponse<int>> AddUser(UserRequestModel model)
+        {
+            var existingEmail = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
+            if (existingEmail is not null)
+                return ApiResponse<int>.ErrorResponse(APIMessages.UserManagement.UserAlreadyRegistered, HttpStatusCodes.Conflict);
 
+            var UserSalt = AppEncryption.GenerateSalt();
+            var user = new User()
+            {
+                Name = model.Name,
+                Email = model.Email,
+                PostalCode = model.PostalCode,
+                PhoneNumber = model.PhoneNumber,
+                Address = model.Address,
+                UserRole = UserRole.Instructor,
+                Salt = UserSalt,
+                Password = AppEncryption.CreatePassword(model.Password!, UserSalt),
+                CreatedBy = Guid.Empty,
+                CreatedDate = DateTime.Now,
+                ModifiedBy = Guid.Empty,
+                ModifiedDate = DateTime.Now,
+                DeletedBy = Guid.Empty,
+                IsActive = true
+            };
+            var returnVal = await userRepository.InsertAsync(user);
+            if (returnVal > 0)
+                return ApiResponse<int>.SuccessResponse(returnVal,HttpStatusCodes.OK.ToString());
+            return ApiResponse<int>.ErrorResponse("Something Went Wrong", HttpStatusCodes.BadRequest);
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Org.BouncyCastle.Asn1.Ocsp;
 using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IEmailService;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
@@ -104,19 +105,73 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest);
         }
 
-        public Task<ApiResponse<IEnumerable<StudentResponseModel>>> GetallStudents()
+        public async Task<ApiResponse<IEnumerable<StudentResponseModel>>> GetallStudents()
         {
-            throw new NotImplementedException();
+            var academyId = contextService.GetUserId();
+            var returnVal = await studentRepository.GetAllStudents(academyId);
+            if (returnVal is not null)
+                return ApiResponse<IEnumerable<StudentResponseModel>>.SuccessResponse(returnVal.OrderBy(_ => _.Name), $"Found {returnVal.Count()} Students");
+            return ApiResponse<IEnumerable<StudentResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
         }
 
-        public Task<ApiResponse<StudentResponseModel>> GetStudentById(Guid id)
+        public async Task<ApiResponse<StudentResponseModel>> GetStudentById(Guid id)
         {
-            throw new NotImplementedException();
+            var student = await studentRepository.GetStudentById(id);
+            if (student is null)
+                return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+
+            var responseModel = await studentRepository.GetStudentById(id);
+            if (responseModel is null)
+                return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.TechnicalError);
+            return ApiResponse<StudentResponseModel>.SuccessResponse(responseModel);
         }
 
-        public Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model)
+        public async Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model)
         {
-            throw new NotImplementedException();
+            var user = await userRepository.GetByIdAsync(x => x.Id == model.Id);
+
+            if (user is null)
+                return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+            user.Address = model.Address;
+            user.PostalCode = model.PostalCode;
+            user.Name = model.Name;
+            user.ModifiedDate = DateTime.Now;
+            user.IsActive = model.IsActive;
+            var userResponse = await userRepository.UpdateAsync(user);
+
+            var student = await studentRepository.GetByIdAsync(x => x.Id == user.Id);
+            student.DateOfBirth = model.DateOfBirth;
+            student.EmergencyContactNo= model.EmergencyContactNo;
+            student.CountryId = model.CountryId;
+            student.StateId = model.StateId;
+            student.CityId = model.CityId;
+
+            var studentResponse = await studentRepository.UpdateAsync(student);
+            if (studentResponse is > 0)
+            {
+                List<StudentInterests> StdIntrests = new List<StudentInterests>();
+                foreach (var item in model.CourseId!)
+                {
+                    var StudentIntrests = new StudentInterests()
+                    {
+                        StudentId = user.Id,
+                        CourseId = item,
+                        ModifiedDate = DateTime.Now,
+                    };
+                    StdIntrests.Add(StudentIntrests);
+                }
+                var response = await studentRepository.InsertRangeAsync(StdIntrests);
+            };
+                var responseModel = await studentRepository.GetStudentById(student.Id);
+            if(responseModel is not null)
+                return ApiResponse<StudentResponseModel>.SuccessResponse(responseModel, APIMessages.StudentManagement.StudentUpdated);
+              return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+
         }
+
+
     }
 }
+

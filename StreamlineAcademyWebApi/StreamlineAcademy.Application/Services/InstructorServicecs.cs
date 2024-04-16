@@ -154,11 +154,11 @@ namespace StreamlineAcademy.Application.Services
             instructor.StateId=request.StateId;
             instructor.CityId=request.CityId;
             
-            var instructorResponse = await userRepository.UpdateAsync(user);
+            var instructorResponse = await instructorRepository.UpdateAsync(instructor);
 
             if (instructorResponse is > 0)
             {
-                var responseModel= await instructorRepository.GetInstructorById(user.Id);
+                var responseModel= await instructorRepository.GetInstructorById(instructor.Id);
                 return ApiResponse<InstructorResponseModel>.SuccessResponse(responseModel, APIMessages.InstructorManagement.InstructorUpdated);
             }
             return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);

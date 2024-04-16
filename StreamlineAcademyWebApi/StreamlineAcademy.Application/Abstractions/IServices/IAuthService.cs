@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace StreamlineAcademy.Application.Abstractions.IServices
 {
     public interface IAuthService
-    { 
+    {
+        Task<ApiResponse<int>> AddUser(UserRequestModel model);
         Task<ApiResponse<LoginResponseModel>> Login(LoginRequestModel request);
         Task<ApiResponse<string>> ChangePassword(ChangePasswordRequestModel model);
         Task<ApiResponse<string>> ForgotPassword(ForgotPasswordRequestModel model);
