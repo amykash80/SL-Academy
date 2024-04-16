@@ -70,14 +70,13 @@ namespace StreamlineAcademy.Persistence.Repositories
                     Address = instructor.User.Address,
                     WorkExperiance = instructor.WorkExperiance,
                     Skill = instructor.Skill,
-                    AcademyName = a.Academy!.AcademyName,
+                    AcademyName = instructor.Academy!.AcademyName,
                     DateOfBirth = instructor.DateOfBirth,
                     CountryName = instructor.Country!.CountryName,
                     StateName = instructor.State!.StateName,
                     CityName = instructor.City!.CityName,
                     IsActive=instructor.User.IsActive,
-                    UserRole = instructor.User.UserRole,
-                    
+                    UserRole = instructor.User.UserRole,  
 
                 };
 
