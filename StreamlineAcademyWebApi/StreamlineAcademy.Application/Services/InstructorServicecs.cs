@@ -60,6 +60,7 @@ namespace StreamlineAcademy.Application.Services
                 IsActive = true
             };
             var returnVal = await userRepository.InsertAsync(user);
+            var academyId = contextService.GetUserId();
             if (returnVal > 0)
             {
                 var instructor = new Instructor()
@@ -68,6 +69,7 @@ namespace StreamlineAcademy.Application.Services
                     CountryId = model.CountryId,
                     StateId = model.StateId,
                     CityId = model.CityId,
+                    AcademyId=academyId,
                     WorkExperiance=model.WorkExperience,
                     DateOfBirth=model.DateOfBirth,
                     Skill=Skill.Programming

@@ -117,9 +117,10 @@ namespace StreamlineAcademy.Persistence.Repositories
             return await context.SaveChangesAsync();
         }
 
-        public Task<int> InsertRangeAsync(List<Student> models)
+        public async Task<int> InsertRangeAsync(List<StudentInterests> models)
         {
-            throw new NotImplementedException();
+            await context.StudentInterests.AddRangeAsync(models);
+            return await context.SaveChangesAsync();
         }
 
         public async Task<int> UpdateAsync(Student model)

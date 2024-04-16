@@ -13,7 +13,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     {
         #region async methods
         Task<int> InsertAsync(Student model);
-        Task<int> InsertRangeAsync(List<Student> models);
+        Task<int> InsertRangeAsync(List<StudentInterests> models);
         Task<int> UpdateAsync(Student model);
         Task<int> DeleteAsync(Student model);
         Task<IEnumerable<Student>> GetAllAsync();
