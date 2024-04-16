@@ -47,47 +47,47 @@ namespace StreamlineAcademy.Persistence.Repositories
 
         }
 
-        public async Task<InstructorResponseModel> GetStudentById(Guid? id)
+        public async Task<StudentResponseModel> GetStudentById(Guid? id)
         {
 
-            var instructor = await context.Students
+            var student = await context.Students
               .Include(a => a.User)
               .Include(a => a.Country)
               .Include(a => a.State)
               .Include(a => a.City)
               .FirstOrDefaultAsync(a => a.Id == id);
 
-            if (instructor is not null)
+            if (student is not null)
             {
 
-                var response = new InstructorResponseModel()
+                var response = new StudentResponseModel()
                 {
-                    Id = instructor.Id,
-                    Name = instructor.User!.Name,
-                    Email = instructor.User!.Email,
-                    PhoneNumber = instructor.User.PhoneNumber,
-                    PostalCode = instructor.User.PostalCode,
-                    Address = instructor.User.Address,
-                    DateOfBirth = instructor.DateOfBirth,
-                    CountryName = instructor.Country!.CountryName,
-                    StateName = instructor.State!.StateName,
-                    CityName = instructor.City!.CityName,
-                    IsActive = instructor.User.IsActive,
-                    UserRole = instructor.User.UserRole,
-
+                    Id = student.Id,
+                    Name = student.User!.Name,
+                    Email = student.User!.Email,
+                    PhoneNumber = student.User.PhoneNumber,
+                    PostalCode = student.User.PostalCode,
+                    Address = student.User.Address,
+                    DateOfBirth = student.DateOfBirth,
+                    CountryName = student.Country!.CountryName,
+                    AcademyName = student.Academy!.AcademyName,
+                    StateName = student.State!.StateName,
+                    CityName = student.City!.CityName,
+                    IsActive = student.User.IsActive,
+                    UserRole = student.User.UserRole,
 
                 };
 
                 return response;
             }
-            return new InstructorResponseModel() { };
+            return new StudentResponseModel() { };
 
         }
 
 
-        public async Task<List<InstructorResponseModel>> GetAllStudents(Guid? id)
+        public async Task<List<StudentResponseModel>> GetAllStudents(Guid? id)
         {
-            var instructors = await context.Students
+            var students = await context.Students
                  .Where(a => a.AcademyId == id)
                 .Include(a => a.User)
                 .Include(a => a.Country)
@@ -101,6 +101,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     PostalCode = a.User.PostalCode,
                     Address = a.User.Address,
                     DateOfBirth = a.DateOfBirth,
+                    AcademyName=a.Academy!.AcademyName,
                     CountryName = a.Country!.CountryName,
                     StateName = a.State!.StateName,
                     CityName = a.City!.CityName,
@@ -108,7 +109,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                 })
                 .ToListAsync();
 
-            return default;
+            return students;
         }
 
         public async Task<int> InsertAsync(Student model)
@@ -135,14 +136,7 @@ namespace StreamlineAcademy.Persistence.Repositories
             return await context.SaveChangesAsync();
         }
 
-        Task<StudentResponseModel> IStudentRepository.GetStudentById(Guid? id)
-        {
-            throw new NotImplementedException();
-        }
+       
 
-        Task<List<StudentResponseModel>> IStudentRepository.GetAllStudents(Guid? id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
