@@ -112,7 +112,7 @@ namespace StreamlineAcademy.Application.Services
 
               if(updatedUser > 0)
             {
-                if(returnVal.Academy is not null)
+                if(returnVal is not null)
                 {
                     var academy = await academyRepository.FirstOrDefaultAsync(x => x.Id == id);
                     academy.CountryId = request.CountryId;
@@ -130,7 +130,7 @@ namespace StreamlineAcademy.Application.Services
 
                     };
 
-                    return ApiResponse<AddressInfoResponseModel>.SuccessResponse(resultSet,HttpStatusCodes.OK.ToString());
+                    return ApiResponse<AddressInfoResponseModel>.SuccessResponse(resultSet,APIMessages.ProfileManagement.AddressUpdated.ToString());
                 }
                 return ApiResponse<AddressInfoResponseModel>.ErrorResponse(APIMessages.TechnicalError);
 
