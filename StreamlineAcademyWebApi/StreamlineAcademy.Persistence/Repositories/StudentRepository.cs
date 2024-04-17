@@ -146,7 +146,36 @@ namespace StreamlineAcademy.Persistence.Repositories
             return await context.SaveChangesAsync();
         }
 
-       
+        public async Task<int> AddStudentSchedule(StudentSchedule model)
+        {
+            await context.StudentSchedules.AddAsync(model);
+            return await context.SaveChangesAsync();
+        }
 
+        public async Task<List<StudentScheduleResponseModel>> GetStudentSchedulesWithDetails(Guid? studentId)
+        {
+            return await context.StudentSchedules
+         .Where(s => s.StudentId == studentId)
+         .Include(s => s.Schedule)
+             .ThenInclude(schedule => schedule!.Batch)
+         .Include(s => s.Schedule)
+             .ThenInclude(schedule => schedule!.Batch!.Course)
+         .Select(s => new StudentScheduleResponseModel
+         {
+             ScheduleId = s.ScheduleId,
+             StartTime = s.Schedule!.StartTime,
+             EndTime = s.Schedule.EndTime,
+             BatchName = s.Schedule!.Batch!.BatchName,
+             CourseName = s.Schedule!.Batch!.Course!.Name
+         })
+         .ToListAsync();
+        }
+
+        public async Task<List<StudentInterests>> GetStudentInterestsByStudentId(Guid? studentId)
+        {
+            return await context.StudentInterests
+            .Where(si => si.StudentId == studentId)
+           .ToListAsync();
+        }
     }
 }

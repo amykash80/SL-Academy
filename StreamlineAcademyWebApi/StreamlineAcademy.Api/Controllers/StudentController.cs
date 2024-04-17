@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
 using StreamlineAcademy.Application.Shared;
+using StreamlineAcademy.Domain.Enums;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
 
@@ -22,6 +23,10 @@ namespace StreamlineAcademy.Api.Controllers
         }
         [HttpPost("register-student")]
         public async Task<ApiResponse<StudentResponseModel>> AddStudent(StudentRequestModel model) => await studentService.AddStudent(model);
+        [HttpPost("assign-to-schedule")]
+        public async Task<ApiResponse<string>> AddStudentToSchedule(StudentScheduleRequestModel model)=>await studentService.AssignStudentToSchedule(model);
+        [HttpGet("check-schedules")]
+        public async Task<ApiResponse<IEnumerable<StudentScheduleResponseModel>>> GetAllStudentSchedules() => await studentService.GetStudentSchedules();
         [HttpGet("getAll-Students")]
         public async Task<ApiResponse<IEnumerable<StudentResponseModel>>> GetAllStudents() => await studentService.GetallStudents();
 
@@ -30,5 +35,6 @@ namespace StreamlineAcademy.Api.Controllers
 
         [HttpPut("updateStudent")]
         public async Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model) => await studentService.UpdateStudent(model);
+
     }
 }

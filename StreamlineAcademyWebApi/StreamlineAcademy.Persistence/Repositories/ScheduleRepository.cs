@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Persistence.Repositories
 {
-    public class ScheduleRepository:BaseRepository<Schedule>,IScheduleRepository
+    public class ScheduleRepository : BaseRepository<Schedule>, IScheduleRepository
     {
         private readonly StreamlineDbContet context;
 
-        public ScheduleRepository(StreamlineDbContet context):base(context)
+        public ScheduleRepository(StreamlineDbContet context) : base(context)
         {
             this.context = context;
         }
@@ -45,5 +45,7 @@ namespace StreamlineAcademy.Persistence.Repositories
 
             return schedules;
         }
+
+        
     }
 }

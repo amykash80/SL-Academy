@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240417061720_studentScedules")]
+    partial class studentScedules
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -761,8 +764,6 @@ namespace StreamlineAcademy.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ScheduleId");
-
                     b.HasIndex("StudentId");
 
                     b.ToTable("StudentSchedules");
@@ -841,20 +842,20 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5a139f79-48b3-4e23-b7cf-b992fa04aab7"),
+                            Id = new Guid("8443cf26-85cb-4dab-8d26-22382ac3da05"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 17, 13, 27, 21, 844, DateTimeKind.Unspecified).AddTicks(1739), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 17, 11, 47, 18, 224, DateTimeKind.Unspecified).AddTicks(8078), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 17, 13, 27, 21, 844, DateTimeKind.Unspecified).AddTicks(1779), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 17, 11, 47, 18, 224, DateTimeKind.Unspecified).AddTicks(8117), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "TFOlP9hEeMPkHNwOCpVFGnGu3zZ2tbxDYVMK1X4gU+o=",
+                            Password = "UKc7n8QuGpdavFSsKZnWeSRDxfMifkYxmRL0K3/LEaI=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
-                            Salt = "YVwNQ+xd1mj9Pqk4zJ4EWw==",
+                            Salt = "HsOJiugeY5W1+OPT68JslQ==",
                             UserRole = (byte)1
                         });
                 });
@@ -1176,7 +1177,7 @@ namespace StreamlineAcademy.Persistence.Migrations
                 {
                     b.HasOne("StreamlineAcademy.Domain.Entities.Schedule", "Schedule")
                         .WithMany()
-                        .HasForeignKey("ScheduleId");
+                        .HasForeignKey("StudentId");
 
                     b.HasOne("StreamlineAcademy.Domain.Entities.Student", "Student")
                         .WithMany()

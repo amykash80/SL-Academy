@@ -27,5 +27,8 @@ namespace StreamlineAcademy.Domain.Entities
         public Guid? AcademyId { get; set; }
         [ForeignKey(nameof(AcademyId))]
         public Academy? Academy { get; set; }
+
+        #region navigation
+        #endregion
     }
 }

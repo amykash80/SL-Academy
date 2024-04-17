@@ -23,6 +23,9 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         #endregion
         Task<StudentResponseModel> GetStudentById(Guid? id);
         Task<List<StudentResponseModel>> GetAllStudents(Guid? id);
+        Task<int> AddStudentSchedule(StudentSchedule model);
+        Task<List<StudentScheduleResponseModel>> GetStudentSchedulesWithDetails(Guid? studentId);
+        Task<List<StudentInterests>> GetStudentInterestsByStudentId(Guid? studentId);
         Task<int> Delete(User model);
     }
 }
