@@ -34,7 +34,7 @@ namespace StreamlineAcademy.Infrastructure.JWT
             {
                 Subject = new ClaimsIdentity(new List<Claim>
             {
-             new Claim(AppClaimTypes.UserId, user.Id.ToString()),
+             new Claim(AppClaimTypes.UserId, user.Id.ToString()!),
              new Claim(JwtRegisteredClaimNames.Name, user.Name!),
              new Claim(JwtRegisteredClaimNames.Email, user.Email!),
              new Claim(UserRole , Enum.GetName(typeof(UserRole), user.UserRole) ?? ""),

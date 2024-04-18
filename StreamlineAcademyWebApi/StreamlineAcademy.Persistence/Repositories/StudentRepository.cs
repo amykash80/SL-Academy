@@ -65,7 +65,6 @@ namespace StreamlineAcademy.Persistence.Repositories
                      .Include(a => a.Course)
                     .Select(a => a.Course!.Name)
                     .ToListAsync();
-                var courses = studentsInterests.Select(name => new Course { Name = name }).ToList();
                 var response = new StudentResponseModel()
                 {
                     Id = student.Id,
@@ -77,7 +76,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     DateOfBirth = student.DateOfBirth,
                     CountryName = student.Country!.CountryName,
                     AcademyName = student.Academy!.AcademyName,
-                    IntrestedIn= courses,
+                    IntrestedIn= studentsInterests!,
                     StateName = student.State!.StateName,
                     CityName = student.City!.CityName,
                     IsActive = student.User.IsActive,
@@ -104,6 +103,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                 .Select(a => new StudentResponseModel
                 {
                     Id = a.Id,
+                    Name=a.User!.Name,
                     Email = a.User!.Email,
                     PhoneNumber = a.User.PhoneNumber,
                     PostalCode = a.User.PostalCode,
@@ -113,7 +113,9 @@ namespace StreamlineAcademy.Persistence.Repositories
                     CountryName = a.Country!.CountryName,
                     StateName = a.State!.StateName,
                     CityName = a.City!.CityName,
-                    UserRole = a.User.UserRole
+                    UserRole = a.User.UserRole,
+                    IsActive = a.User.IsActive,
+
                 })
                 .ToListAsync();
 
@@ -144,7 +146,69 @@ namespace StreamlineAcademy.Persistence.Repositories
             return await context.SaveChangesAsync();
         }
 
-       
+        public async Task<int> AddStudentBatch(StudentBatch model)
+        {
+            await context.StudentBatches.AddAsync(model);
+            return await context.SaveChangesAsync();
+        }
 
+
+        public async Task<List<StudentInterests>> GetStudentInterestsByStudentId(Guid? studentId)
+        {
+            return await context.StudentInterests
+            .Where(a => a.StudentId == studentId)
+           .ToListAsync();
+        }
+
+        public async Task<IEnumerable<StudentBatchResponseModel>> GetStudentWithBatchDetails(Guid? studentId)
+        {
+            var batches = await context.StudentBatches
+          .Where(a => a.StudentId == studentId)
+          .Select(a => new
+        {
+            a.BatchId,
+            
+        })
+        .ToListAsync();
+
+            var response = new List<StudentBatchResponseModel>();
+            foreach (var batch in batches)
+            {
+                var batchDetails = await context.Batches
+                    .Include(b => b.Course)
+                    .Include(b => b.Instructor)
+                        .ThenInclude(i => i.User)
+                    .Include(b => b.Location)
+                    .Include(b=>b.Schedules)
+                    .FirstOrDefaultAsync(b => b.Id == batch.BatchId);
+
+                if (batchDetails is not null)
+                {
+                    var responseModel = new StudentBatchResponseModel
+                    {
+                        StudenId = studentId,
+                        BatchName = batchDetails.BatchName,
+                        BatchSize = batchDetails.BatchSize,
+                        StartDate = batchDetails.StartDate,
+                        EndDate = batchDetails.EndDate,
+                        CourseName = batchDetails!.Course!.Name,
+                        InstructorName = batchDetails!.Instructor!.User!.Name,
+                        LocationName = batchDetails!.Location!.Address,
+                        Schedules = batchDetails!.Schedules!.Select(a => new ScheduleResponseModel
+                        {
+                            Id = a.Id,
+                            DayOfWeek = a.DayOfWeek,
+                            StartTime = a.StartTime,
+                            EndTime = a.EndTime,
+                            BatchName=batchDetails!.BatchName
+                        })
+                    };
+                    response.Add(responseModel);
+                }
+            }
+
+            return response;
+
+        }
     }
 }

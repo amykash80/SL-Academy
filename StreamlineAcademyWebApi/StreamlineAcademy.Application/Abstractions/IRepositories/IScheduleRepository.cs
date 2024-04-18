@@ -13,5 +13,6 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     {
         Task<IEnumerable<Schedule>> GetAsync(Expression<Func<Schedule, bool>> predicate);
         Task<List<ScheduleResponseModel>> GetAllSchedules();
+
     }
 }

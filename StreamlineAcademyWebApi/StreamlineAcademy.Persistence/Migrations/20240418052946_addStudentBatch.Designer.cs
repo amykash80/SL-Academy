@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240418052946_addStudentBatch")]
+    partial class addStudentBatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BatchStudent", b =>
-                {
-                    b.Property<Guid>("StudentsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("batchesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("StudentsId", "batchesId");
-
-                    b.HasIndex("batchesId");
-
-                    b.ToTable("BatchStudent");
-                });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Academy", b =>
                 {
@@ -856,20 +844,20 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94eb880e-e530-4411-b623-30abe172c839"),
+                            Id = new Guid("b0721996-e453-4c3d-a258-9f69fe53eb5a"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 18, 11, 41, 32, 49, DateTimeKind.Unspecified).AddTicks(7924), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 18, 10, 59, 44, 656, DateTimeKind.Unspecified).AddTicks(7676), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 18, 11, 41, 32, 49, DateTimeKind.Unspecified).AddTicks(7959), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 18, 10, 59, 44, 656, DateTimeKind.Unspecified).AddTicks(7715), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "UQzs28V5Ilc0c/hAMQyc8LhMBeNwR4+VyEzhcK5G1kk=",
+                            Password = "8g6WuDf2voGpCOY/ZLY9PWU3ehiQrfFb+7wuevWC02k=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
-                            Salt = "gCnXRas2igLbJfXf+wuS3g==",
+                            Salt = "Blzv1O//aBrOoLuGScMuRw==",
                             UserRole = (byte)1
                         });
                 });
@@ -934,21 +922,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BatchStudent", b =>
-                {
-                    b.HasOne("StreamlineAcademy.Domain.Entities.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StreamlineAcademy.Domain.Entities.Batch", null)
-                        .WithMany()
-                        .HasForeignKey("batchesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Academy", b =>

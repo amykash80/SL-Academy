@@ -93,5 +93,6 @@ namespace StreamlineAcademy.Persistence.Repositories
 
             return batches;
         }
+
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StreamlineAcademy.Persistence.Data;
 
@@ -11,9 +12,11 @@ using StreamlineAcademy.Persistence.Data;
 namespace StreamlineAcademy.Persistence.Migrations
 {
     [DbContext(typeof(StreamlineDbContet))]
-    partial class StreamlineDbContetModelSnapshot : ModelSnapshot
+    [Migration("20240417061720_studentScedules")]
+    partial class studentScedules
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BatchStudent", b =>
-                {
-                    b.Property<Guid>("StudentsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("batchesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("StudentsId", "batchesId");
-
-                    b.HasIndex("batchesId");
-
-                    b.ToTable("BatchStudent");
-                });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Academy", b =>
                 {
@@ -699,48 +687,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.StudentBatch", b =>
-                {
-                    b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BatchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("DeletedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("ModifiedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BatchId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("StudentBatches");
-                });
-
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.StudentInterests", b =>
                 {
                     b.Property<Guid?>("Id")
@@ -781,6 +727,46 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("StudentInterests");
+                });
+
+            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.StudentSchedule", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("ScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentSchedules");
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.SuperAdmin", b =>
@@ -856,20 +842,20 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94eb880e-e530-4411-b623-30abe172c839"),
+                            Id = new Guid("8443cf26-85cb-4dab-8d26-22382ac3da05"),
                             Address = "Hsr,Bangalore",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 18, 11, 41, 32, 49, DateTimeKind.Unspecified).AddTicks(7924), new TimeSpan(0, 5, 30, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 4, 17, 11, 47, 18, 224, DateTimeKind.Unspecified).AddTicks(8078), new TimeSpan(0, 5, 30, 0, 0)),
                             DeletedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "aamir@anterntech.com",
                             IsActive = true,
                             ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 18, 11, 41, 32, 49, DateTimeKind.Unspecified).AddTicks(7959), new TimeSpan(0, 5, 30, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 4, 17, 11, 47, 18, 224, DateTimeKind.Unspecified).AddTicks(8117), new TimeSpan(0, 5, 30, 0, 0)),
                             Name = "amir",
-                            Password = "UQzs28V5Ilc0c/hAMQyc8LhMBeNwR4+VyEzhcK5G1kk=",
+                            Password = "UKc7n8QuGpdavFSsKZnWeSRDxfMifkYxmRL0K3/LEaI=",
                             PhoneNumber = "8997654556",
                             PostalCode = "786545",
-                            Salt = "gCnXRas2igLbJfXf+wuS3g==",
+                            Salt = "HsOJiugeY5W1+OPT68JslQ==",
                             UserRole = (byte)1
                         });
                 });
@@ -934,21 +920,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BatchStudent", b =>
-                {
-                    b.HasOne("StreamlineAcademy.Domain.Entities.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StreamlineAcademy.Domain.Entities.Batch", null)
-                        .WithMany()
-                        .HasForeignKey("batchesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.Academy", b =>
@@ -1185,21 +1156,6 @@ namespace StreamlineAcademy.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.StudentBatch", b =>
-                {
-                    b.HasOne("StreamlineAcademy.Domain.Entities.Batch", "Batch")
-                        .WithMany()
-                        .HasForeignKey("BatchId");
-
-                    b.HasOne("StreamlineAcademy.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
-
-                    b.Navigation("Batch");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("StreamlineAcademy.Domain.Entities.StudentInterests", b =>
                 {
                     b.HasOne("StreamlineAcademy.Domain.Entities.Course", "Course")
@@ -1213,6 +1169,21 @@ namespace StreamlineAcademy.Persistence.Migrations
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("StreamlineAcademy.Domain.Entities.StudentSchedule", b =>
+                {
+                    b.HasOne("StreamlineAcademy.Domain.Entities.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("StreamlineAcademy.Domain.Entities.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Schedule");
 
                     b.Navigation("Student");
                 });
