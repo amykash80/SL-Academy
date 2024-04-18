@@ -23,10 +23,10 @@ namespace StreamlineAcademy.Api.Controllers
         }
         [HttpPost("register-student")]
         public async Task<ApiResponse<StudentResponseModel>> AddStudent(StudentRequestModel model) => await studentService.AddStudent(model);
-        [HttpPost("assign-to-schedule")]
-        public async Task<ApiResponse<string>> AddStudentToSchedule(StudentScheduleRequestModel model)=>await studentService.AssignStudentToSchedule(model);
-        [HttpGet("check-schedules")]
-        public async Task<ApiResponse<IEnumerable<StudentScheduleResponseModel>>> GetAllStudentSchedules() => await studentService.GetStudentSchedules();
+        [HttpPost("assign-to-Batch")]
+        public async Task<ApiResponse<string>> AddStudentToSchedule(StudentBatchRequestModel model)=>await studentService.AssignStudentToBatch(model);
+        [HttpGet("check-my-Batches")]
+        public async Task<ApiResponse<IEnumerable<StudentBatchResponseModel>>> GetAllStudentBatches() => await studentService.GetStudentBatches();
         [HttpGet("getAll-Students")]
         public async Task<ApiResponse<IEnumerable<StudentResponseModel>>> GetAllStudents() => await studentService.GetallStudents();
 

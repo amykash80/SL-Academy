@@ -24,19 +24,19 @@ namespace StreamlineAcademy.Application.Services
         private readonly IUserRepository userRepository;
         private readonly IEmailHelperService emailHelperService;
         private readonly IContextService contextService;
-        private readonly IScheduleRepository scheduleRepository;
+        private readonly IBatchRepository batchRepository;
 
         public StudentService(IStudentRepository studentRepository,
                               IUserRepository userRepository,
                               IEmailHelperService emailHelperService,
                               IContextService contextService,
-                              IScheduleRepository scheduleRepository)
+                              IBatchRepository batchRepository)
         {
             this.studentRepository = studentRepository;
             this.userRepository = userRepository;
             this.emailHelperService = emailHelperService;
             this.contextService = contextService;
-            this.scheduleRepository = scheduleRepository;
+            this.batchRepository = batchRepository;
         }
         public async Task<ApiResponse<StudentResponseModel>> AddStudent(StudentRequestModel model)
         {
@@ -52,7 +52,7 @@ namespace StreamlineAcademy.Application.Services
                 PostalCode = model.PostalCode,
                 PhoneNumber = model.PhoneNumber,
                 Address = model.Address,
-                UserRole = UserRole.Instructor,
+                UserRole = UserRole.Student,
                 Salt = UserSalt,
                 Password = AppEncryption.CreatePassword(model.Password!, UserSalt),
                 CreatedBy = Guid.Empty,
@@ -108,21 +108,21 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest);
         }
 
-        public async Task<ApiResponse<string>> AssignStudentToSchedule(StudentScheduleRequestModel model)
+        public async Task<ApiResponse<string>> AssignStudentToBatch(StudentBatchRequestModel model)
         {
             var student = await studentRepository.GetByIdAsync(x => x.Id == model.StudentId);
             if (student is null)
                 return ApiResponse<string>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
 
-            var schedule = await scheduleRepository.GetByIdAsync(x => x.Id == model.ScheduleId);
-            if (student is null)
-                return ApiResponse<string>.ErrorResponse(APIMessages.ScheduleManagement.ScheduleNotFound, HttpStatusCodes.NotFound);
+            var Batch = await batchRepository.GetByIdAsync(x => x.Id == model.BatchId);
+            if (Batch is null)
+                return ApiResponse<string>.ErrorResponse(APIMessages.BatchManagement.BatchNotFound, HttpStatusCodes.NotFound);
 
             var userId = contextService.GetUserId();
-            var studentSchedule = new StudentSchedule()
+            var studentBatch = new StudentBatch()
             {
                 StudentId = student.Id,
-                ScheduleId = model.ScheduleId,
+                BatchId = model.BatchId,
                 IsActive = true,
                 CreatedBy = userId,
                 CreatedDate = DateTime.Now,
@@ -130,9 +130,9 @@ namespace StreamlineAcademy.Application.Services
                 ModifiedDate = DateTime.Now,
                 DeletedBy= Guid.Empty,
             };
-           var res= await studentRepository.AddStudentSchedule(studentSchedule);
+           var res= await studentRepository.AddStudentBatch(studentBatch);
             if (res > 0)
-                return ApiResponse<string>.SuccessResponse( APIMessages.StudentManagement.ScheduleAssigned,HttpStatusCodes.OK.ToString());
+                return ApiResponse<string>.SuccessResponse( APIMessages.StudentManagement.BatchAssigned,HttpStatusCodes.OK.ToString());
                 return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError,HttpStatusCodes.BadRequest);
 
 
@@ -143,7 +143,7 @@ namespace StreamlineAcademy.Application.Services
             var returnVal = await studentRepository.GetAllStudents(academyId);
             if (returnVal is not null)
                 return ApiResponse<IEnumerable<StudentResponseModel>>.SuccessResponse(returnVal.OrderBy(_ => _.Name), $"Found {returnVal.Count()} Students");
-            return ApiResponse<IEnumerable<StudentResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+                 return ApiResponse<IEnumerable<StudentResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
         }
 
         public async Task<ApiResponse<StudentResponseModel>> GetStudentById(Guid id)
@@ -158,19 +158,17 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<StudentResponseModel>.SuccessResponse(responseModel);
         }
 
-        public async Task<ApiResponse<IEnumerable<StudentScheduleResponseModel>>> GetStudentSchedules()
+        public async Task<ApiResponse<IEnumerable<StudentBatchResponseModel>>> GetStudentBatches()
         {
-            var studentId =  contextService.GetUserId();
-           var  student = await studentRepository.GetByIdAsync(_=>_.Id==studentId);
+            var studentId = contextService.GetUserId();
+            var student = await studentRepository.GetByIdAsync(_ => _.Id == studentId);
             if (student is null)
-                return ApiResponse<IEnumerable<StudentScheduleResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+                return ApiResponse<IEnumerable<StudentBatchResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
 
-            var result = await studentRepository.GetStudentSchedulesWithDetails(studentId);
-            if(result is not null)
-                return ApiResponse<IEnumerable<StudentScheduleResponseModel>>.SuccessResponse(result, HttpStatusCodes.OK.ToString());
-              return ApiResponse<IEnumerable<StudentScheduleResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest);
-
-
+            var returnVal = await studentRepository.GetStudentWithBatchDetails(studentId);
+            if (returnVal is not null)
+                return ApiResponse<IEnumerable<StudentBatchResponseModel>>.SuccessResponse(returnVal,HttpStatusCodes.OK.ToString());
+               return ApiResponse<IEnumerable<StudentBatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest);
         }
 
         public async Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model)

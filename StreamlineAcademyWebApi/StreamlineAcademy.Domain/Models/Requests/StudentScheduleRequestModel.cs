@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Domain.Models.Requests
 {
-    public class StudentScheduleRequestModel
+    public class StudentBatchRequestModel
     {
         public Guid? StudentId { get; set; }
-        public Guid? ScheduleId { get; set; }
+        public Guid? BatchId { get; set; }
     }
 }

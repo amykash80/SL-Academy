@@ -118,7 +118,7 @@ public static class APIMessages
             public static readonly string StudentUpdated = "Student Updated Successfully.";
             public static readonly string StudentDeleted = "Student Deleted Successfully.";
             public static readonly string StudentAlreadyRegistered = "Student with this email already registered";
-            public static readonly string ScheduleAssigned = "Schedule Assigned";
+            public static readonly string BatchAssigned = "batch Assigned";
 
 
         }

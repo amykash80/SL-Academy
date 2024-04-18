@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Domain.Entities
 {
-    public class StudentSchedule:BaseModel
+    public class StudentBatch:BaseModel
     {
       public Guid? StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]
      public Student? Student { get; set; }
-      public Guid? ScheduleId { get; set; }
-        [ForeignKey(nameof(ScheduleId))]
-     public Schedule? Schedule { get; set; }  
+      public Guid? BatchId { get; set; }
+        [ForeignKey(nameof(BatchId))]
+     public Batch? Batch { get; set; }  
     }
 }

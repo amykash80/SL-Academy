@@ -146,36 +146,69 @@ namespace StreamlineAcademy.Persistence.Repositories
             return await context.SaveChangesAsync();
         }
 
-        public async Task<int> AddStudentSchedule(StudentSchedule model)
+        public async Task<int> AddStudentBatch(StudentBatch model)
         {
-            await context.StudentSchedules.AddAsync(model);
+            await context.StudentBatches.AddAsync(model);
             return await context.SaveChangesAsync();
         }
 
-        public async Task<List<StudentScheduleResponseModel>> GetStudentSchedulesWithDetails(Guid? studentId)
-        {
-            return await context.StudentSchedules
-         .Where(s => s.StudentId == studentId)
-         .Include(s => s.Schedule)
-             .ThenInclude(schedule => schedule!.Batch)
-         .Include(s => s.Schedule)
-             .ThenInclude(schedule => schedule!.Batch!.Course)
-         .Select(s => new StudentScheduleResponseModel
-         {
-             ScheduleId = s.ScheduleId,
-             StartTime = s.Schedule!.StartTime,
-             EndTime = s.Schedule.EndTime,
-             BatchName = s.Schedule!.Batch!.BatchName,
-             CourseName = s.Schedule!.Batch!.Course!.Name
-         })
-         .ToListAsync();
-        }
 
         public async Task<List<StudentInterests>> GetStudentInterestsByStudentId(Guid? studentId)
         {
             return await context.StudentInterests
-            .Where(si => si.StudentId == studentId)
+            .Where(a => a.StudentId == studentId)
            .ToListAsync();
+        }
+
+        public async Task<IEnumerable<StudentBatchResponseModel>> GetStudentWithBatchDetails(Guid? studentId)
+        {
+            var batches = await context.StudentBatches
+          .Where(a => a.StudentId == studentId)
+          .Select(a => new
+        {
+            a.BatchId,
+            
+        })
+        .ToListAsync();
+
+            var response = new List<StudentBatchResponseModel>();
+            foreach (var batch in batches)
+            {
+                var batchDetails = await context.Batches
+                    .Include(b => b.Course)
+                    .Include(b => b.Instructor)
+                        .ThenInclude(i => i.User)
+                    .Include(b => b.Location)
+                    .Include(b=>b.Schedules)
+                    .FirstOrDefaultAsync(b => b.Id == batch.BatchId);
+
+                if (batchDetails is not null)
+                {
+                    var responseModel = new StudentBatchResponseModel
+                    {
+                        StudenId = studentId,
+                        BatchName = batchDetails.BatchName,
+                        BatchSize = batchDetails.BatchSize,
+                        StartDate = batchDetails.StartDate,
+                        EndDate = batchDetails.EndDate,
+                        CourseName = batchDetails!.Course!.Name,
+                        InstructorName = batchDetails!.Instructor!.User!.Name,
+                        LocationName = batchDetails!.Location!.Address,
+                        Schedules = batchDetails!.Schedules!.Select(a => new ScheduleResponseModel
+                        {
+                            Id = a.Id,
+                            DayOfWeek = a.DayOfWeek,
+                            StartTime = a.StartTime,
+                            EndTime = a.EndTime,
+                            BatchName=batchDetails!.BatchName
+                        })
+                    };
+                    response.Add(responseModel);
+                }
+            }
+
+            return response;
+
         }
     }
 }
