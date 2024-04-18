@@ -118,14 +118,13 @@ namespace StreamlineAcademy.Application.Services
                 int isSoftDelted = await batchRepository.DeleteAsync(result!);
                 if (isSoftDelted > 0)
                 {
-                    //var returnVal = await courseRepository.GetCourseById(existingCourse.Id);
                     return ApiResponse<BatchResponseModel>.SuccessResponse(null, APIMessages.BatchManagement.BatchDeleted);
                 }
             }
             return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
-        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchByCourseId(Guid? courseId)
+        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchesByCourseId(Guid? courseId)
         {
             var batch = await batchRepository.GetByIdAsync(b => b.CourseId == courseId);
             if (batch == null)
