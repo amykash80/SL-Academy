@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Org.BouncyCastle.Asn1.Ocsp;
+using StreamlineAcademy.Application.Abstractions.Identity;
 using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Shared;
@@ -32,10 +33,9 @@ namespace StreamlineAcademy.Application.Services
                 return ApiResponse<CourseContentResponseModel>.ErrorResponse(APIMessages.ContentManagement.ContentNotFound, HttpStatusCodes.Conflict);
             var courseContent = new CourseContent()
             {
-                ContentName = request.ContentName,
                 TaskName = request.TaskName,
                 Discription=request.Description,
-                Duration = request.Duration,
+                DurationInHours = request.Duration,
                 CourseId=request.CourseId,
                 IsActive = true,
                 CreatedBy = Guid.Empty,
@@ -50,12 +50,11 @@ namespace StreamlineAcademy.Application.Services
                 var contentResponse = await contentRepository.GetByIdAsync(x => x.Id == courseContent.Id);
                 var response = new CourseContentResponseModel()
                 {
-                    Id=courseContent.Id,
-                   ContentName=courseContent.ContentName,
+                    Id=courseContent.Id, 
                    TaskName=courseContent.TaskName,
                    Description=courseContent.Discription,
-                   Duration=courseContent.Duration,
-                   CourseName=courseContent.ContentName
+                   Duration=courseContent.DurationInHours,
+                   CourseName=courseContent.Course!.Name
 
                 };
                 return ApiResponse<CourseContentResponseModel>.SuccessResponse(response, APIMessages.ContentManagement.ContentAdded, HttpStatusCodes.Created);
@@ -67,9 +66,8 @@ namespace StreamlineAcademy.Application.Services
         {
             var existingContent = await contentRepository.GetByIdAsync(x => x.Id == id);
             if (existingContent == null)
-            {
                 return ApiResponse<CourseContentResponseModel>.ErrorResponse(APIMessages.ContentManagement.ContentNotFound, HttpStatusCodes.NotFound);
-            } 
+            
             existingContent.IsActive = false; 
             existingContent.DeletedDate = DateTime.Now;
 
@@ -78,6 +76,22 @@ namespace StreamlineAcademy.Application.Services
             if (isSoftDeleted > 0) 
                 return ApiResponse<CourseContentResponseModel>.SuccessResponse(null, APIMessages.ContentManagement.ContentDeleted);
                 return ApiResponse<CourseContentResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError); 
+        }
+
+        public async Task<ApiResponse<IEnumerable<CourseContentResponseModel>>>GetContentByCourseId(Guid courseId)
+        {
+            var existingcCourse = await courseRepository.GetByIdAsync(x=>x.Id==courseId);
+            if (existingcCourse == null)
+                return ApiResponse<IEnumerable<CourseContentResponseModel>>.ErrorResponse(APIMessages.ContentManagement.ContentNotFound, HttpStatusCodes.NotFound);
+
+            var contents = await contentRepository.GetAllContentByCourseId(courseId);
+            if (contents != null && contents.Any())
+            {
+                var sortedContent = contents.OrderBy(c => c.Id);
+                return ApiResponse<IEnumerable<CourseContentResponseModel>>.SuccessResponse(sortedContent, $"Found {contents.Count()} CourseContents");
+            }
+
+            return ApiResponse<IEnumerable<CourseContentResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
         public async Task<ApiResponse<CourseContentResponseModel>> GetContentById(Guid id)
@@ -89,11 +103,10 @@ namespace StreamlineAcademy.Application.Services
             
             var response = new CourseContentResponseModel
             {
-                Id = content.Id,
-                ContentName = content.ContentName,
+                Id = content.Id, 
                 TaskName = content.TaskName,
                 Description = content.Discription, 
-                Duration = content.Duration,
+                Duration = content.DurationInHours,
                 CourseName = content.Course!.Name
             };
             return ApiResponse<CourseContentResponseModel>.SuccessResponse(response);
@@ -105,10 +118,10 @@ namespace StreamlineAcademy.Application.Services
 
             if (contentToUpdate == null)
                 return ApiResponse<CourseContentResponseModel>.ErrorResponse(APIMessages.ContentManagement.ContentNotFound, HttpStatusCodes.NotFound); 
-            contentToUpdate.ContentName = request.ContentName;
+            
             contentToUpdate.TaskName = request.TaskName;
             contentToUpdate.Discription = request.Description;
-            contentToUpdate.Duration = request.Duration;
+            contentToUpdate.DurationInHours = request.Duration;
             var course = await courseRepository.GetByIdAsync(x => x.Id == contentToUpdate.CourseId);
             var updateContent=await contentRepository.UpdateAsync(contentToUpdate);
             if (updateContent > 0)
@@ -116,10 +129,9 @@ namespace StreamlineAcademy.Application.Services
                 var updatedResponse = new CourseContentResponseModel
                 {
                     Id = contentToUpdate.Id,
-                    ContentName = contentToUpdate.ContentName,
                     TaskName = contentToUpdate.TaskName,
                     Description = contentToUpdate.Discription,
-                    Duration = contentToUpdate.Duration,
+                    Duration = contentToUpdate.DurationInHours,
                     CourseName = contentToUpdate.Course!.Name
                 };
                 return ApiResponse<CourseContentResponseModel>.SuccessResponse(updatedResponse, APIMessages.ContentManagement.ContentUpdated);

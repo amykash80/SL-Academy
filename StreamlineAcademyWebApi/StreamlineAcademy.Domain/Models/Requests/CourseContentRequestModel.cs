@@ -10,10 +10,7 @@ using System.Threading.Tasks;
 namespace StreamlineAcademy.Domain.Models.Requests
 {
     public class CourseContentRequestModel
-    {
-        [Required(ErrorMessage = "Content name is required")]
-        public string? ContentName { get; set; }
-
+    {  
         [Required(ErrorMessage = "Task name is required")]
         public string? TaskName { get; set; }
 

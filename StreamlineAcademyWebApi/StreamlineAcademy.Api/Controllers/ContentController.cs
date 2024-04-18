@@ -27,6 +27,8 @@ namespace StreamlineAcademy.Api.Controllers
         public async Task<ApiResponse<CourseContentResponseModel>> UpdateContent(CourseContentUpdateRequest model) => await contentService.UpdateContent(model);
         [HttpDelete("deleteContent/{id:guid}")]
         public async Task<ApiResponse<CourseContentResponseModel>> DeleteContent(Guid id) => await contentService.DeleteContent(id);
+        [HttpGet("getContentByCourseId/{id:guid}")]
+        public async Task<ApiResponse<IEnumerable<CourseContentResponseModel>>>GetContentByCourseId(Guid id) => await contentService.GetContentByCourseId(id);
 
     }
 }

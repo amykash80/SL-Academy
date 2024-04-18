@@ -10,11 +10,13 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public class Schedule:BaseModel
     {
-        public DayOfWeek? DayOfWeek { get; set; }
-        public TimeSpan? StartTime { get; set; }
-        public TimeSpan? EndTime { get; set; }
+        public DateTimeOffset? Date { get; set; }
+        public int DurationInHours { get; set; }
         public Guid? BatchId { get; set; } 
         [ForeignKey(nameof(BatchId))]
         public Batch? Batch { get; set; }
+        public Guid? CourseContentId { get; set; }
+        [ForeignKey(nameof(CourseContentId))]
+        public CourseContent? CourseContent { get; set; }
     }
 }

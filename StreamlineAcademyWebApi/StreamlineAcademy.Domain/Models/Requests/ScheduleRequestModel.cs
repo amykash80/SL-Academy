@@ -12,17 +12,14 @@ namespace StreamlineAcademy.Domain.Models.Requests
 {
     public class ScheduleRequestModel
     {
-        [Required(ErrorMessage = "Day of the week is required.")]
-        public DayOfWeek? DayOfWeek { get; set; }
-
-        [Required(ErrorMessage = "Start time is required.")]
-        public TimeSpan? StartTime { get; set; }
-
-        [Required(ErrorMessage = "End time is required.")]
-        public TimeSpan? EndTime { get; set; }
-
+        [Required(ErrorMessage = "Date is required.")]
+        public DateTimeOffset? Date { get; set; }
+        [Required(ErrorMessage = "DurationInHours is required.")]
+        public int DurationInHours { get; set; }
         [Required(ErrorMessage = "Batch ID is required.")]
         public Guid? BatchId { get; set; }
+        [Required(ErrorMessage = "CourseContent ID is required.")]
+        public Guid? CourseContentId { get; set; }
     }
 
     public class ScheduleUpdateRequest : ScheduleRequestModel  // to update  response 

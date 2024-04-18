@@ -28,16 +28,13 @@ namespace StreamlineAcademy.Application.Services
             var existingBatch = await batchRepository.GetByIdAsync(x => x.Id == request.BatchId);
             if (existingBatch == null)
                 return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
-            if (request.StartTime >= request.EndTime)
-                return ApiResponse<ScheduleResponseModel>.ErrorResponse("Start time must be before end time.", HttpStatusCodes.BadRequest);
-
+           
             var schedule = new Schedule()
             {
 
-                DayOfWeek = (DayOfWeek)request.DayOfWeek!,
-                StartTime = request.StartTime,
-                EndTime = request.EndTime,
+                Date =request.Date!,
                 BatchId = request.BatchId!.Value,
+                CourseContentId = request.CourseContentId,
                 IsActive = true,
                 CreatedBy = Guid.Empty,
                 CreatedDate = DateTime.Now,
@@ -51,10 +48,11 @@ namespace StreamlineAcademy.Application.Services
                 var scheduleResponse = new ScheduleResponseModel
                 {
                     Id = schedule.Id,
-                    DayOfWeek = schedule.DayOfWeek,
-                    StartTime = schedule.StartTime,
-                    EndTime = schedule.EndTime,
-                    BatchName = existingBatch.BatchName
+                    Date= schedule.Date,
+                    DurationInHours = schedule.DurationInHours,
+                    BatchName = existingBatch.BatchName,
+                    
+                    
                 };
                 return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleAdded, HttpStatusCodes.Created);
             }
@@ -103,9 +101,7 @@ namespace StreamlineAcademy.Application.Services
             var scheduleResponseList = schedules.Select(schedule => new ScheduleResponseModel
             {
                 Id = schedule.Id,
-                DayOfWeek = schedule.DayOfWeek,
-                StartTime = schedule.StartTime,
-                EndTime = schedule.EndTime,
+                Date = schedule.Date,
                 BatchName = schedule.Batch!.BatchName // Assuming Schedule has a navigation property Batch
             }).ToList();
 
@@ -118,17 +114,13 @@ namespace StreamlineAcademy.Application.Services
             var existingBatch = await batchRepository.GetByIdAsync(x => x.Id == request.BatchId);
             if (existingBatch == null)
                 return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
-            if (request.StartTime >= request.EndTime)
-                return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.ScheduleManagement.StartTimeMustbebeforeEndtime);
-
             var existingSchedule = await scheduleRepository.GetByIdAsync(x => x.Id == request.Id);
             if (existingSchedule == null)
                 return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.ScheduleManagement.AllScheduleNotFound, HttpStatusCodes.NotFound);
 
-            existingSchedule.DayOfWeek = (DayOfWeek)request.DayOfWeek!;
-            existingSchedule.StartTime = request.StartTime;
-            existingSchedule.EndTime = request.EndTime;
+            existingSchedule.Date =request.Date!;
             existingSchedule.BatchId = request.BatchId!.Value;
+            existingSchedule.CourseContentId = request.CourseContentId!.Value;
             existingSchedule.ModifiedDate = DateTime.Now;
 
             var res = await scheduleRepository.UpdateAsync(existingSchedule);
@@ -137,10 +129,9 @@ namespace StreamlineAcademy.Application.Services
                 var scheduleResponse = new ScheduleResponseModel
                 {
                     Id = existingSchedule.Id,
-                    DayOfWeek = existingSchedule.DayOfWeek,
-                    StartTime = existingSchedule.StartTime,
-                    EndTime = existingSchedule.EndTime,
+                    Date = existingSchedule.Date,
                     BatchName = existingBatch.BatchName
+                    
                 };
                 return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleUpdated, HttpStatusCodes.OK);
             }
