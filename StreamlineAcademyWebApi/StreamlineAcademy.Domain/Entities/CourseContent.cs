@@ -10,12 +10,13 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public class CourseContent:BaseModel
     {
-        public string? ContentName { get; set; }
         public string? TaskName { get; set; }
         public string? Discription { get; set; }
-        public int Duration { get; set; }
+        public int DurationInHours { get; set; }
         public Guid? CourseId { get; set; }
         [ForeignKey(nameof(CourseId))]
         public Course? Course { get; set; }
+
+
     }
 }

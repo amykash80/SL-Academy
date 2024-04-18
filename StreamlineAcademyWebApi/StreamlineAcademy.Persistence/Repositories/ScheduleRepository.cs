@@ -36,9 +36,8 @@ namespace StreamlineAcademy.Persistence.Repositories
                 .Select(s => new ScheduleResponseModel
                 {
                     Id = s.Id,
-                    DayOfWeek = s.DayOfWeek,
-                    StartTime = s.StartTime,
-                    EndTime = s.EndTime,
+                    Date = s.Date,
+                    DurationInHours = s.DurationInHours,
                     BatchName = s.Batch!.BatchName
                 })
                 .ToListAsync();
