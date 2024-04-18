@@ -36,7 +36,7 @@ namespace StreamlineAcademy.Application.Services
         }
         public async Task<ApiResponse<InstructorResponseModel>> AddInstructor(InstructorRequestModel model)
         {
-
+            var userId = contextService.GetUserId();
             var existingEmail = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (existingEmail is not null)
                 return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.InstructorManagement.InstructorAlreadyRegistered, HttpStatusCodes.Conflict);
@@ -52,7 +52,7 @@ namespace StreamlineAcademy.Application.Services
                 UserRole = UserRole.Instructor,
                 Salt = UserSalt,
                 Password = AppEncryption.CreatePassword(model.Password!, UserSalt),
-                CreatedBy = Guid.Empty,
+                CreatedBy = userId,
                 CreatedDate = DateTime.Now,
                 ModifiedBy = Guid.Empty,
                 ModifiedDate = DateTime.Now,
@@ -98,6 +98,7 @@ namespace StreamlineAcademy.Application.Services
             var result = await userRepository.FirstOrDefaultAsync(x => x.Id == existingInstructor.Id);
             result.IsActive = false;
             result.DeletedDate = DateTime.Now;
+            result.DeletedDate = DateTime.Now;
             if (result is not null)
             {
                 int isSoftDelted = await instructorRepository.Delete(result);
@@ -133,8 +134,8 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<InstructorResponseModel>> UpdateInstructor(InstructorUpdateRequestModel request)
         {
+            var userId = contextService.GetUserId();
             var user = await userRepository.GetByIdAsync(x=>x.Id==request.Id);
-
             if (user is null)
                 return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.InstructorManagement.InstructorNotFound, HttpStatusCodes.NotFound);
             user.Email= request.Email;
@@ -143,6 +144,7 @@ namespace StreamlineAcademy.Application.Services
             user.PostalCode= request.PostalCode;
             user.Name=request.Name;
             user.ModifiedDate = DateTime.Now;
+            user.ModifiedBy = userId;
             user.IsActive = request.IsActive;
             var userResponse = await userRepository.UpdateAsync(user);
 

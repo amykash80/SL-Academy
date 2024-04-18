@@ -27,7 +27,9 @@ namespace StreamlineAcademy.Domain.Models.Requests
         [RegularExpression("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", ErrorMessage = "Please enter valid Email")]
         public string? Email { get; set; } 
         [Required(ErrorMessage = "Password is required")]
-        public string? Password { get; set; } 
+        public string? Password { get; set; }
+        [Required(ErrorMessage = "UserRole is required")]
+        public UserRole UserRole { get; set; }  
     }
      
 }

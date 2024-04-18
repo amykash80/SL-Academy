@@ -43,7 +43,7 @@ namespace StreamlineAcademy.Application.Services
                 StateId=model.StateId,
                 CityId=model.CityId,
                 IsActive=true,
-                CreatedBy = Guid.Empty,
+                CreatedBy = academyId,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
                 DeletedBy = Guid.Empty,
@@ -103,8 +103,8 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<LocationResponseModel>> UpdateLocation(LocationUpdateRequestModel model)
         {
+            var academyId = contextService.GetUserId();
             var location = await locationRepository.GetByIdAsync(x => x.Id == model.Id);
-
             if (location is null)
                 return ApiResponse<LocationResponseModel>.ErrorResponse(APIMessages.LocationManagement.LocationNotFound, HttpStatusCodes.NotFound);
 
@@ -116,8 +116,8 @@ namespace StreamlineAcademy.Application.Services
             location.StateId = model.StateId;
             location.CityId = model.CityId;
             location.ModifiedDate=DateTime.Now;
+            location.ModifiedBy = academyId;
             var locationResponse = await locationRepository.UpdateAsync(location);
-
             if (locationResponse is > 0)
             {
                 var responseModel = await locationRepository.GetLocationJoinById(location.Id);

@@ -40,6 +40,7 @@ namespace StreamlineAcademy.Application.Services
         }
         public async Task<ApiResponse<StudentResponseModel>> AddStudent(StudentRequestModel model)
         {
+            var userId = contextService.GetUserId();
             var existingEmail = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (existingEmail is not null)
                 return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentAlreadyRegistered, HttpStatusCodes.Conflict);
@@ -55,7 +56,7 @@ namespace StreamlineAcademy.Application.Services
                 UserRole = UserRole.Student,
                 Salt = UserSalt,
                 Password = AppEncryption.CreatePassword(model.Password!, UserSalt),
-                CreatedBy = Guid.Empty,
+                CreatedBy = userId,
                 CreatedDate = DateTime.Now,
                 ModifiedBy = Guid.Empty,
                 ModifiedDate = DateTime.Now,
@@ -173,8 +174,8 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model)
         {
+            var userId = contextService.GetUserId();
             var user = await userRepository.GetByIdAsync(x => x.Id == model.Id);
-
             if (user is null)
                 return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.UserManagement.UserNotFound, HttpStatusCodes.NotFound);
             user.Email = model.Email;
@@ -183,6 +184,7 @@ namespace StreamlineAcademy.Application.Services
             user.PostalCode = model.PostalCode;
             user.Name = model.Name;
             user.ModifiedDate = DateTime.Now;
+            user.ModifiedBy = userId;
             user.IsActive = model.IsActive;
             var userResponse = await userRepository.UpdateAsync(user);
 

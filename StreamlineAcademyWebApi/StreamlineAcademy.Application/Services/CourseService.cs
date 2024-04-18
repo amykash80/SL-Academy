@@ -29,6 +29,7 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<CourseResponseModel>> CreateCourse(CourseRequestModel request)
         {
+            var academyId = contextService.GetUserId();
             var existingCourse = await courseRepository.GetByIdAsync(x => x.Name == request.Name);
             if (existingCourse is not null)
                 return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.CourseManagement.CourseAlreadyRegistered, HttpStatusCodes.Conflict);
@@ -41,7 +42,7 @@ namespace StreamlineAcademy.Application.Services
                 DurationInWeeks = request.DurationInWeeks,
                 Fee = request.Fee,
                 IsActive = true,
-                CreatedBy = Guid.Empty,
+                CreatedBy = academyId,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
                 DeletedBy = Guid.Empty,
@@ -102,7 +103,6 @@ namespace StreamlineAcademy.Application.Services
                 int isSoftDelted = await courseRepository.DeleteAsync(result!);
                 if (isSoftDelted > 0)
                 {
-                    //var returnVal = await courseRepository.GetCourseById(existingCourse.Id);
                     return ApiResponse<CourseResponseModel>.SuccessResponse(null, APIMessages.CourseManagement.CourseDeleted);
                 }
             }
@@ -162,6 +162,7 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<CourseResponseModel>> UpdateCourse(CourseUpdateRequest request)
         {
+            var academyId = contextService.GetUserId();
             var existingCourse = await courseRepository.GetByIdAsync(x => x.Id == request.Id);
             if (existingCourse == null)
                 return ApiResponse<CourseResponseModel>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
@@ -172,6 +173,7 @@ namespace StreamlineAcademy.Application.Services
             existingCourse.CategoryId = request.CategoryId;
             existingCourse.AcademyId = request.AcademyId;
             existingCourse.ModifiedDate = DateTime.Now;
+            existingCourse.ModifiedBy = academyId;
 
             var returnVal = await courseRepository.UpdateAsync(existingCourse);
             if (returnVal > 0)

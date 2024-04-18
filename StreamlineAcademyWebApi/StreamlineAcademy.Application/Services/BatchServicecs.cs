@@ -1,4 +1,6 @@
-﻿using StreamlineAcademy.Application.Abstractions.IRepositories;
+﻿using Org.BouncyCastle.Bcpg;
+using StreamlineAcademy.Application.Abstractions.Identity;
+using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Shared;
 using StreamlineAcademy.Domain.Entities;
@@ -15,13 +17,17 @@ namespace StreamlineAcademy.Application.Services
     public class BatchService : IBatchService
     {
         private readonly IBatchRepository batchRepository;
+        private readonly IContextService contextService;
 
-        public BatchService(IBatchRepository batchRepository)
+        public BatchService(IBatchRepository batchRepository,
+                            IContextService contextService)
         {
             this.batchRepository = batchRepository;
+            this.contextService = contextService;
         }
         public async Task<ApiResponse<BatchResponseModel>> CreateBatch(BatchRequestModel request)
         {
+            var academyId = contextService.GetUserId();
             var existingBatch = await batchRepository.GetByIdAsync(x => x.BatchName == request.BatchName);
             if (existingBatch != null)
                 return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchAlreadyExists, HttpStatusCodes.Conflict);
@@ -36,7 +42,7 @@ namespace StreamlineAcademy.Application.Services
                 InstructorId = request.InstructorId,
                 LocationId = request.LocationId,
                 IsActive = true,
-                CreatedBy = Guid.Empty,
+                CreatedBy = academyId,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
                 DeletedBy = Guid.Empty,
@@ -72,6 +78,7 @@ namespace StreamlineAcademy.Application.Services
         }
         public async Task<ApiResponse<BatchResponseModel>> UpdateBatch(BatchUpdateRequest request)
         {
+            var academyId = contextService.GetUserId();
             var existingBatch = await batchRepository.GetByIdAsync(x => x.Id == request.Id);
             if (existingBatch == null)
                 return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.CourseManagement.CourseNotFound, HttpStatusCodes.NotFound);
@@ -83,6 +90,7 @@ namespace StreamlineAcademy.Application.Services
             existingBatch.InstructorId = request.InstructorId;
             existingBatch.LocationId = request.LocationId;
             existingBatch.ModifiedDate = DateTime.Now;
+            existingBatch.ModifiedBy = academyId;
 
             var returnVal = await batchRepository.UpdateAsync(existingBatch);
             if (returnVal > 0)

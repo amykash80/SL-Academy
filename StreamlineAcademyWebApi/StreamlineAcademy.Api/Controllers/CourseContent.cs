@@ -10,11 +10,11 @@ namespace StreamlineAcademy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContentController : ControllerBase
+    public class CourseContent : ControllerBase
     {
         private readonly IContentService contentService;
 
-        public ContentController(IContentService contentService)
+        public CourseContent(IContentService contentService)
         {
             this.contentService = contentService;
         }

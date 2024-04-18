@@ -26,15 +26,18 @@ namespace StreamlineAcademy.Application.Services
         private readonly IAcademyRepository academyRepository;
         private readonly IUserRepository userRepository;
 		private readonly IEmailHelperService emailHelperService;
+        private readonly IContextService contextService;
 
-		public AcademyService(IAcademyRepository academyRepository,
+        public AcademyService(IAcademyRepository academyRepository,
                                IUserRepository userRepository ,
-                               IEmailHelperService emailHelperService)
+                               IEmailHelperService emailHelperService,
+                               IContextService contextService)
         {
             this.academyRepository = academyRepository;
             this.userRepository = userRepository;
 			this.emailHelperService = emailHelperService;
-		}
+            this.contextService = contextService;
+        }
 
         public async Task<ApiResponse<AcademyResponseModel>> GetAcademyById(Guid id)
         {
@@ -57,6 +60,7 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<AcademyResponseModel>> RegisterAcademy(AcademyRequestModel request)
         {
+            var userId= contextService.GetUserId();
             var existingAcademy = await academyRepository.GetByIdAsync(x => x.AcademyName == request.AcademyName);
             if (existingAcademy is not null)
                 return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered, HttpStatusCodes.Conflict);
@@ -75,7 +79,7 @@ namespace StreamlineAcademy.Application.Services
                 UserRole = UserRole.AcademyAdmin,
                 Salt = UserSalt,
                 Password = AppEncryption.CreatePassword(request.Password!,UserSalt),
-                CreatedBy=Guid.Empty,
+                CreatedBy= userId,
                 CreatedDate= DateTime.Now,
                 ModifiedBy=Guid.Empty,
                 ModifiedDate= DateTime.Now,
@@ -119,6 +123,7 @@ namespace StreamlineAcademy.Application.Services
 
             var result = await userRepository.FirstOrDefaultAsync(x => x.Id == existingAcademy.Id);
             result.IsActive = false;
+            result.ModifiedDate=DateTime.Now;
             result.DeletedDate = DateTime.Now;
             if (result is not null )
             {
@@ -135,8 +140,8 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<AcademyResponseModel>> UpdateAcademy(AcademyUpdateRequest request)
         {
+            var userId = contextService.GetUserId();
             var user = await userRepository.GetByIdAsync(x => x.Id == request.Id);
-
             if (user is null)
                 return ApiResponse<AcademyResponseModel>.ErrorResponse(APIMessages.UserManagement.UserNotFound, HttpStatusCodes.NotFound);
             user.Email = request.Email;
@@ -145,6 +150,7 @@ namespace StreamlineAcademy.Application.Services
             user.PostalCode = request.PostalCode;
             user.Name = request.Name;
             user.ModifiedDate = DateTime.Now;
+            user.ModifiedBy = userId;
             user.IsActive = request.IsActive;
             var userResponse = await userRepository.UpdateAsync(user);
 
@@ -177,13 +183,13 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<AcademyTypeResponseModel>> CreateAcademyType(AcademyTypeRequestModel model)
         {
-
+            var userId = contextService.GetUserId();
             var existingAcademy = await academyRepository.GetAcademyTypeById(x =>x.Name==model.Name);
             if (existingAcademy is not null)
                 return ApiResponse<AcademyTypeResponseModel>.ErrorResponse(APIMessages.AcademyManagement.AcademyAlreadyRegistered, HttpStatusCodes.Conflict);
-            var acdemyType = new AcademyType() {
+                var acdemyType = new AcademyType() {
                 Name= model.Name,
-                CreatedBy = Guid.Empty,
+                CreatedBy = userId,
                 CreatedDate = DateTime.Now,
                 ModifiedBy = Guid.Empty,
                 ModifiedDate = DateTime.Now,
