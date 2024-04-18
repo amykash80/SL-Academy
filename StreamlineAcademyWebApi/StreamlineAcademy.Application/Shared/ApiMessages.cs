@@ -45,6 +45,14 @@ public static class APIMessages
             public static readonly string BatchDeleted = "Batch deleted Successfully";
 
         }
+        public static class ContentManagement
+        {
+            public static readonly string ContentNotFound = "Content not found.";
+            public static readonly string ContentAdded = "Content Added Successfully.";
+            public static readonly string ContentUpdated = "Content Updated Successfully.";
+            public static readonly string ContentDeleted = "Content deleted Successfully";
+
+        }
         public static class ScheduleManagement
         {
             public static readonly string ScheduleAdded = "Schedule Added Successfully.";

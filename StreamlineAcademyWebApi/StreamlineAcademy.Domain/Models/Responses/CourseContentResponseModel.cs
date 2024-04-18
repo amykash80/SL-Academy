@@ -8,10 +8,10 @@ namespace StreamlineAcademy.Domain.Models.Responses
 {
     public class CourseContentResponseModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string? ContentName { get; set; }
         public string? TaskName { get; set; }
-        public string? Discription { get; set; }
+        public string? Description { get; set; }
         public int Duration { get; set; }
         public string? CourseName { get; set; }
     }

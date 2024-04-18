@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Domain.Models.Requests
 {
-    public class CourseContentRequest
+    public class CourseContentRequestModel
     {
         [Required(ErrorMessage = "Content name is required")]
         public string? ContentName { get; set; }
@@ -27,7 +27,7 @@ namespace StreamlineAcademy.Domain.Models.Requests
         public Guid? CourseId { get; set; } 
     }
 
-    public class CourseContentUpdateRequest : CourseContentRequest  // to update  response 
+    public class CourseContentUpdateRequest : CourseContentRequestModel  // to update  response 
     {
         public Guid Id { get; set; }
     }

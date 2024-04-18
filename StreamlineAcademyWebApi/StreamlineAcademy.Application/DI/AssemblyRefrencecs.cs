@@ -55,6 +55,7 @@ namespace StreamlineAcademy.Application.DI
 			services.AddScoped<IInstructorService, InstructorService>();
             services.AddScoped<IScheduleService,ScheduleService>();
 			services.AddScoped<IStudentService,StudentService>();
+            services.AddScoped<IContentService,ContentService >();
 
             return services;
         }
