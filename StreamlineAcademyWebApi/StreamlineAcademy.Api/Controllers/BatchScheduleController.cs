@@ -11,11 +11,11 @@ namespace StreamlineAcademy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ScheduleController : ControllerBase
+    public class BatchScheduleController : ControllerBase
     {
         private readonly IScheduleService scheduleService;
 
-        public ScheduleController(IScheduleService scheduleService)
+        public BatchScheduleController(IScheduleService scheduleService)
         {
             this.scheduleService = scheduleService;
         }

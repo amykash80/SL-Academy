@@ -149,6 +149,7 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<int>> AddUser(UserRequestModel model)
         {
+            var userId = contextService.GetUserId();
             var existingEmail = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (existingEmail is not null)
                 return ApiResponse<int>.ErrorResponse(APIMessages.UserManagement.UserAlreadyRegistered, HttpStatusCodes.Conflict);
@@ -162,9 +163,9 @@ namespace StreamlineAcademy.Application.Services
                 PhoneNumber = model.PhoneNumber,
                 Address = model.Address,
                 Salt = UserSalt,
-                UserRole=UserRole.Student,
+                UserRole=model.UserRole,
                 Password = AppEncryption.CreatePassword(model.Password!, UserSalt),
-                CreatedBy = Guid.Empty,
+                CreatedBy = userId,
                 CreatedDate = DateTime.Now,
                 ModifiedBy = Guid.Empty,
                 ModifiedDate = DateTime.Now,

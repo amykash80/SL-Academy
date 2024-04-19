@@ -197,10 +197,9 @@ namespace StreamlineAcademy.Persistence.Repositories
                         Schedules = batchDetails!.Schedules!.Select(a => new ScheduleResponseModel
                         {
                             Id = a.Id,
-                            DayOfWeek = a.DayOfWeek,
-                            StartTime = a.StartTime,
-                            EndTime = a.EndTime,
-                            BatchName=batchDetails!.BatchName
+                            Date = a.Date,
+                            DurationInHours = a.DurationInHours,
+                            BatchName=batchDetails!.BatchName  
                         })
                     };
                     response.Add(responseModel);

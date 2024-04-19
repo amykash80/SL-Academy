@@ -32,7 +32,7 @@ namespace StreamlineAcademy.Api.Controllers
         public async Task<ApiResponse<BatchResponseModel>> DeleteBatch(Guid id) => await batchService.DeleteBatch(id);
 
         [HttpGet("getAllBatchesByCourseId/{id:guid}")]
-        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchByCourseId(Guid id) => await batchService.GetAllBatchByCourseId(id);
+        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchesByCourseId(Guid id) => await batchService.GetAllBatchesByCourseId(id);
 
     }
 }
