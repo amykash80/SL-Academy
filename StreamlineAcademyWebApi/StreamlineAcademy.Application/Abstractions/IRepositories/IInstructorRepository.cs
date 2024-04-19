@@ -23,6 +23,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         #endregion
         Task<InstructorResponseModel> GetInstructorById(Guid? id);
         Task<List<InstructorResponseModel>> GetAllInstructors(Guid? id);
+        Task<IEnumerable<CourseResponseModel>> GetAllIntructorCourses(Guid? id);
         Task<int> Delete(User model);
 
 

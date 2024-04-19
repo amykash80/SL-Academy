@@ -140,5 +140,31 @@ namespace StreamlineAcademy.Persistence.Repositories
             await Task.Run(() => context.Set<User>().Update(model));
             return await context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<CourseResponseModel>> GetAllIntructorCourses(Guid? id)
+        {
+           var courses = await context.Courses
+         .Join(context.Batches,
+         course => course.Id,
+        batch => batch.CourseId,
+        (course, batch) => new { Course = course, Batch = batch })
+       .Where(x => x.Batch.InstructorId == id)
+       .Select(x => new CourseResponseModel
+    {
+        Id = x.Course.Id,
+        Name = x.Course.Name,
+        Description = x.Course.Description,
+        DurationInWeeks = x.Course.DurationInWeeks,
+        AcademyName = x.Course.Academy!.AcademyName, 
+        CategoryName = x.Course.CourseCategory!.CategoryName, 
+        Fee = x.Course.Fee,
+        IsActive = x.Course.IsActive,
+       
+    })
+    .ToListAsync();
+
+            return courses;
+
+        }
     }
 }

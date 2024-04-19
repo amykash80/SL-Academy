@@ -48,8 +48,9 @@ namespace StreamlineAcademy.Application.Services
             if (user is null)
                 return ApiResponse<string>.ErrorResponse(APIMessages.Auth.UserNotFound, HttpStatusCodes.NotFound);
 
-            if (AppEncryption.ComparePassword(model.OldPassword!, user.Password!, user.Salt!))
-                return ApiResponse<string>.ErrorResponse(APIMessages.Auth.IncorrectOldPassword, HttpStatusCodes.BadRequest);
+            var res = AppEncryption.ComparePassword(user.Password!, model.OldPassword!, user.Salt!);
+            if(!res)
+                return ApiResponse<string>.ErrorResponse("Old password is incorrect", HttpStatusCodes.BadRequest); 
 
             user.Salt = AppEncryption.GenerateSalt();
             user.Password = AppEncryption.CreatePassword(model.NewPassword!, user.Salt);

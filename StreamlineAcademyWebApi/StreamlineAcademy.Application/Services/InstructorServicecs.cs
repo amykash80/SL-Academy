@@ -111,6 +111,15 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
 
+        public async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllInstructorCourses()
+        {
+            var instructorId = contextService.GetUserId();
+            var returnVal =  await instructorRepository.GetAllIntructorCourses(instructorId);
+            if(returnVal is not null)
+                return ApiResponse<IEnumerable<CourseResponseModel>>.SuccessResponse(returnVal);
+            return ApiResponse<IEnumerable<CourseResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
+        }
+
         public async  Task<ApiResponse<IEnumerable<InstructorResponseModel>>> GetallInstructors()
         {
             var academyId=contextService.GetUserId();
