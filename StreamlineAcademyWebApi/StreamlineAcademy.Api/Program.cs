@@ -22,13 +22,6 @@ builder.Services.AddPersistenceService(builder.Configuration)
 
 
 var app = builder.Build();
-app.UseCors(option =>
-{
-    option.SetIsOriginAllowed(_ => true)
-    .AllowAnyHeader()
-    .AllowAnyMethod();
-});
-
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.

@@ -25,8 +25,10 @@ namespace StreamlineAcademy.Infrastructure.ExceptionNotifier
         {
 
             // if ()
+            var body = JsonConvert.SerializeObject(ex, Formatting.Indented);
+            var subject = ex.Message;
+            emailService.SendExceptionLogger(body, subject);
 
-          
         }
     }
     public sealed class EmailExceptionLoggerOptions
