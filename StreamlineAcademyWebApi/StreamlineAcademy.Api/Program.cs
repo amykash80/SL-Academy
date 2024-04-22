@@ -4,7 +4,7 @@ using StreamlineAcademy.Persistence.DI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using StreamlineAcademy.Api;
+using StreamlineAcademy.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

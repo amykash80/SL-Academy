@@ -8,7 +8,7 @@ using StreamlineAcademy.Application.Utils;
 using System.Reflection;
 using System.Text.Json;
 
-namespace StreamlineAcademy.Api
+namespace StreamlineAcademy.Api.Middlewares
 {
     public class GlobalExceptionHandlingMiddleware : IMiddleware
     {
