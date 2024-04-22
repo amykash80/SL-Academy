@@ -1,4 +1,5 @@
-﻿using StreamlineAcademy.Application.Abstractions.IRepositories;
+﻿using StreamlineAcademy.Application.Abstractions.Identity;
+using StreamlineAcademy.Application.Abstractions.IRepositories;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Shared;
 using StreamlineAcademy.Domain.Entities;
@@ -16,27 +17,36 @@ namespace StreamlineAcademy.Application.Services
     {
         private readonly IScheduleRepository scheduleRepository;
         private readonly IBatchRepository batchRepository;
+        private readonly IContentRepository contentRepository;
+        private readonly IContextService contextService;
 
-        public ScheduleService(IScheduleRepository scheduleRepository, IBatchRepository batchRepository)
+        public ScheduleService(IScheduleRepository scheduleRepository,
+                               IBatchRepository batchRepository,
+                               IContentRepository contentRepository,
+                               IContextService contextService)
         {
             this.scheduleRepository = scheduleRepository;
             this.batchRepository = batchRepository;
+            this.contentRepository = contentRepository;
+            this.contextService = contextService;
         }
+
 
         public async Task<ApiResponse<ScheduleResponseModel>> CreateSchedule(ScheduleRequestModel request)
         {
+            var userId = contextService.GetUserId();
             var existingBatch = await batchRepository.GetByIdAsync(x => x.Id == request.BatchId);
             if (existingBatch == null)
                 return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
-           
             var schedule = new Schedule()
             {
 
                 Date =request.Date!,
-                BatchId = request.BatchId!.Value,
+                BatchId = request.BatchId!,
+                DurationInHours= request.DurationInHours,
                 CourseContentId = request.CourseContentId,
                 IsActive = true,
-                CreatedBy = Guid.Empty,
+                CreatedBy = userId,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
                 DeletedBy = Guid.Empty,
@@ -45,15 +55,7 @@ namespace StreamlineAcademy.Application.Services
             var res = await scheduleRepository.InsertAsync(schedule);
             if (res > 0)
             {
-                var scheduleResponse = new ScheduleResponseModel
-                {
-                    Id = schedule.Id,
-                    Date= schedule.Date,
-                    DurationInHours = schedule.DurationInHours,
-                    BatchName = existingBatch.BatchName,
-                    
-                    
-                };
+                var scheduleResponse = await scheduleRepository.GetScheduleById(schedule.Id);
                 return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleAdded, HttpStatusCodes.Created);
             }
             return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
@@ -93,24 +95,21 @@ namespace StreamlineAcademy.Application.Services
 
         public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> GetAllSchedulesByBatchId(Guid? batchId)
         {
-            var schedules = await scheduleRepository.GetAsync(x => x.BatchId == batchId);
-
-            if (schedules == null || !schedules.Any())
-                return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.ScheduleManagement.ScheduleNotFound, HttpStatusCodes.NotFound);
-
-            var scheduleResponseList = schedules.Select(schedule => new ScheduleResponseModel
+            var scheduleId = await scheduleRepository.GetAsync(x => x.BatchId == batchId);
+            var schedule = await scheduleRepository.GetAllSchedulesByBatchId(batchId);
+            if (schedule != null && schedule.Any())
             {
-                Id = schedule.Id,
-                Date = schedule.Date,
-                BatchName = schedule.Batch!.BatchName // Assuming Schedule has a navigation property Batch
-            }).ToList();
+                var sortedCourses = schedule.OrderBy(c => c.Id);
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(sortedCourses, $"Found {schedule.Count()} Schedules");
+            }
 
-            return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(scheduleResponseList, APIMessages.ScheduleManagement.ScheduleFound);
+            return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
 
         }
 
         public async Task<ApiResponse<ScheduleResponseModel>> UpdateSchedule(ScheduleUpdateRequest request)
         {
+            var userId = contextService.GetUserId();
             var existingBatch = await batchRepository.GetByIdAsync(x => x.Id == request.BatchId);
             if (existingBatch == null)
                 return ApiResponse<ScheduleResponseModel>.ErrorResponse(APIMessages.BatchManagement.BatchnotFound, HttpStatusCodes.NotFound);
@@ -121,17 +120,19 @@ namespace StreamlineAcademy.Application.Services
             existingSchedule.Date =request.Date!;
             existingSchedule.BatchId = request.BatchId!.Value;
             existingSchedule.CourseContentId = request.CourseContentId!.Value;
+            existingSchedule.CourseContentId = request.CourseContentId!.Value;
             existingSchedule.ModifiedDate = DateTime.Now;
 
             var res = await scheduleRepository.UpdateAsync(existingSchedule);
             if (res > 0)
             {
+                var responseModel = await scheduleRepository.GetScheduleById(existingSchedule.Id);
                 var scheduleResponse = new ScheduleResponseModel
                 {
                     Id = existingSchedule.Id,
                     Date = existingSchedule.Date,
-                    BatchName = existingBatch.BatchName
-                    
+                    BatchName = existingBatch.BatchName,
+                    ContentName=existingSchedule.CourseContent!.TaskName
                 };
                 return ApiResponse<ScheduleResponseModel>.SuccessResponse(scheduleResponse, APIMessages.ScheduleManagement.ScheduleUpdated, HttpStatusCodes.OK);
             }

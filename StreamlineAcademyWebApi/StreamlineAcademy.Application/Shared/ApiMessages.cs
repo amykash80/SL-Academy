@@ -51,6 +51,7 @@ public static class APIMessages
             public static readonly string ContentAdded = "Content Added Successfully.";
             public static readonly string ContentUpdated = "Content Updated Successfully.";
             public static readonly string ContentDeleted = "Content deleted Successfully";
+            public static readonly string CourseContentNotFound = "CourseContent not Found";
 
         }
         public static class ScheduleManagement

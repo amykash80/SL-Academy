@@ -12,7 +12,10 @@ namespace StreamlineAcademy.Domain.Models.Requests
 {
     public class ScheduleRequestModel
     {
-        [Required(ErrorMessage = "Date is required.")]
+       
+        [Required(ErrorMessage = "Date  is required")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTimeOffset? Date { get; set; }
         [Required(ErrorMessage = "DurationInHours is required.")]
         public int DurationInHours { get; set; }

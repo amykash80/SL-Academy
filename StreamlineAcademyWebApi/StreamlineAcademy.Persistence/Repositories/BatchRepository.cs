@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Persistence.Repositories
 {
-    public class BatchRepository:BaseRepository<Batch>,IBatchRepository
+    public class BatchRepository : BaseRepository<Batch>, IBatchRepository
     {
         private readonly StreamlineDbContet context;
 
-        public BatchRepository(StreamlineDbContet context):base(context) 
+        public BatchRepository(StreamlineDbContet context) : base(context)
         {
             this.context = context;
         }
-         
+
         public async Task<BatchResponseModel> GetBatchById(Guid? id)
         {
             var batch = await context.Batches
@@ -63,7 +63,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     EndDate = a.EndDate,
                     CourseName = a.Course!.Name,
                     InstructorName = a.Instructor!.User!.Name,
-                    LocationName = a.Location!.Address 
+                    LocationName = a.Location!.Address
                 })
                 .ToListAsync();
 
@@ -85,14 +85,31 @@ namespace StreamlineAcademy.Persistence.Repositories
                     StartDate = b.StartDate,
                     EndDate = b.EndDate,
                     CourseName = b.Course!.Name,
-                    InstructorName = b.Instructor!.User!.Name, 
-                    LocationName = b.Location!.Address, 
-                   
+                    InstructorName = b.Instructor!.User!.Name,
+                    LocationName = b.Location!.Address,
+
                 })
                 .ToListAsync();
 
             return batches;
         }
+        public async Task<List<StudentByBatchResponseModel>> GetAllStudentsByBatchId(Guid? batchId)
+        {
+            var students = await context.StudentBatches
+        .Where(sb => sb.BatchId == batchId)
+        .Include(sb => sb.Student) 
+        .Select(sb => new StudentByBatchResponseModel
+        {
+            Id=sb.Id,
+            Name=sb.Student!.User!.Name,
+            Address=sb.Student.User!.Address,
+            PhoneNumber=sb.Student.User!.PhoneNumber,
+            Email=sb.Student.User!.Email,
+            AcademyName=sb.Student!.Academy!.AcademyName
 
+         })
+        .ToListAsync(); 
+         return students!;
+        }
     }
 }

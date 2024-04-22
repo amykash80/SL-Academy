@@ -33,6 +33,8 @@ namespace StreamlineAcademy.Api.Controllers
 
         [HttpGet("getAllBatchesByCourseId/{id:guid}")]
         public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatchesByCourseId(Guid id) => await batchService.GetAllBatchesByCourseId(id);
+        [HttpGet("getAllStudentsByBatchId/{id:guid}")]
+        public async Task<ApiResponse<IEnumerable<StudentByBatchResponseModel>>> GetAllStudentsByBatchId(Guid id) => await batchService.GetAllStudentsByBatchId(id);
 
     }
 }

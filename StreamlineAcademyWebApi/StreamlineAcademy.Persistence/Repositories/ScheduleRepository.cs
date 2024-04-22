@@ -24,27 +24,71 @@ namespace StreamlineAcademy.Persistence.Repositories
         public async Task<IEnumerable<Schedule>> GetAsync(Expression<Func<Schedule, bool>> predicate)
         {
             return await context.Schedules
-                .Include(s => s.Batch) // Include if there's a navigation property to Batch
+                .Include(s => s.Batch) 
                 .Where(predicate)
                 .ToListAsync();
         }
+        public async Task<ScheduleResponseModel> GetScheduleById(Guid? id)
+        {
+            var schedule = await context.Schedules
+                .Include(s => s.Batch)
+                    .ThenInclude(b => b.Course)
+                .Include(s => s.CourseContent)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (schedule is not null)
+            {
+                var response = new ScheduleResponseModel
+                {
+                    Id = schedule.Id,
+                    Date = schedule.Date,
+                    DurationInHours = schedule.DurationInHours,
+                    BatchName = schedule.Batch!.BatchName, 
+                    ContentName = schedule.CourseContent!.TaskName, 
+                };
+
+                return response;
+            }
+            return new ScheduleResponseModel(); 
+        }
+
 
         public async Task<List<ScheduleResponseModel>> GetAllSchedules()
         {
             var schedules = await context.Schedules
                 .Include(s => s.Batch)
+                .Include(s => s.CourseContent)
                 .Select(s => new ScheduleResponseModel
                 {
                     Id = s.Id,
                     Date = s.Date,
                     DurationInHours = s.DurationInHours,
-                    BatchName = s.Batch!.BatchName
+                    BatchName = s.Batch!.BatchName,
+                    ContentName=s.CourseContent!.TaskName
+                })
+                .ToListAsync();
+
+            return schedules;
+        }
+        public async Task<List<ScheduleResponseModel>> GetAllSchedulesByBatchId(Guid? batchId)
+        {
+            var schedules = await context.Schedules
+                .Include(s => s.Batch)
+                    .ThenInclude(b => b.Course) 
+                .Include(s => s.CourseContent)
+                .Where(s => s.BatchId == batchId)
+                .Select(s => new ScheduleResponseModel
+                {
+                    Id = s.Id,
+                    Date = s.Date,
+                    DurationInHours = s.DurationInHours,
+                    BatchName = s.Batch!.BatchName, 
+                    ContentName = s.CourseContent!.TaskName, 
                 })
                 .ToListAsync();
 
             return schedules;
         }
 
-        
     }
 }
