@@ -24,8 +24,9 @@ namespace StreamlineAcademy.Application.Utils
 		}
 		public static bool ComparePassword(string hashPassword, string password, string salt)
 		{
-			return hashPassword == CreatePassword(password, salt);
-		}
+            string hashedInputPassword = CreatePassword(password, salt);
+            return hashPassword == hashedInputPassword;
+        }
 
         public  static string GetRandomConfirmationCode()
         {
