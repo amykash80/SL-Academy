@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\NewFolder1\**" />
+    <Compile Remove="Utils\NewFolder\**" />
+    <EmbeddedResource Remove="Utils\NewFolder1\**" />
+    <EmbeddedResource Remove="Utils\NewFolder\**" />
+    <None Remove="Utils\NewFolder1\**" />
+    <None Remove="Utils\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />

@@ -10,16 +10,11 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Domain.Entities
 {
-    public  class SuperAdmin:BaseModel
+    public  class SuperAdmin
     {
-        public string? Name { get; set; }
-        public string? Address { get; set; }
-        public string? PostalCode { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string? Email { get; set; }
-        public string? Password { get; set; }
-        public string? Salt { get; set; }
-        public UserRole UserRole { get; set; }
+        public Guid? Id { get; set; }
+        [ForeignKey(nameof(Id))]
+        public User? User { get; set; }
         public Guid? CountryId { get; set; }
         [ForeignKey(nameof(CountryId))]
         public Country? Country { get; set; }
