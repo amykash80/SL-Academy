@@ -23,16 +23,19 @@ namespace StreamlineAcademy.Application.Services
         private readonly IUserRepository userRepository;
         private readonly IEmailHelperService emailHelperService;
         private readonly IContextService contextService;
+        private readonly IStudentRepository studentRepository;
 
         public InstructorService(IInstructorReository instructorRepository,
                                   IUserRepository userRepository,
                                   IEmailHelperService emailHelperService,
-                                  IContextService contextService)
+                                  IContextService contextService,
+                                  IStudentRepository studentRepository)
         {
             this.instructorRepository = instructorRepository;
             this.userRepository = userRepository;
             this.emailHelperService = emailHelperService;
             this.contextService = contextService;
+            this.studentRepository = studentRepository;
         }
         public async Task<ApiResponse<InstructorResponseModel>> AddInstructor(InstructorRequestModel model)
         {
@@ -184,6 +187,25 @@ namespace StreamlineAcademy.Application.Services
             if (returnVal is not null)
                 return ApiResponse<IEnumerable<BatchResponseModel>>.SuccessResponse(returnVal);
             return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
+        }
+
+        public async Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceResponseModel model)
+        {
+            var instructorId= contextService.GetUserId();
+            if (await studentRepository.FirstOrDefaultAsync(_ => _.Id == model.StudentId) is null)
+                return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound);
+            var attendance = new Attendance
+            {
+                StudentId = model.StudentId,
+                ScheduleId = model.ScheduleId,
+                AttendanceDate = model.Date,
+                AttendenceStatus = model.AttendenceStatus,
+                CreatedBy= instructorId,
+                CreatedDate=DateTime.Now,
+                ModifiedBy=Guid.Empty,
+                DeletedBy= Guid.Empty,
+
+            };
         }
     }
 }
