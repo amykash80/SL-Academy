@@ -104,5 +104,11 @@ namespace StreamlineAcademy.Application.Services
             var emailMessage = CreateMailMessage(emailAddress, subject, body);
             return await SendRegistrationEmail(emailMessage);
         }
+
+        public async Task<bool> SendExceptionLogger(string subject,string body)
+        {
+            var emailMessage = CreateMailMessage("",subject, body);
+            return await SendRegistrationEmail(emailMessage);
+        }
     }
 }

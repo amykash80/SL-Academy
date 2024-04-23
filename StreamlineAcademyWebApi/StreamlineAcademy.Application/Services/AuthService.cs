@@ -175,9 +175,10 @@ namespace StreamlineAcademy.Application.Services
             };
             var returnVal = await userRepository.InsertAsync(user);
             if (returnVal > 0)
-                return ApiResponse<int>.SuccessResponse(returnVal,HttpStatusCodes.OK.ToString());
+                return ApiResponse<int>.SuccessResponse(returnVal,"User Created Successfully");
             return ApiResponse<int>.ErrorResponse("Something Went Wrong", HttpStatusCodes.BadRequest);
         }
+
     }
 
 }

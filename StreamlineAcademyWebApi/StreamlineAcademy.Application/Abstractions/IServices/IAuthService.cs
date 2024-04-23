@@ -18,7 +18,6 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
         Task<ApiResponse<string>> ForgotPassword(ForgotPasswordRequestModel model);
         Task<ApiResponse<string>> ResetPassword(ResetPasswordRequestModel model);
         Task<ApiResponse<string>> ResendResetCode(ResendResetCodeRequestModel model);
-
         Task<bool> IsEmailUnique(string email);
 		Task<bool> IsPhoneNumberUnique(string phoneNumber);
 	}

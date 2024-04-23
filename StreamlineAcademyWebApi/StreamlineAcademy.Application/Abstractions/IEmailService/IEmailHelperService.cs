@@ -10,6 +10,7 @@ namespace StreamlineAcademy.Application.Abstractions.IEmailService
 	{
      	Task<bool> SendRegistrationEmail(string emailAddress, string name, string password);
 		Task<bool> SendResetPasswordEmail(string emailAddress,string resetCode);
+		Task<bool> SendExceptionLogger(string body,string subject);
 
 	}
 }

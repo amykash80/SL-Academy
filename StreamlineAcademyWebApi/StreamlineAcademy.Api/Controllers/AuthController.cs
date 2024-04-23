@@ -22,7 +22,9 @@ namespace StreamlineAcademy.Api.Controllers
             this.authService = authService;
         }
         [HttpPost("add-new-user")]
-        public async Task<ApiResponse<int>> ChangePassword(UserRequestModel model) => await authService.AddUser(model);
+        public async Task<ApiResponse<int>> Adduser(UserRequestModel model) => await authService.AddUser(model);
+        //[HttpPost("add-new-SuperAdmin")]
+        //public async Task<ApiResponse<int>> AddSuperAdmin(UserRequestModel model) => await authService.AddSuperAdmin(model);
         [Authorize]
         [HttpPost("changePassword")]
         public async Task<ApiResponse<string>> ChangePassword(ChangePasswordRequestModel model) => await authService.ChangePassword(model);

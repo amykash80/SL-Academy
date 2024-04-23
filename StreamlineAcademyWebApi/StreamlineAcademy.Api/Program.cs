@@ -4,6 +4,8 @@ using StreamlineAcademy.Persistence.DI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using StreamlineAcademy.Api.Middlewares;
+using StreamlineAcademy.Api.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +19,13 @@ builder.Services.AddSwaggerGen();
 // Adding Services added inside AddPersistenceService Etension Method
 builder.Services.AddPersistenceService(builder.Configuration)
                .AddAplicationService(builder.Environment.WebRootPath,builder.Configuration)
-               .AddInfrastructureService();
+               .AddInfrastructureService()
+               .AddPresentationService();
+
+
 
 var app = builder.Build();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

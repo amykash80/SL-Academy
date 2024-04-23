@@ -20,41 +20,12 @@ namespace StreamlineAcademy.Persistence.Data
             modelBuilder.Entity<Academy>().HasIndex(x => x.AcademyName);
         }
 
-        private static void setdata(ModelBuilder modelbuilder)
-        {
-            var Passwordsalt = AppEncryption.GenerateSalt();
-            var commonId = Guid.NewGuid();
-            modelbuilder.Entity<SuperAdmin>().HasData(
-
-                new SuperAdmin()
-                {
-
-                    Id = commonId,
-                    Name = "amir",
-                    Address = "Hsr,Bangalore",
-                    PostalCode = "786545",
-                    PhoneNumber = "8997654556",
-                    Email = "aamir@anterntech.com",
-                    Password = AppEncryption.CreatePassword("superadmin", Passwordsalt),
-                    Salt = Passwordsalt,
-                    UserRole = UserRole.SuperAdmin,
-                    IsActive = true,
-                    CreatedBy = Guid.Empty,
-                    CreatedDate = DateTime.Now,
-                    ModifiedBy = Guid.Empty,
-                    ModifiedDate = DateTime.Now,
-                    DeletedBy = Guid.Empty,
-                    
-
-                }
-            );
-
-         }
+    
+         
 
         public static void ConfigureIndexesAndData(this ModelBuilder modelBuilder)
         {
             Index.ConfigureIndex(modelBuilder);
-            Index.setdata(modelBuilder);
         }
 }
 }
