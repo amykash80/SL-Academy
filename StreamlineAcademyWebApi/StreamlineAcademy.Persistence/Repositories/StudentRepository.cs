@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StreamlineAcademy.Persistence.Repositories
 {
-    public class StudentRepository:IStudentRepository
+    public class StudentRepository : IStudentRepository
     {
         private readonly StreamlineDbContet context;
 
@@ -52,7 +52,7 @@ namespace StreamlineAcademy.Persistence.Repositories
 
             var student = await context.Students
               .Include(a => a.User)
-              .Include(a=>a.Academy)
+              .Include(a => a.Academy)
               .Include(a => a.Country)
               .Include(a => a.State)
               .Include(a => a.City)
@@ -76,7 +76,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     DateOfBirth = student.DateOfBirth,
                     CountryName = student.Country!.CountryName,
                     AcademyName = student.Academy!.AcademyName,
-                    IntrestedIn= studentsInterests!,
+                    IntrestedIn = studentsInterests!,
                     StateName = student.State!.StateName,
                     CityName = student.City!.CityName,
                     IsActive = student.User.IsActive,
@@ -103,13 +103,13 @@ namespace StreamlineAcademy.Persistence.Repositories
                 .Select(a => new StudentResponseModel
                 {
                     Id = a.Id,
-                    Name=a.User!.Name,
+                    Name = a.User!.Name,
                     Email = a.User!.Email,
                     PhoneNumber = a.User.PhoneNumber,
                     PostalCode = a.User.PostalCode,
                     Address = a.User.Address,
                     DateOfBirth = a.DateOfBirth,
-                    AcademyName=a.Academy!.AcademyName,
+                    AcademyName = a.Academy!.AcademyName,
                     CountryName = a.Country!.CountryName,
                     StateName = a.State!.StateName,
                     CityName = a.City!.CityName,
@@ -165,10 +165,10 @@ namespace StreamlineAcademy.Persistence.Repositories
             var batches = await context.StudentBatches
           .Where(a => a.StudentId == studentId)
           .Select(a => new
-        {
-            a.BatchId,
-            
-        })
+          {
+              a.BatchId,
+
+          })
         .ToListAsync();
 
             var response = new List<StudentBatchResponseModel>();
@@ -179,7 +179,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     .Include(b => b.Instructor)
                         .ThenInclude(i => i.User)
                     .Include(b => b.Location)
-                    .Include(b=>b.Schedules)
+                    .Include(b => b.Schedules)
                     .FirstOrDefaultAsync(b => b.Id == batch.BatchId);
 
                 if (batchDetails is not null)
@@ -199,7 +199,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                             Id = a.Id,
                             Date = a.Date,
                             DurationInHours = a.DurationInHours,
-                            BatchName=batchDetails!.BatchName  
+                            BatchName = batchDetails!.BatchName
                         })
                     };
                     response.Add(responseModel);
@@ -209,5 +209,25 @@ namespace StreamlineAcademy.Persistence.Repositories
             return response;
 
         }
+
+      
+        public async Task<IEnumerable<ScheduleResponseModel>> GetStudentSchedules(Guid? studentId)
+        {
+            var schedules = await context.StudentBatches
+                .Where(sb => sb.StudentId == studentId)
+                .SelectMany(sb => sb.Batch!.Schedules!.Select(s => new ScheduleResponseModel
+                {
+                    Id = s.Id,
+                    Date = s.Date,
+                    DurationInHours = s.DurationInHours,
+                    BatchName = sb.Batch.BatchName,
+                    ContentName = s.CourseContent!.TaskName // Assuming CourseContent is related to the schedule
+                }))
+                .ToListAsync();
+
+            return schedules;
+        }
+
+
     }
 }

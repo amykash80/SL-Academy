@@ -35,6 +35,8 @@ namespace StreamlineAcademy.Api.Controllers
 
         [HttpPut("updateStudent")]
         public async Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model) => await studentService.UpdateStudent(model);
+        [HttpGet("check-my-Schedule")]
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> CheckMySchedule() => await studentService.CheckMySchedule();
 
     }
 }

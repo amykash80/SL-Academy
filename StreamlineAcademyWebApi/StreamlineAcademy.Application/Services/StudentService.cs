@@ -25,18 +25,21 @@ namespace StreamlineAcademy.Application.Services
         private readonly IEmailHelperService emailHelperService;
         private readonly IContextService contextService;
         private readonly IBatchRepository batchRepository;
+        private readonly IScheduleRepository scheduleRepository;
 
         public StudentService(IStudentRepository studentRepository,
                               IUserRepository userRepository,
                               IEmailHelperService emailHelperService,
                               IContextService contextService,
-                              IBatchRepository batchRepository)
+                              IBatchRepository batchRepository,
+                              IScheduleRepository scheduleRepository)
         {
             this.studentRepository = studentRepository;
             this.userRepository = userRepository;
             this.emailHelperService = emailHelperService;
             this.contextService = contextService;
             this.batchRepository = batchRepository;
+            this.scheduleRepository = scheduleRepository;
         }
         public async Task<ApiResponse<StudentResponseModel>> AddStudent(StudentRequestModel model)
         {
@@ -73,20 +76,20 @@ namespace StreamlineAcademy.Application.Services
                     CountryId = model.CountryId,
                     StateId = model.StateId,
                     CityId = model.CityId,
-                    AcademyId= academyId,
+                    AcademyId = academyId,
                     DateOfBirth = model.DateOfBirth,
-                    EmergencyContactNo=model.EmergencyContactNo
+                    EmergencyContactNo = model.EmergencyContactNo
                 };
                 var result = await studentRepository.InsertAsync(student);
                 if (result > 0)
                 {
-                    List<StudentInterests> StdIntrests= new List<StudentInterests>();
+                    List<StudentInterests> StdIntrests = new List<StudentInterests>();
                     foreach (var item in model.CourseId!)
                     {
                         var StudentIntrests = new StudentInterests()
                         {
                             StudentId = user.Id,
-                            CourseId =item,
+                            CourseId = item,
                             CreatedBy = Guid.Empty,
                             CreatedDate = DateTime.Now,
                             ModifiedBy = Guid.Empty,
@@ -96,8 +99,8 @@ namespace StreamlineAcademy.Application.Services
                         };
                         StdIntrests.Add(StudentIntrests);
                     }
-                   var response= await studentRepository.InsertRangeAsync(StdIntrests);
-                   
+                    var response = await studentRepository.InsertRangeAsync(StdIntrests);
+
                     if (await emailHelperService.SendRegistrationEmail(user.Email!, user.Name!, model.Password!))
                     {
                         var res = await studentRepository.GetStudentById(student.Id);
@@ -129,12 +132,12 @@ namespace StreamlineAcademy.Application.Services
                 CreatedDate = DateTime.Now,
                 ModifiedBy = Guid.Empty,
                 ModifiedDate = DateTime.Now,
-                DeletedBy= Guid.Empty,
+                DeletedBy = Guid.Empty,
             };
-           var res= await studentRepository.AddStudentBatch(studentBatch);
+            var res = await studentRepository.AddStudentBatch(studentBatch);
             if (res > 0)
-                return ApiResponse<string>.SuccessResponse( APIMessages.StudentManagement.BatchAssigned,HttpStatusCodes.OK.ToString());
-                return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError,HttpStatusCodes.BadRequest);
+                return ApiResponse<string>.SuccessResponse(APIMessages.StudentManagement.BatchAssigned, HttpStatusCodes.OK.ToString());
+            return ApiResponse<string>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest);
 
 
         }
@@ -144,7 +147,7 @@ namespace StreamlineAcademy.Application.Services
             var returnVal = await studentRepository.GetAllStudents(academyId);
             if (returnVal is not null)
                 return ApiResponse<IEnumerable<StudentResponseModel>>.SuccessResponse(returnVal.OrderBy(_ => _.Name), $"Found {returnVal.Count()} Students");
-                 return ApiResponse<IEnumerable<StudentResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+            return ApiResponse<IEnumerable<StudentResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
         }
 
         public async Task<ApiResponse<StudentResponseModel>> GetStudentById(Guid id)
@@ -168,8 +171,8 @@ namespace StreamlineAcademy.Application.Services
 
             var returnVal = await studentRepository.GetStudentWithBatchDetails(studentId);
             if (returnVal is not null)
-                return ApiResponse<IEnumerable<StudentBatchResponseModel>>.SuccessResponse(returnVal,HttpStatusCodes.OK.ToString());
-               return ApiResponse<IEnumerable<StudentBatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest);
+                return ApiResponse<IEnumerable<StudentBatchResponseModel>>.SuccessResponse(returnVal, HttpStatusCodes.OK.ToString());
+            return ApiResponse<IEnumerable<StudentBatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.BadRequest);
         }
 
         public async Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model)
@@ -192,7 +195,7 @@ namespace StreamlineAcademy.Application.Services
             if (student is null)
                 return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
             student.DateOfBirth = model.DateOfBirth;
-            student.EmergencyContactNo= model.EmergencyContactNo;
+            student.EmergencyContactNo = model.EmergencyContactNo;
             student.CountryId = model.CountryId;
             student.StateId = model.StateId;
             student.CityId = model.CityId;
@@ -207,18 +210,40 @@ namespace StreamlineAcademy.Application.Services
                     {
                         interest.CourseId = item;
                         interest.ModifiedDate = DateTime.Now;
-                    }   
+                    }
                 }
                 var response = await studentRepository.InsertRangeAsync(existingInterests);
             };
-                var responseModel = await studentRepository.GetStudentById(student.Id);
-            if(responseModel is not null)
+            var responseModel = await studentRepository.GetStudentById(student.Id);
+            if (responseModel is not null)
                 return ApiResponse<StudentResponseModel>.SuccessResponse(responseModel, APIMessages.StudentManagement.StudentUpdated);
-              return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+            return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
 
         }
 
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> CheckMySchedule()
+        {
+            
+            var studentId = contextService.GetUserId();
+            var student = await studentRepository.GetByIdAsync(_ => _.Id == studentId);
+            if (student is null)
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
 
+            var schedules = await studentRepository.GetStudentSchedules(studentId);
+            schedules = schedules.OrderByDescending(s => s.Date);
+
+            if (schedules.Any())
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(schedules, HttpStatusCodes.OK.ToString());
+            return ApiResponse< IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.ScheduleManagement.ScheduleNotFound, HttpStatusCodes.NotFound);
+        }
+
+        
     }
 }
+
+
+
+
+
+
 

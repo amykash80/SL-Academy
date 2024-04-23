@@ -27,5 +27,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         Task<IEnumerable<StudentBatchResponseModel>> GetStudentWithBatchDetails(Guid? studentId);
         Task<List<StudentInterests>> GetStudentInterestsByStudentId(Guid? studentId);
         Task<int> Delete(User model);
+        
+        Task<IEnumerable<ScheduleResponseModel>> GetStudentSchedules(Guid? studentId);
     }
 }

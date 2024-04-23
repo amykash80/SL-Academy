@@ -163,7 +163,10 @@ namespace StreamlineAcademy.Application.Services
              return ApiResponse<IEnumerable<StudentByBatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
 
         }
+      
+
+        
     }
 
-    
+
 }

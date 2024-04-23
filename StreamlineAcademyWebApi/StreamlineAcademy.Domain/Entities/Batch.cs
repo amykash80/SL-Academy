@@ -28,6 +28,7 @@ namespace StreamlineAcademy.Domain.Entities
         #region Navigation 
         public ICollection<Schedule>? Schedules { get; set; }
         public ICollection<Student>? Students { get; set; }
+        public ICollection<Attendance>? Attendances { get; set; }
 
         #endregion
 

@@ -38,5 +38,7 @@ namespace StreamlineAcademy.Api.Controllers
 
         [HttpGet("Check-my-courses")]
         public  async Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetInstructorCourses()=>await instructorService.GetAllInstructorCourses();
+        [HttpGet("Check-my-batches")]
+        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches() => await instructorService.GetAllBatches();
     }
 }

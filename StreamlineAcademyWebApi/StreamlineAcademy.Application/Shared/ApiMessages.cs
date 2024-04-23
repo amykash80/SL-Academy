@@ -43,6 +43,7 @@ public static class APIMessages
             public static readonly string BatchAlreadyExists = "Batch already Exists";
             public static readonly string BatchAdded = "Batch Added Successfully.";
             public static readonly string BatchDeleted = "Batch deleted Successfully";
+           
 
         }
         public static class ContentManagement

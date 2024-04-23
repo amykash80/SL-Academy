@@ -174,5 +174,16 @@ namespace StreamlineAcademy.Application.Services
             }
             return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
+        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches()
+        {
+            var instructorId = contextService.GetUserId();
+            var instructor = await instructorRepository.GetByIdAsync(_ => _.Id ==instructorId);
+            if (instructor is null)
+                return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+            var returnVal = await instructorRepository.GetAllBatches(instructorId);
+            if (returnVal is not null)
+                return ApiResponse<IEnumerable<BatchResponseModel>>.SuccessResponse(returnVal);
+            return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
+        }
     }
 }
