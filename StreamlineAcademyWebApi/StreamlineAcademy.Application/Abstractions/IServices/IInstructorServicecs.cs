@@ -19,6 +19,6 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
         Task<ApiResponse<InstructorResponseModel>> UpdateInstructor(InstructorUpdateRequestModel request);
         Task<ApiResponse<IEnumerable<CourseResponseModel>>> GetAllInstructorCourses();
         Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceRequestModel model);
-        Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches();
+        Task<ApiResponse<BatchResponseModel>> GetInstructorBatch();
     }
 }

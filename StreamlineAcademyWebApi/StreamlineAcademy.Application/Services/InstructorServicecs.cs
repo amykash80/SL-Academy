@@ -177,16 +177,16 @@ namespace StreamlineAcademy.Application.Services
             }
             return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
-        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches()
+        public async Task<ApiResponse<BatchResponseModel>> GetInstructorBatch()
         {
             var instructorId = contextService.GetUserId();
             var instructor = await instructorRepository.GetByIdAsync(_ => _.Id ==instructorId);
             if (instructor is null)
-                return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
-            var returnVal = await instructorRepository.GetAllBatches(instructorId);
+                return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+            var returnVal = await instructorRepository.GetInstructorBatch(instructorId);
             if (returnVal is not null)
-                return ApiResponse<IEnumerable<BatchResponseModel>>.SuccessResponse(returnVal);
-            return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
+                return ApiResponse<BatchResponseModel>.SuccessResponse(returnVal);
+            return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
 
         public async Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceRequestModel model)
