@@ -192,7 +192,7 @@ namespace StreamlineAcademy.Application.Services
         public async Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceRequestModel model)
         {
             var instructorId= contextService.GetUserId();
-            if (await studentRepository.FirstOrDefaultAsync(_ => _.Id == model.StudentId) is null)
+            if (await studentRepository.GetByIdAsync(_ => _.Id == model.StudentId) is null)
                 return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound);
             var attendance = new Attendance
             {
@@ -214,7 +214,7 @@ namespace StreamlineAcademy.Application.Services
                     ScheduleId = attendance.ScheduleId,
                     StudentId = attendance.StudentId
 
-                });
+                },"Attendece Saved Successfully");
             return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
     }
