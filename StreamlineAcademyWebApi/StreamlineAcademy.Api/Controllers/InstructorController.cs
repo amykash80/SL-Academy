@@ -41,5 +41,7 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpGet("Check-my-batches")]
         [Authorize]
         public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches() => await instructorService.GetAllBatches();
+        [HttpGet("save-student-attendence")]
+        public async Task<ApiResponse<AttendenceResponseModel>> SaveAttendence(AttendenceRequestModel model) => await instructorService.SaveStudentAttendance(model);
     }
 }

@@ -186,7 +186,7 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
         }
 
-        public async Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceResponseModel model)
+        public async Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceRequestModel model)
         {
             var instructorId= contextService.GetUserId();
             if (await studentRepository.FirstOrDefaultAsync(_ => _.Id == model.StudentId) is null)
@@ -195,7 +195,7 @@ namespace StreamlineAcademy.Application.Services
             {
                 StudentId = model.StudentId,
                 ScheduleId = model.ScheduleId,
-                AttendanceDate = model.Date,
+                AttendanceDate = model.AttendanceDate,
                 AttendenceStatus = model.AttendenceStatus,
                 CreatedBy= instructorId,
                 CreatedDate=DateTime.Now,

@@ -230,7 +230,7 @@ namespace StreamlineAcademy.Persistence.Repositories
 
         public async Task<int> SaveStudentAttendence(Attendance attendance)
         {
-            await context.Attendance.AddAsync(attendance);
+            await context.Attendances.AddAsync(attendance);
             return await context.SaveChangesAsync();
         }
     }
