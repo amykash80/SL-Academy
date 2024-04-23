@@ -201,8 +201,18 @@ namespace StreamlineAcademy.Application.Services
                 CreatedDate=DateTime.Now,
                 ModifiedBy=Guid.Empty,
                 DeletedBy= Guid.Empty,
-
             };
+           var returnVal=await studentRepository.SaveStudentAttendence(attendance);
+            if (returnVal is > 0)
+                return ApiResponse<AttendenceResponseModel>.SuccessResponse(new AttendenceResponseModel
+                {
+                    AttendenceStatus = attendance.AttendenceStatus,
+                    Date = attendance.AttendanceDate,
+                    ScheduleId = attendance.ScheduleId,
+                    StudentId = attendance.StudentId
+
+                });
+            return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
     }
 }
