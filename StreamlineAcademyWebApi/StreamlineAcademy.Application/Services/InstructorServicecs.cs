@@ -180,19 +180,22 @@ namespace StreamlineAcademy.Application.Services
             }
             return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
-        public async Task<ApiResponse<IEnumerable<InstructorBatchResponseModel>>> GetAllBatches()
+        public async Task<ApiResponse<BatchResponseModel>> GetInstructorBatch()
         {
             var instructorId = contextService.GetUserId();
-            var returnVal = await instructorRepository.GetAllBatches(instructorId);
+            var instructor = await instructorRepository.GetByIdAsync(_ => _.Id ==instructorId);
+            if (instructor is null)
+                return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+            var returnVal = await instructorRepository.GetInstructorBatch(instructorId);
             if (returnVal is not null)
-                return ApiResponse<IEnumerable<InstructorBatchResponseModel>>.SuccessResponse(returnVal);
-            return ApiResponse<IEnumerable<InstructorBatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
+                return ApiResponse<BatchResponseModel>.SuccessResponse(returnVal);
+            return ApiResponse<BatchResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
 
         public async Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceRequestModel model)
         {
             var instructorId= contextService.GetUserId();
-            if (await studentRepository.FirstOrDefaultAsync(_ => _.Id == model.StudentId) is null)
+            if (await studentRepository.GetByIdAsync(_ => _.Id == model.StudentId) is null)
                 return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound);
             var attendance = new Attendance
             {
@@ -214,7 +217,7 @@ namespace StreamlineAcademy.Application.Services
                     ScheduleId = attendance.ScheduleId,
                     StudentId = attendance.StudentId
 
-                });
+                },"Attendece Saved Successfully");
             return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
 

@@ -237,7 +237,22 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse< IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.ScheduleManagement.ScheduleNotFound, HttpStatusCodes.NotFound);
         }
 
-        
+        public async Task<ApiResponse<IEnumerable<AttendenceResponseModel>>> CheckMyAttendence()
+        {
+            var studentId=contextService.GetUserId();
+            var attendances = await studentRepository.checkMyAttendences(studentId);
+            if (!attendances.Any())
+                return ApiResponse<IEnumerable<AttendenceResponseModel>>.ErrorResponse("No attendance records found.", HttpStatusCodes.NotFound);
+
+            var attendanceResponses = attendances.Select(_ => new AttendenceResponseModel
+            {
+                StudentId = _.StudentId,
+                ScheduleId = _.ScheduleId,
+                Date = _.AttendanceDate,
+                AttendenceStatus = _.AttendenceStatus
+            });
+            return ApiResponse<IEnumerable<AttendenceResponseModel>>.SuccessResponse(attendanceResponses, $"Found {attendanceResponses.Count()} attendences",HttpStatusCodes.OK);
+        }
     }
 }
 

@@ -233,5 +233,10 @@ namespace StreamlineAcademy.Persistence.Repositories
             await context.Attendances.AddAsync(attendance);
             return await context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Attendance>> checkMyAttendences(Guid? studentId)
+        {
+            return await context.Attendances.Where(a => a.StudentId == studentId).ToListAsync();
+        }
     }
 }

@@ -29,5 +29,6 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         Task<int> Delete(User model);   
         Task<IEnumerable<ScheduleResponseModel>> GetStudentSchedules(Guid? studentId);
         Task<int> SaveStudentAttendence(Attendance attendance);
+        Task<IEnumerable<Attendance>> checkMyAttendences(Guid? StudentId);
     }
 }
