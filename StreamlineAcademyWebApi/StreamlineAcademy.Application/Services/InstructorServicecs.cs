@@ -180,9 +180,6 @@ namespace StreamlineAcademy.Application.Services
         public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches()
         {
             var instructorId = contextService.GetUserId();
-            var instructor = await instructorRepository.GetByIdAsync(_ => _.Id ==instructorId);
-            if (instructor is null)
-                return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
             var returnVal = await instructorRepository.GetAllBatches(instructorId);
             if (returnVal is not null)
                 return ApiResponse<IEnumerable<BatchResponseModel>>.SuccessResponse(returnVal);
