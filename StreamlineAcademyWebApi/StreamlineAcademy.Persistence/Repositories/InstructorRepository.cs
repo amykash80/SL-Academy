@@ -167,19 +167,19 @@ namespace StreamlineAcademy.Persistence.Repositories
 
         }
 
-        public async Task<IEnumerable<BatchResponseModel>> GetAllBatches(Guid? instructorId)
+        public async Task<IEnumerable<InstructorBatchResponseModel>> GetAllBatches(Guid? instructorId)
         {
             var batches = await context.Batches
                 .Include(a => a.Instructor)
        .Where(batch => batch.InstructorId == instructorId)
-       .Select(batch => new BatchResponseModel
+       .Select(batch => new InstructorBatchResponseModel
        {
            Id = batch.Id,
            BatchName = batch.BatchName,
            BatchSize = batch.BatchSize,
            StartDate = batch.StartDate,
            EndDate = batch.EndDate,
-           //CourseName = batch.Course?.Name // Assuming Course navigation property is available
+           CourseName = batch.Course!.Name // Assuming Course navigation property is available
        })
        .ToListAsync();
 

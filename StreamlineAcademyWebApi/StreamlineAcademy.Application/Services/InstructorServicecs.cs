@@ -24,18 +24,21 @@ namespace StreamlineAcademy.Application.Services
         private readonly IEmailHelperService emailHelperService;
         private readonly IContextService contextService;
         private readonly IStudentRepository studentRepository;
+        private readonly IBatchRepository batchRepository;
 
         public InstructorService(IInstructorReository instructorRepository,
                                   IUserRepository userRepository,
                                   IEmailHelperService emailHelperService,
                                   IContextService contextService,
-                                  IStudentRepository studentRepository)
+                                  IStudentRepository studentRepository,
+                                  IBatchRepository batchRepository)
         {
             this.instructorRepository = instructorRepository;
             this.userRepository = userRepository;
             this.emailHelperService = emailHelperService;
             this.contextService = contextService;
             this.studentRepository = studentRepository;
+            this.batchRepository = batchRepository;
         }
         public async Task<ApiResponse<InstructorResponseModel>> AddInstructor(InstructorRequestModel model)
         {
@@ -177,13 +180,13 @@ namespace StreamlineAcademy.Application.Services
             }
             return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
-        public async Task<ApiResponse<IEnumerable<BatchResponseModel>>> GetAllBatches()
+        public async Task<ApiResponse<IEnumerable<InstructorBatchResponseModel>>> GetAllBatches()
         {
             var instructorId = contextService.GetUserId();
             var returnVal = await instructorRepository.GetAllBatches(instructorId);
             if (returnVal is not null)
-                return ApiResponse<IEnumerable<BatchResponseModel>>.SuccessResponse(returnVal);
-            return ApiResponse<IEnumerable<BatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
+                return ApiResponse<IEnumerable<InstructorBatchResponseModel>>.SuccessResponse(returnVal);
+            return ApiResponse<IEnumerable<InstructorBatchResponseModel>>.ErrorResponse(APIMessages.TechnicalError);
         }
 
         public async Task<ApiResponse<AttendenceResponseModel>> SaveStudentAttendance(AttendenceRequestModel model)
@@ -214,5 +217,18 @@ namespace StreamlineAcademy.Application.Services
                 });
             return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
+
+        //public async Task<bool> SendNotification(NotificationRequestModel request)
+        //{
+        //    var instructorId = contextService.GetUserId();
+        //    var batches = await instructorRepository.GetAllBatches(instructorId);
+        //    //var students = await batchRepository.GetAllStudentsByBatchId(batches);
+        //    foreach (var batch in batches)
+        //    {
+        //        var student = await batchRepository.GetAllStudentsByBatchId(batch.Id);
+        //    }
+
+
+        //}
     }
 }

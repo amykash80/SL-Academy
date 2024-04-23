@@ -51,7 +51,7 @@ namespace StreamlineAcademy.Application.Services
         
 
 		}
-		private async Task<bool> SendRegistrationEmail(MimeMessage emailMessage)
+		public async Task<bool> SendRegistrationEmail(MimeMessage emailMessage)
 		{
 			var emailParameters = new EmailParameters();
 			emailParameters.SmtpHost = configuration.GetValue<string>("EmailSettings:SmtpHost");
@@ -79,7 +79,7 @@ namespace StreamlineAcademy.Application.Services
 			}
 		}
 
-		private MimeMessage CreateMailMessage(string emailAddress, string Subject, string body)
+		public MimeMessage CreateMailMessage(string emailAddress, string Subject, string body)
 		{
 			var email = new MimeMessage();
 			email.Sender = MailboxAddress.Parse(configuration.GetValue<string>("EmailSettings:From"));
@@ -110,5 +110,10 @@ namespace StreamlineAcademy.Application.Services
             var emailMessage = CreateMailMessage("",subject, body);
             return await SendRegistrationEmail(emailMessage);
         }
-    }
+
+		//public Task<bool> SendNotification(List<string> emailAdresses, List<string> name, string body, string subject, string batch, DateTimeOffset scheduleDate)
+		//{
+
+		//}
+	}
 }
