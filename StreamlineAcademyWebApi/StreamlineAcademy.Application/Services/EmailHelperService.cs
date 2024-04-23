@@ -13,6 +13,8 @@ using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Shared;
 using StreamlineAcademy.Application.Abstractions.Identity;
 using static StreamlineAcademy.Application.Shared.APIMessages;
+using System.Net.Mail;
+using System.Reflection.Metadata.Ecma335;
 
 namespace StreamlineAcademy.Application.Services
 {
@@ -66,7 +68,7 @@ namespace StreamlineAcademy.Application.Services
 		{
 			try
 			{
-				using var smtp = new SmtpClient();
+				using var smtp = new MailKit.Net.Smtp.SmtpClient();
 				smtp.Connect(emailParameters.SmtpHost, emailParameters.Port, SecureSocketOptions.StartTls);
 				smtp.Authenticate(emailParameters.UserName, emailParameters.Password);
 				await smtp.SendAsync(email);
@@ -111,9 +113,17 @@ namespace StreamlineAcademy.Application.Services
             return await SendRegistrationEmail(emailMessage);
         }
 
-		//public Task<bool> SendNotification(List<string> emailAdresses, List<string> name, string body, string subject, string batch, DateTimeOffset scheduleDate)
-		//{
-
-		//}
+		public async Task<bool> SendNotification(List<string> emailAdresses, List<string> name, string body, string subject, string batch, DateTimeOffset scheduleDate)
+		{
+            var baseUrl = configuration.GetValue<string>("EmailSettings:DomainUrl");
+            string newBody = $"{body} + {batch} + { scheduleDate}";
+			foreach(var email in  emailAdresses)
+			{
+                var emailMessage = CreateMailMessage(email, subject, newBody);
+                return await SendRegistrationEmail(emailMessage);
+            }
+			return true;
+        }
+		
 	}
 }

@@ -25,13 +25,14 @@ namespace StreamlineAcademy.Application.Services
         private readonly IContextService contextService;
         private readonly IStudentRepository studentRepository;
         private readonly IBatchRepository batchRepository;
+        private readonly IScheduleRepository scheduleRepository;
 
         public InstructorService(IInstructorReository instructorRepository,
                                   IUserRepository userRepository,
                                   IEmailHelperService emailHelperService,
                                   IContextService contextService,
                                   IStudentRepository studentRepository,
-                                  IBatchRepository batchRepository)
+                                  IBatchRepository batchRepository,IScheduleRepository scheduleRepository)
         {
             this.instructorRepository = instructorRepository;
             this.userRepository = userRepository;
@@ -39,6 +40,7 @@ namespace StreamlineAcademy.Application.Services
             this.contextService = contextService;
             this.studentRepository = studentRepository;
             this.batchRepository = batchRepository;
+            this.scheduleRepository = scheduleRepository;
         }
         public async Task<ApiResponse<InstructorResponseModel>> AddInstructor(InstructorRequestModel model)
         {
@@ -221,17 +223,30 @@ namespace StreamlineAcademy.Application.Services
             return ApiResponse<AttendenceResponseModel>.ErrorResponse(APIMessages.TechnicalError);
         }
 
-        //public async Task<bool> SendNotification(NotificationRequestModel request)
-        //{
-        //    var instructorId = contextService.GetUserId();
-        //    var batches = await instructorRepository.GetAllBatches(instructorId);
-        //    //var students = await batchRepository.GetAllStudentsByBatchId(batches);
-        //    foreach (var batch in batches)
-        //    {
-        //        var student = await batchRepository.GetAllStudentsByBatchId(batch.Id);
-        //    }
+        public async Task<bool> SendNotification(NotificationRequestModel request)
+        {
+            var instructorId = contextService.GetUserId();
+            var batch = await instructorRepository.GetInstructorBatch(instructorId);
+            var students = await batchRepository.GetAllStudentsByBatchId(batch.Id);
+            var batchSchedule = await scheduleRepository.GetAllSchedulesByBatchId(batch.Id);
+            var today = DateTimeOffset.UtcNow.Date;
+            List<DateTimeOffset>? ScheduleDates = new List<DateTimeOffset>();
+            foreach (var schedule in batchSchedule)
+            {
+                ScheduleDates.Add((DateTimeOffset)schedule.Date!);
+            }
+            List<string> emilAddresses = new List<string>();
+            List<string> names= new List<string>();
+            foreach (var student in students)
+            {
+                emilAddresses.Add (student.Email!);
+                names.Add (student.Name!);
+            }
+            var todaysSchedule=ScheduleDates.Where(date=>date.Date==today).FirstOrDefault();
+            var success = await emailHelperService.SendNotification(emilAddresses, names, request.Body!, request.Subject!, batch.BatchName!, todaysSchedule);
 
+            return success;
 
-        //}
+        }
     }
 }
