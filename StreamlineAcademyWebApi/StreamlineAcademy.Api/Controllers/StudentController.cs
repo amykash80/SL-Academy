@@ -35,8 +35,12 @@ namespace StreamlineAcademy.Api.Controllers
 
         [HttpPut("updateStudent")]
         public async Task<ApiResponse<StudentResponseModel>> UpdateStudent(StudentUpdateRequestModel model) => await studentService.UpdateStudent(model);
-        [HttpGet("check-my-Schedule")]
+        [HttpGet("check-my-all-Schedules")]
         public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> CheckMySchedule() => await studentService.CheckMySchedule();
+        [HttpGet("check-my-todays-Schedule")]
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> CheckMyTodaysSchedule() => await studentService.checkMyTodaysSchedule();
+        [HttpGet("check-Schedule-by-date/{selectDate:datetime}")]
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> CheckScheduleVyDate(DateTimeOffset selectDate) => await studentService.checkScheduleByDate(selectDate);
         [HttpGet("check-my-attendence")]
         public async Task<ApiResponse<IEnumerable<AttendenceResponseModel>>> CheckMyattendence() => await studentService.CheckMyAttendence();
 

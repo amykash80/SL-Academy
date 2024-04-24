@@ -27,6 +27,5 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         Task<int> Delete(User model);
         Task<BatchResponseModel> GetInstructorBatch(Guid? id);
 
-
     }
 }
