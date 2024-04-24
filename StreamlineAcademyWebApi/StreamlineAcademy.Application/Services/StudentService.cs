@@ -228,10 +228,8 @@ namespace StreamlineAcademy.Application.Services
             var student = await studentRepository.GetByIdAsync(_ => _.Id == studentId);
             if (student is null)
                 return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
-
             var schedules = await studentRepository.GetStudentSchedules(studentId);
             schedules = schedules.OrderByDescending(s => s.Date);
-
             if (schedules.Any())
                 return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(schedules, HttpStatusCodes.OK.ToString());
             return ApiResponse< IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.ScheduleManagement.ScheduleNotFound, HttpStatusCodes.NotFound);
@@ -252,6 +250,34 @@ namespace StreamlineAcademy.Application.Services
                 AttendenceStatus = _.AttendenceStatus
             });
             return ApiResponse<IEnumerable<AttendenceResponseModel>>.SuccessResponse(attendanceResponses, $"Found {attendanceResponses.Count()} attendences",HttpStatusCodes.OK);
+        }
+
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> checkMyTodaysSchedule()
+        {
+            var studentId = contextService.GetUserId();
+            var student = await studentRepository.GetByIdAsync(_ => _.Id == studentId);
+            if (student is null)
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+
+            var schedules = await studentRepository.GetStudentSchedules(studentId);
+            var TodaysStudentSchedule= schedules.Where(schedule => schedule.Date == DateTimeOffset.UtcNow.Date);
+            if(TodaysStudentSchedule.Any())
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(TodaysStudentSchedule, HttpStatusCodes.OK.ToString());
+               return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse("There are No Schedules Today");
+        }
+
+        public async Task<ApiResponse<IEnumerable<ScheduleResponseModel>>> checkScheduleByDate(DateTimeOffset slectedDate)
+        {
+            var studentId = contextService.GetUserId();
+            var student = await studentRepository.GetByIdAsync(_ => _.Id == studentId);
+            if (student is null)
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse(APIMessages.StudentManagement.StudentNotFound, HttpStatusCodes.NotFound);
+
+            var schedules = await studentRepository.GetStudentSchedules(studentId);
+            var schdeulesFordate = schedules.Where(schedule => schedule.Date == slectedDate);
+            if (schdeulesFordate.Any())
+                return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(schdeulesFordate, HttpStatusCodes.OK.ToString());
+            return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse("There are No Schedules for given date You provided");
         }
     }
 }

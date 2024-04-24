@@ -238,5 +238,10 @@ namespace StreamlineAcademy.Persistence.Repositories
         {
             return await context.Attendances.Where(a => a.StudentId == studentId).ToListAsync();
         }
+
+        public Task<ScheduleResponseModel> CheckMyTodaysSchedule(Guid? StudentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

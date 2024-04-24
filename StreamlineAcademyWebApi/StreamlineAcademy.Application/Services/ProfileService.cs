@@ -62,7 +62,6 @@ namespace StreamlineAcademy.Application.Services
             };
             return ApiResponse<ContactInfoResponseModel>.SuccessResponse(responseModel);
 
-
         }
 
         public async Task<ApiResponse<ContactUpdateModel>> UpdateContact(ContactUpdateModel request)
