@@ -167,23 +167,27 @@ namespace StreamlineAcademy.Persistence.Repositories
 
         }
 
-        public async Task<BatchResponseModel> GetInstructorBatch(Guid? instructorId)
+        public async Task<InstructorBatchResponseModel> GetInstructorBatch(Guid? instructorId)
         {
             var batch = await context.Batches
+                .Include(a => a.Course)
+                .Include(a=>a.Location)
                .FirstOrDefaultAsync(a => a.InstructorId == instructorId);
               
             if(batch is not null)
             {
-                var resBatch = new BatchResponseModel() {
+                var resBatch = new InstructorBatchResponseModel() {
+                Id=batch.Id,
                 BatchName=batch.BatchName,
                 BatchSize=batch.BatchSize,
                 StartDate=batch.StartDate,  
                 EndDate=batch.EndDate,
-                CourseName=batch!.Course!.Name
+                CourseName=batch!.Course!.Name,
+                LocationName=batch.Location!.Address
                 };
                 return resBatch;
             }
-            return new BatchResponseModel() { };
+            return new InstructorBatchResponseModel() { };
         }
 
     }

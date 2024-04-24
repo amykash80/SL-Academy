@@ -113,16 +113,22 @@ namespace StreamlineAcademy.Application.Services
             return await SendRegistrationEmail(emailMessage);
         }
 
-		public async Task<bool> SendNotification(List<string> emailAdresses, List<string> name, string body, string subject, string batch, DateTimeOffset scheduleDate)
+		public async Task<bool> SendNotification(List<string> emailAddresses, List<string> name, string body, string subject, string batch, DateTimeOffset scheduleDate)
 		{
             var baseUrl = configuration.GetValue<string>("EmailSettings:DomainUrl");
-            string newBody = $"{body} + {batch} + { scheduleDate}";
-			foreach(var email in  emailAdresses)
-			{
-                var emailMessage = CreateMailMessage(email, subject, newBody);
-                return await SendRegistrationEmail(emailMessage);
+            bool allEmailsSent = true;
+            for (int i = 0; i < emailAddresses.Count; i++)
+            {
+                string personalizedBody = $"Hi {name[i]},<br>" +
+                                          $"Welcome to StreamLine Academy!<br>" +
+                                          $"{body} on {scheduleDate!.ToString("MM/dd/yyyy")} for batch {batch}.";
+
+                var emailMessage = CreateMailMessage(emailAddresses[i], subject, personalizedBody);
+                bool emailSent = await SendRegistrationEmail(emailMessage);
             }
-			return true;
+
+            return allEmailsSent;
+            
         }
 		
 	}
