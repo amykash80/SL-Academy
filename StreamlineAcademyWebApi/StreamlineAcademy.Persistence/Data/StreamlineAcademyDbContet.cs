@@ -37,6 +37,7 @@ namespace StreamlineAcademy.Persistence.Data
         public DbSet<CourseContent> CourseContents { get; set; }
         public DbSet<StudentBatch> StudentBatches { get; set; }    
         public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<CourseResource> CourseResources { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

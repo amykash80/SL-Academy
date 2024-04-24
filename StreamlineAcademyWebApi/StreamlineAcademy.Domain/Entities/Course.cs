@@ -25,6 +25,8 @@ namespace StreamlineAcademy.Domain.Entities
         public ICollection<Batch>? batches { get; set; }
         public ICollection< CourseContent>? CourseContents { get; set; }
         public ICollection<Student>? students { get; set; }
+        public ICollection<CourseResource>? CourseResources { get; set; }
+
         #endregion
 
     }
