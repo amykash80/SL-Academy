@@ -277,7 +277,7 @@ namespace StreamlineAcademy.Application.Services
             var schdeulesFordate = schedules.Where(schedule => schedule.Date == slectedDate);
             if (schdeulesFordate.Any())
                 return ApiResponse<IEnumerable<ScheduleResponseModel>>.SuccessResponse(schdeulesFordate, HttpStatusCodes.OK.ToString());
-            return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse("There are No Schedules for given date");
+            return ApiResponse<IEnumerable<ScheduleResponseModel>>.ErrorResponse("There are No Schedules for given date You provided");
         }
     }
 }
