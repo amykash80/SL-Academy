@@ -46,6 +46,17 @@ public static class APIMessages
            
 
         }
+        public static class CourseResourceManagement
+        {
+            
+            public static readonly string CourseResourceUpdated = "CourseResource Updated Successfully.";
+            public static readonly string BatchnotFound = "Batch not found.";
+            public static readonly string BatchAlreadyExists = "Batch already Exists";
+            public static readonly string CourseResourceAdded = "CourseResource Added Successfully.";
+            public static readonly string BatchDeleted = "Batch deleted Successfully";
+
+
+        }
         public static class ContentManagement
         {
             public static readonly string ContentNotFound = "Content not found.";
