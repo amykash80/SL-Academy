@@ -13,7 +13,7 @@ namespace StreamlineAcademy.Domain.Entities
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public ResourceType Type { get; set; }
+        public  Enums.CourseResourceType? Type { get; set; }
         public string? FilePath { get; set; } 
         public Guid CourseId { get; set; }
         [ForeignKey(nameof(CourseId))]

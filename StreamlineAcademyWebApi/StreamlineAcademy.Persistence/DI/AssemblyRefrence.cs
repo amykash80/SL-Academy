@@ -35,6 +35,7 @@ namespace StreamlineAcademy.Persistence.DI
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IContentRepository, ContentRepository>();
+            services.AddScoped<ICourseResourceRepository, CourseResourceRepository>();
             return services;
         }
     }
