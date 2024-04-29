@@ -13,6 +13,7 @@ namespace StreamlineAcademy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProfileController : ControllerBase
     {
        
@@ -23,22 +24,17 @@ namespace StreamlineAcademy.Api.Controllers
             
             this.profileService = profileService;
         }
-        [Authorize]
         [HttpGet("getContactInfo")] 
         public async Task<ApiResponse<ContactInfoResponseModel>> GetContactInfoById() => await profileService.GetContactInfoById();
 
-        [Authorize]
         [HttpPut("updateContactInfo")]
         public async Task<ApiResponse<ContactUpdateModel>> UpdaContact(ContactUpdateModel model) => await profileService.UpdateContact(model);
 
-        [Authorize]
         [HttpGet("getAddressInfo")]
         public async Task<ApiResponse<AddressInfoResponseModel>> GetAddressInfoById() => await profileService.GetAddressInfoById();
-        [Authorize]
         [HttpPut("updateAddressInfo")]
         public async Task<ApiResponse<AddressInfoResponseModel>> UpdateAddress(AddressInfoUpdateModel model) => await profileService.UpdateAddress(model);
 
-        [Authorize]
         [HttpPost("uploadPhoto")]
         public async Task<ApiResponse<FileResponseModel>> UploadPhoto([FromForm]FileRequestModel model) => await profileService.UploadPhoto(model);
     }

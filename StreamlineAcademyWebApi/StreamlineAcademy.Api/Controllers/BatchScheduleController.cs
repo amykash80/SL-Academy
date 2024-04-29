@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
 using StreamlineAcademy.Application.Services;
 using StreamlineAcademy.Application.Shared;
+using StreamlineAcademy.Domain.Enums;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
 
@@ -12,6 +13,7 @@ namespace StreamlineAcademy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles =nameof(UserRole.AcademyAdmin))]
     public class BatchScheduleController : ControllerBase
     {
         private readonly IScheduleService scheduleService;

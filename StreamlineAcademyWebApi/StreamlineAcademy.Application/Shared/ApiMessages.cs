@@ -156,6 +156,7 @@ public static class APIMessages
         public static class Auth
     {
         public const string NameAlreadyTaken = "Name is already taken.";
+         public const string InvalidCredential = "invalid Credentials";
         public const string EmailAlreadyRegistered = "Email already registered.";
         public const string PhoneNumberAlreadyRegistered = "Phone Number already registered.";
         public const string EmailOrPasswordIsIncorrect = "Email or/and Password is Incorrect.";
