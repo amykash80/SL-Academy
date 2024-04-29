@@ -26,13 +26,18 @@ namespace StreamlineAcademy.Application.Services
         private readonly IContextService contextService;
         private readonly IBatchRepository batchRepository;
         private readonly IScheduleRepository scheduleRepository;
+        private readonly IInstructorReository instructorReository;
+        private readonly IAcademyRepository academyRepository;
 
         public StudentService(IStudentRepository studentRepository,
                               IUserRepository userRepository,
                               IEmailHelperService emailHelperService,
                               IContextService contextService,
                               IBatchRepository batchRepository,
-                              IScheduleRepository scheduleRepository)
+                              IScheduleRepository scheduleRepository,
+                              IInstructorReository instructorReository,
+                              IAcademyRepository academyRepository
+                              )
         {
             this.studentRepository = studentRepository;
             this.userRepository = userRepository;
@@ -40,6 +45,8 @@ namespace StreamlineAcademy.Application.Services
             this.contextService = contextService;
             this.batchRepository = batchRepository;
             this.scheduleRepository = scheduleRepository;
+            this.instructorReository = instructorReository;
+            this.academyRepository = academyRepository;
         }
         public async Task<ApiResponse<StudentResponseModel>> AddStudent(StudentRequestModel model)
         {
@@ -47,7 +54,6 @@ namespace StreamlineAcademy.Application.Services
             var existingEmail = await userRepository.FirstOrDefaultAsync(x => x.Email == model.Email);
             if (existingEmail is not null)
                 return ApiResponse<StudentResponseModel>.ErrorResponse(APIMessages.StudentManagement.StudentAlreadyRegistered, HttpStatusCodes.Conflict);
-
             var UserSalt = AppEncryption.GenerateSalt();
             var user = new User()
             {
@@ -69,7 +75,19 @@ namespace StreamlineAcademy.Application.Services
             var returnVal = await userRepository.InsertAsync(user);
             if (returnVal > 0)
             {
-                var academyId = contextService.GetUserId();
+                Guid? academyId = Guid.Empty;
+                Guid? instructorId= Guid.Empty;
+                var portalUser=await userRepository.GetByIdAsync(_=>_.Id==userId);
+                if (portalUser.UserRole == UserRole.AcademyAdmin)
+                {
+                     academyId=portalUser.Id;
+                }
+                else
+                {
+                  var instructor=await instructorReository.GetInstructorById(portalUser.Id);
+                   var returnAcademy = await academyRepository.GetByIdAsync(_ => _.AcademyName == instructor.AcademyName);
+                   academyId = returnAcademy.Id;
+                }
                 var student = new Student()
                 {
                     Id = user.Id,
@@ -78,7 +96,8 @@ namespace StreamlineAcademy.Application.Services
                     CityId = model.CityId,
                     AcademyId = academyId,
                     DateOfBirth = model.DateOfBirth,
-                    EmergencyContactNo = model.EmergencyContactNo
+                    EmergencyContactNo = model.EmergencyContactNo,    
+                   
                 };
                 var result = await studentRepository.InsertAsync(student);
                 if (result > 0)

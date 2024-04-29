@@ -37,14 +37,13 @@ namespace StreamlineAcademy.Infrastructure.JWT
              new Claim(AppClaimTypes.UserId, user.Id.ToString()!),
              new Claim(JwtRegisteredClaimNames.Name, user.Name!),
              new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-             new Claim(UserRole , Enum.GetName(typeof(UserRole), user.UserRole) ?? ""),
+             new Claim(ClaimTypes.Role , user.UserRole.ToString()),
              }),
                 Expires = DateTime.Now.AddHours(1),
                 Issuer = configuration["Jwt:Issuer"],
                 Audience = configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)), SecurityAlgorithms.HmacSha256),
             };
-
             var handler = new JwtSecurityTokenHandler();
             var securityToken = handler.CreateToken(descriptor);
 

@@ -13,7 +13,7 @@ namespace StreamlineAcademy.Api.Controllers
  
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize (Roles =nameof(UserRole.AcademyAdmin))]
     public class LocationController : ControllerBase
     {
         private readonly ILocationService locationService;

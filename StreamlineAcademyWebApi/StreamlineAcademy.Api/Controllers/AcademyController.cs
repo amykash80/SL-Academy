@@ -15,7 +15,7 @@ namespace StreamlineAcademy.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles =nameof(UserRole.SuperAdmin))]
     public class AcademyController : ControllerBase
     {
         private readonly IAcademyService academyService;
@@ -24,6 +24,7 @@ namespace StreamlineAcademy.Api.Controllers
         {
             this.academyService = academyService;
         }
+
         [HttpPost("register")]
         public async Task<ApiResponse<AcademyResponseModel>> RegisterAcademy(AcademyRequestModel request) => await academyService.RegisterAcademy(request);
 
