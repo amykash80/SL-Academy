@@ -21,5 +21,6 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
         public Task<List<CourseResponseModel>> GetAllCoursesByAcademyId(Guid? academyId);
 
 
+
     }
 }

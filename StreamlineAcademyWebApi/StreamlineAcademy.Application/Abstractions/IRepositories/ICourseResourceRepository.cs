@@ -12,5 +12,7 @@ namespace StreamlineAcademy.Application.Abstractions.IRepositories
     {
         Task<CourseResourceResponseModel> GetCourseResourceById(Guid? id);
         Task<AppFiles?> GetByEntityIdAsync(Guid? entityId);
+        Task<List<CourseResourceResponseModel>> GetAllCourseResource();
+        Task<List<CourseResourceResponseModel>> GetCourseResourseByCourseId(Guid? courseId);
     }
 }

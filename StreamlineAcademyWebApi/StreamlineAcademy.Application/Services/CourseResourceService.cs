@@ -85,7 +85,7 @@ namespace StreamlineAcademy.Application.Services
             var existingResource = await courseResourceRepository.GetByIdAsync(x => x.Id == request.Id);
             if (existingResource == null)
             {
-                return ApiResponse<CourseResourceResponseModel>.ErrorResponse("Course resource not found", HttpStatusCodes.NotFound);
+                return ApiResponse<CourseResourceResponseModel>.ErrorResponse(APIMessages.CourseResourceManagement.CourseResourcenotFound, HttpStatusCodes.NotFound);
             }
             var filePath = await storageService.UploadFileAsync(request.File!);
             var appFile = await courseResourceRepository.GetByEntityIdAsync(existingResource.Id);
@@ -126,7 +126,7 @@ namespace StreamlineAcademy.Application.Services
             var existingResource = await courseResourceRepository.GetByIdAsync(x => x.Id == Id);
             if (existingResource == null)
             {
-                return ApiResponse<CourseResourceResponseModel>.ErrorResponse("Course resource not found", HttpStatusCodes.NotFound);
+                return ApiResponse<CourseResourceResponseModel>.ErrorResponse(APIMessages.CourseResourceManagement.CourseResourcenotFound, HttpStatusCodes.NotFound);
             }
 
             var result = await courseResourceRepository.FirstOrDefaultAsync(x => x.Id == existingResource.Id);
@@ -137,12 +137,46 @@ namespace StreamlineAcademy.Application.Services
                 int isSoftDelted = await courseResourceRepository.DeleteAsync(result!);
                 if (isSoftDelted > 0)
                 {
-                    return ApiResponse<CourseResourceResponseModel>.SuccessResponse(null, APIMessages.BatchManagement.BatchDeleted);
+                    return ApiResponse<CourseResourceResponseModel>.SuccessResponse(null, APIMessages.CourseResourceManagement.CourseResourceDeleted);
                 }
             }
             return ApiResponse<CourseResourceResponseModel>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
         }
+        public async Task<ApiResponse<IEnumerable<CourseResourceResponseModel>>> GetAllCourseResource()
+        {
+            var returnVal = await courseResourceRepository.GetAllCourseResource();
+            if (returnVal is not null)
+                return ApiResponse<IEnumerable<CourseResourceResponseModel>>.SuccessResponse(returnVal.OrderBy(_ => _.Id), $"Found {returnVal.Count()} CourseResources");
+            return ApiResponse<IEnumerable<CourseResourceResponseModel>>.ErrorResponse(APIMessages.CourseResourceManagement.CourseResourcenotFound, HttpStatusCodes.NotFound);
+        }
 
+        public async Task<ApiResponse<CourseResourceResponseModel>> GetCourseResourceById(Guid id)
+        {
+            var courseResource = await courseResourceRepository.GetByIdAsync(x => x.Id == id);
+            if (courseResource is null)
+                return ApiResponse<CourseResourceResponseModel>.ErrorResponse(APIMessages.CourseResourceManagement.CourseResourcenotFound, HttpStatusCodes.NotFound);
+
+            var responseModel = await courseResourceRepository.GetCourseResourceById(id);
+
+            return ApiResponse<CourseResourceResponseModel>.SuccessResponse(responseModel);
+        }
+
+        public async Task<ApiResponse<IEnumerable<CourseResourceResponseModel>>> GetCourseResourceByCourseId(Guid? courseId)
+        {
+            var resource = await courseResourceRepository.GetByIdAsync(b => b.CourseId == courseId);
+            if (resource == null)
+            {
+                return ApiResponse<IEnumerable<CourseResourceResponseModel>>.ErrorResponse(APIMessages.CourseResourceManagement.CourseResourcenotFound, HttpStatusCodes.NotFound);
+            }
+            var courseResource = await courseResourceRepository.GetCourseResourseByCourseId(courseId);
+            if (courseResource != null && courseResource.Any())
+            {
+                var sortedResources = courseResource.OrderBy(c => c.CourseName);
+                return ApiResponse<IEnumerable<CourseResourceResponseModel>>.SuccessResponse(sortedResources, $"Found {courseResource.Count()} CourseResource");
+            }
+
+            return ApiResponse<IEnumerable<CourseResourceResponseModel>>.ErrorResponse(APIMessages.TechnicalError, HttpStatusCodes.InternalServerError);
+        }
     }
 }
         

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StreamlineAcademy.Application.Abstractions.IServices;
+using StreamlineAcademy.Application.Services;
 using StreamlineAcademy.Application.Shared;
 using StreamlineAcademy.Domain.Models.Requests;
 using StreamlineAcademy.Domain.Models.Responses;
@@ -24,5 +25,11 @@ namespace StreamlineAcademy.Api.Controllers
         public async Task<ApiResponse<CourseResourceResponseModel>> UpdateCourseResource(CourseResourceUpdateRequest request)=>await courseResourceService.UpdateCourseResource(request);
         [HttpDelete("deleteCourseResource")]
         public async Task<ApiResponse<CourseResourceResponseModel>> DeleteCourseResource(Guid Id)=>await courseResourceService.DeleteCourseResource(Id);
+        [HttpGet("getAllCourseResource")]
+        public async Task<ApiResponse<IEnumerable<CourseResourceResponseModel>>> GetAllCourseResource() => await courseResourceService.GetAllCourseResource();
+        [HttpGet("getCourseResourceById/{id:guid}")]
+        public async Task<ApiResponse<CourseResourceResponseModel>> GetCourseResourceById(Guid id) => await courseResourceService.GetCourseResourceById(id);
+        [HttpGet("getCourseResourceByCourseId/{id:guid}")]
+        public async Task<ApiResponse<IEnumerable<CourseResourceResponseModel>>> GetCourseResourceByCourseId(Guid id) => await courseResourceService.GetCourseResourceByCourseId(id);
     }
 }

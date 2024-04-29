@@ -13,6 +13,10 @@ namespace StreamlineAcademy.Application.Abstractions.IServices
     {
         Task<ApiResponse<CourseResourceResponseModel>> AddCourseResource(CourseResourceRequestModel request);
         Task<ApiResponse<CourseResourceResponseModel>> UpdateCourseResource(CourseResourceUpdateRequest request);
+        Task<ApiResponse<CourseResourceResponseModel>> DeleteCourseResource(Guid Id);
+        Task<ApiResponse<IEnumerable<CourseResourceResponseModel>>> GetAllCourseResource();
+        Task<ApiResponse<CourseResourceResponseModel>> GetCourseResourceById(Guid id);
+        Task<ApiResponse<IEnumerable<CourseResourceResponseModel>>> GetCourseResourceByCourseId(Guid? courseId);
 
     }  
 }

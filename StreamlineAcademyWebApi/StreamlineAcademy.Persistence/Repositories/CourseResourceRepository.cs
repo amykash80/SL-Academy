@@ -46,5 +46,43 @@ namespace StreamlineAcademy.Persistence.Repositories
         {
             return await context.AppFiles.FirstOrDefaultAsync(x => x.EntityId == entityId);
         }
+
+        public async Task<List<CourseResourceResponseModel>> GetAllCourseResource()
+        {
+            var courseResource = await context.CourseResources
+              .Include(a => a.Course)
+                .Select(a => new CourseResourceResponseModel
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    Description = a.Description,
+                    Type = a.Type!,
+                    FilePath = a.FilePath,
+                    CourseName = a.Name,
+                })
+                .ToListAsync();
+
+            return courseResource;
+        }
+
+        public async Task<List<CourseResourceResponseModel>> GetCourseResourseByCourseId(Guid? courseId)
+        {
+            var resource = await context.CourseResources
+                .Include(b => b.Course)
+                .Where(b => b.CourseId == courseId)
+                .Select(b => new CourseResourceResponseModel
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    Description = b.Description,
+                    Type = b.Type!,
+                    FilePath = b.FilePath,
+                    CourseName = b.Name,
+
+                })
+                .ToListAsync();
+
+            return resource;
+        }
     }
 }
