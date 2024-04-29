@@ -44,5 +44,7 @@ namespace StreamlineAcademy.Api.Controllers
         public async Task<ApiResponse<AttendenceResponseModel>> SaveAttendence(AttendenceRequestModel model) => await instructorService.SaveStudentAttendance(model);
         [HttpPost("sendNotification")]
         public async Task<bool> SendNotification(NotificationRequestModel model) => await instructorService.SendNotification(model);
+        [HttpGet("Check-my-academy")]
+        public async Task<ApiResponse<InstructorResponseModel>> GetInstructorAcademy() => await instructorService.GetInstructorAcademy();
     }
 }

@@ -189,6 +189,39 @@ namespace StreamlineAcademy.Persistence.Repositories
             }
             return new InstructorBatchResponseModel() { };
         }
+        public async Task<InstructorResponseModel> GetInstructorAcademy(Guid? academyId)
+        {
+            var instructor = await context.Instructors
+                .Include(i => i.User)
+                .Include(i => i.Academy)
+                .Include(i => i.Country)
+                .Include(i => i.State)
+                .Include(i => i.City)
+                .FirstOrDefaultAsync(i => i.Id == academyId);
 
+            if (instructor is not null)
+            {
+                return new InstructorResponseModel
+                {
+                    Id = instructor.Id,
+                    Name = instructor.User!.Name,
+                    Email = instructor.User!.Email,
+                    PhoneNumber = instructor.User!.PhoneNumber,
+                    PostalCode = instructor.User!.PostalCode,
+                    Address = instructor.User!.Address,
+                    Skill = instructor.Skill,
+                    AcademyName = instructor.Academy!.AcademyName,
+                    DateOfBirth = instructor.DateOfBirth,
+                    CountryName = instructor.Country!.CountryName,
+                    StateName = instructor.State!.StateName,
+                    CityName = instructor.City!.CityName,
+                    IsActive = instructor.User.IsActive,
+                    UserRole = instructor.User.UserRole
+                };
+            }
+
+            return new InstructorResponseModel(); 
+        }
     }
 }
+

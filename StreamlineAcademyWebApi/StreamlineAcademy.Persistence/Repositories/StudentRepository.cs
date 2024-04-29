@@ -221,7 +221,7 @@ namespace StreamlineAcademy.Persistence.Repositories
                     Date = s.Date,
                     DurationInHours = s.DurationInHours,
                     BatchName = sb.Batch.BatchName,
-                    ContentName = s.CourseContent!.TaskName // Assuming CourseContent is related to the schedule
+                    ContentName = s.CourseContent!.TaskName 
                 }))
                 .ToListAsync();
 
