@@ -248,5 +248,19 @@ namespace StreamlineAcademy.Application.Services
             return success;
 
         }
+
+        public async Task<ApiResponse<InstructorResponseModel>> GetInstructorAcademy()
+        {
+            var instructorId = contextService.GetUserId();
+            var instructor = await instructorRepository.GetByIdAsync(_ => _.Id==instructorId);
+            if (instructor is null)
+                return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.InstructorManagement.InstructorNotFound, HttpStatusCodes.NotFound);
+            var returnVal = await instructorRepository.GetInstructorAcademy(instructorId);
+            if (returnVal is not null)
+                return ApiResponse<InstructorResponseModel>.SuccessResponse(returnVal);
+            return ApiResponse<InstructorResponseModel>.ErrorResponse(APIMessages.TechnicalError);
+
+        }
+
     }
 }

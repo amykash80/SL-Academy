@@ -52,5 +52,7 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpPost("sendNotification")]
         [Authorize(Roles = nameof(UserRole.Instructor))]
         public async Task<bool> SendNotification(NotificationRequestModel model) => await instructorService.SendNotification(model);
+        [HttpGet("Check-my-academy")]
+        public async Task<ApiResponse<InstructorResponseModel>> GetInstructorAcademy() => await instructorService.GetInstructorAcademy();
     }
 }
