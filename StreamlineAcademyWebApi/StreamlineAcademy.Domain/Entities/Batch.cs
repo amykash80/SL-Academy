@@ -11,7 +11,6 @@ namespace StreamlineAcademy.Domain.Entities
 {
     public class Batch:BaseModel
     {
-       
         public string? BatchName { get; set; }
         public int? BatchSize { get; set; }
         public DateTimeOffset StartDate { get; set; }

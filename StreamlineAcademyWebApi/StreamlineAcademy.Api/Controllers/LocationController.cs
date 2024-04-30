@@ -33,6 +33,5 @@ namespace StreamlineAcademy.Api.Controllers
         [HttpPut("updateLocation")]
         public async Task<ApiResponse<LocationResponseModel>> UpdateLocation(LocationUpdateRequestModel model) => await locationService.UpdateLocation(model);
 
-
     }
 }
